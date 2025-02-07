@@ -1,14 +1,64 @@
 {
     "version": 2,
+    "builds": [
+        {
+            "src": "api/categories/index.py",  
+            "use": "@vercel/python"
+        },
+        {
+            "src": "api/courses/index.py",
+            "use": "@vercel/python"
+        },
+        {
+            "src": "api/institutions/index.py",
+            "use": "@vercel/python"
+        },
+        {
+            "src": "api/filter_course/index.py",
+            "use": "@vercel/python"
+        }
+    ],
     "routes": [
-      { "src": "/api/categories", "dest": "/api/categories.py" }, 
-      { "src": "/(.*)", "dest": "index.html" },
-      {"src": "/(.*)","dest": "api/app_serverless.py"},
-      {"src": "/(.*)","dest":"api/categories.py"},
-      { "src": "/api/courses", "dest": "/api/courses.py" }, 
-      { "src": "/api/institutions", "dest": "/api/institutions.py" }, 
-      { "src": "/(.*)", "dest": "index.html" },
-      { "src": "/(.*)", "dest": "api/courses.py" }, 
-      { "src": "/(.*)", "dest": "api/institutions.py" }
+        {
+            "src": "/api/categories",
+            "dest": "/api/categories/index.py", 
+            "headers": {
+                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+                "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+            }
+        },
+        {
+            "src": "/api/courses",
+            "dest": "/api/courses/index.py", 
+            "headers": {
+                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+                "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+            }
+        },
+        {
+            "src": "/api/institutions",
+            "dest": "/api/institutions/index.py", 
+            "headers": {
+                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+                "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+            }
+        },
+        {
+            "src": "/api/filter_course",
+            "dest": "/api/filter_course/index.py", 
+            "headers": {
+                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+                "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+            }
+        },
+        { "src": "/(.*)", "dest": "index.html" }
     ]
-  }
+}
