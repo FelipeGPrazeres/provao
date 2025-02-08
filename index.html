@@ -57,7 +57,7 @@
         let currentCategory = null; // Currently selected category
 
         // Load categories into the category dropdown
-        fetch('http://localhost:5001/categories')
+        fetch('https://provao.onrender.com/categories')
             .then(response => response.json())
             .then(categories => {
                 categories.forEach(category => {
@@ -79,13 +79,13 @@
 
             if (currentCategory) {
                 // Fetch courses for the selected category
-                fetch(`http://localhost:5001/courses?category=${currentCategory}`)
+                fetch(`https://provao.onrender.com/courses?category=${currentCategory}`)
                     .then(response => response.json())
                     .then(courses => {
                         allCourses[currentCategory] = courses; // Store courses for this category
                     });
                 // Fetch institutions for the selected category
-                fetch(`http://localhost:5001/institutions?category=${currentCategory}`)
+                fetch(`https://provao.onrender.com/institutions?category=${currentCategory}`)
                     .then(response => response.json())
                     .then(institutions => {
                         allInstitutions[currentCategory] = institutions; // Store institutions for this category
@@ -152,7 +152,7 @@
                 requestBody.institution = selectedInstitution;
             }
 
-            fetch('http://localhost:5001/filter_course', {
+            fetch('https://provao.onrender.com/filter_course', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
