@@ -1,8 +1,10 @@
-# backend/app.py
 from flask import Flask, jsonify, request
 import json
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, origins=["https://provao-1.onrender.com"]) # **SPECIFIC ORIGIN - REPLACE WITH YOUR FRONTEND URL**
+
 JSON_FILE_PATH = 'output_multi_sheet.json'
 
 def load_data():
