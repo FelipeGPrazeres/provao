@@ -1,11 +1,8 @@
 # backend/app.py
 from flask import Flask, jsonify, request
 import json
-from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
-
 JSON_FILE_PATH = 'output_multi_sheet.json'
 
 def load_data():
