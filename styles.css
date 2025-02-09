@@ -1,3 +1,5 @@
+--- START OF FILE styles.css ---
+
 /* Definição da paleta de cores inspirada na VUNESP */
 :root {
     --primary-color: #8B0000; /* Vermelho escuro */
@@ -98,13 +100,13 @@ button:hover {
     box-shadow: 0px 4px 10px rgba(139, 0, 0, 0.3);
 }
 
-/* Resultados */
+/* Results Section - Initially Hidden */
 #results {
     margin-top: 20px;
     display: none; /* Initially hide the results div */
 }
 
-#peopleList {
+#peopleList { /* Style for the list of people within results */
     background: var(--background-color);
     padding: 10px;
     border-radius: 5px;
@@ -172,54 +174,24 @@ button:hover {
     cursor: not-allowed;
 }
 
-/* Estilização do popup */
+/* Popup Styling */
 .popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    max-width: 400px;
-    background: white;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    display: none; /* Hidden by default */
+}
+
+#popupContent {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    display: none;
-}
-
-.popup h2 {
-    color: var(--primary-color);
-}
-
-.popup button {
-    margin-top: 10px;
-    background: var(--gradient);
-    color: white;
-    font-weight: bold;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* Ocultar os resultados até que a busca seja feita */
-#results {
-    display: none; /* Initially hide the results div */
-    margin-top: 20px;
-    padding: 15px;
     background: var(--background-color);
     border-radius: 10px;
     border-left: 5px solid var(--secondary-color);
 }
-
-/* Melhorar a visualização dos resultados */
-.person {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-.person:last-child {
-    border-bottom: none;
-}
-

@@ -1,3 +1,5 @@
+--- START OF FILE index.html ---
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -9,7 +11,12 @@
         body { font-family: Arial, sans-serif; }
         .container { width: 80%; margin: 0 auto; padding-top: 20px; }
         #categorySelect, #institutionInput, #courseInput { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; }
-        #searchButton { padding: 10px 20px; cursor: pointer; }
+        #searchButton {
+            padding: 10px 20px;
+            cursor: pointer;
+            background: var(--gradient); /* Added background to match button style */
+            color: white; /* Added text color for button */
+        }
         #results { margin-top: 20px; border: 1px solid #eee; padding: 10px; }
         .person { margin-bottom: 10px; padding: 10px; border-bottom: 1px dashed #ddd; }
         .person:last-child { border-bottom: none; }
@@ -20,28 +27,30 @@
 </head>
 <body>
 
-    <!-- Cabeçalho com explicação -->
+    <!-- Header with explanation -->
     <header class="header">
         <h1>📚 Provão Paulista - Visualizador de Notas</h1>
         <p>Nosso objetivo é ajudar vestibulandos a terem mais clareza sobre suas chances de aprovação, oferecendo um simulador baseado nos dados de notas anteriores.</p>
     </header>
 
     
-    <!-- Observação sobre as notas -->
+    <!-- Note Popup -->
     <div id="popup" class="popup">
-    <h2>Observação</h2>
-    <p>Os dados apresentados aqui são baseados nas informações enviadas por alunos. No futuro, teremos dados mais completos.</p>
-    <button id="closePopup">Entendi</button>
-</div>
+        <div id="popupContent">
+            <h2>Observação</h2>
+            <p>Os dados apresentados aqui são baseados nas informações enviadas por alunos. No futuro, teremos dados mais completos.</p>
+            <button id="closePopup">Entendi</button>
+        </div>
+    </div>
 
-    <!-- Formulário de busca -->
+    <!-- Search Form -->
     <div class="container">
         <h1>Buscar Alunos por Curso e Instituição</h1>
 
         <label for="categorySelect">Selecione a Categoria:</label>
         <select id="categorySelect">
             <option value="">Selecione uma categoria</option>
-            <!-- Categorias serão carregadas aqui -->
+            <!-- Categories will be loaded here -->
         </select>
 
         <label for="institutionInput">Filtrar por Instituição (opcional):</label>
@@ -60,7 +69,7 @@
         </div>
     </div>
 
-    <!-- Seção para colaboração -->
+    <!-- Collaboration Section -->
     <div class="collab-section">
         <h2>📩 Ajude outros estudantes!</h2>
         <p>Se você foi aprovado, compartilhe sua nota para ajudar futuros candidatos:</p>
@@ -68,7 +77,7 @@
     </div>
 
 
-    <!-- Contato -->
+    <!-- Contact Section -->
     <div class="contact-section">
         <h2>📞 Contato</h2>
         <p><strong>Kauan Yuri</strong></p>
@@ -88,14 +97,15 @@
         const institutionInput = document.getElementById('institutionInput');
         const courseInput = document.getElementById('courseInput');
         const searchButton = document.getElementById('searchButton');
-        const resultsDiv = document.getElementById('peopleList');
+        const resultsDiv = document.getElementById('results');
+        const peopleListDiv = document.getElementById('peopleList');
         const coursesList = document.getElementById('coursesList');
         const institutionsList = document.getElementById('institutionsList');
         let allCourses = {};
         let allInstitutions = {};
         let currentCategory = null;
 
-     // Mostrar popup ao carregar
+     // Show popup on load
         popup.style.display = "block";
         closePopup.addEventListener("click", () => {
             popup.style.display = "none";
@@ -199,7 +209,7 @@
             })
             .then(response => response.json())
             .then(people => {
-                resultsDiv.style.display = 'block'; // Show results div on search
+                document.getElementById('results').style.display = 'block'; // Show results div
                 resultsDiv.innerHTML = people.length > 0 ? people.map(person => `
                     <div class="person">
                         <p><strong>Instituição:</strong> ${person.Instituição}</p>
