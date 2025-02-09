@@ -29,22 +29,39 @@ body {
 }
 
 /* Footer */
-.footer {
-    margin-top: 40px;
+footer {
+    background: linear-gradient(90deg, #9E0B0F, #D32F2F, #F5E6E6);
     padding: 20px;
-    background: var(--gradient);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     color: white;
-    text-align: center;
-    border-radius: 10px 10px 0 0;
-}
-.footer a {
-    color: linear-gradient(135deg, #B22222, #8B0000);
     font-weight: bold;
+}
+
+.footer-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.social-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 25px;
+    color: white;
     text-decoration: none;
+    transition: background 0.3s;
 }
-.footer a:hover {
-    text-decoration: underline;
+
+.social-button:hover {
+    background: rgba(255, 255, 255, 0.4);
 }
+
 /* Contatos lado a lado */
 .contact-container {
     display: flex;
