@@ -62,7 +62,7 @@ body {
 .footer {
     margin-top: 50px;
     padding: 15px;
-    background: linear-gradient(180deg, #9E0B0F,#ed0707, #ff0000 , #D32F2F);
+    background: linear-gradient(180deg, #ed0707, #ff0000 , #D32F2F);
     color: white;
     border-radius: 10px 10px 0 0;
 }
