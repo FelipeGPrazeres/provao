@@ -45,7 +45,20 @@ body {
 .footer a:hover {
     text-decoration: underline;
 }
-
+/* Contatos lado a lado */
+.contact-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+.contact-box {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    width: 250px;
+}
 /* Adição de gradientes e animações sutis */
 .header, .collab-section, .footer {
     animation: fadeIn 1s ease-in-out;
