@@ -101,7 +101,7 @@
             const currentInput = institutionInput.value;
             institutionsList.innerHTML = ''; // Clear previous institution suggestions
 
-            if (currentInput.length >= 4 && currentCategory) {
+            if (currentInput.length >= 3 && currentCategory) {
                 const categoryInstitutions = allInstitutions[currentCategory] || [];
                 const filteredInstitutions = categoryInstitutions.filter(institution =>
                     institution.toLowerCase().startsWith(currentInput.toLowerCase())
