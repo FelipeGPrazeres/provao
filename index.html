@@ -26,6 +26,14 @@
         <p>Nosso objetivo é ajudar vestibulandos a terem mais clareza sobre suas chances de aprovação, oferecendo um simulador baseado nos dados de notas anteriores.</p>
     </header>
 
+    
+    <!-- Observação sobre as notas -->
+    <div id="popup" class="popup">
+    <h2>Observação</h2>
+    <p>Os dados apresentados aqui são baseados nas informações enviadas por alunos. No futuro, teremos dados mais completos.</p>
+    <button id="closePopup">Entendi</button>
+</div>
+
     <!-- Formulário de busca -->
     <div class="container">
         <h1>Buscar Alunos por Curso e Instituição</h1>
@@ -59,13 +67,6 @@
         <a href="https://forms.gle/2cgZPhm3xofxtYFB8" target="_blank">📋 Enviar minha Nota</a>
     </div>
 
-    <!-- Observação sobre as notas -->
- <div class="overlay" id="overlay"></div>
-    <div class="popup" id="popup">
-        <h2>⚠️ Observação</h2>
-        <p>As notas exibidas são baseadas nos dados disponíveis e podem não representar o corte exato para aprovação.</p>
-        <button onclick="fecharPopup()">Fechar</button>
-    </div>
 
     <!-- Contato -->
     <div class="contact-section">
@@ -94,14 +95,11 @@
         let allInstitutions = {};
         let currentCategory = null;
 
-           document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("popup").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
+     // Mostrar popup ao carregar
+        popup.style.display = "block";
+        closePopup.addEventListener("click", () => {
+            popup.style.display = "none";
         });
-        function fecharPopup() {
-            document.getElementById("popup").style.display = "none";
-            document.getElementById("overlay").style.display = "none";
-        }
 
         fetch('https://provao.onrender.com/categories')
             .then(response => response.json())
