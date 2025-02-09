@@ -1,10 +1,10 @@
  /* Definição da paleta de cores inspirada na VUNESP */
 :root {
-    --primary-color: #8B0000; /* Vermelho escuro */
+    --primary-color: #ed0707; /* Vermelho escuro */
     --secondary-color: #B22222; /* Vermelho médio */
     --background-color: #F8F8F8; /* Branco acinzentado */
     --text-color: #333333; /* Cinza escuro */
-    --gradient: linear-gradient(135deg, #8B0000, #B22222);
+    --gradient: linear-gradient(135deg, #ed0707, #B22222);
 }
 
 /* Reset e estilos gerais */
