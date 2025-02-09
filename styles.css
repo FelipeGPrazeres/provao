@@ -1,0 +1,97 @@
+/* Definição da paleta de cores inspirada na VUNESP */
+:root {
+    --primary-color: #8B0000; /* Vermelho escuro */
+    --secondary-color: #B22222; /* Vermelho médio */
+    --background-color: #F8F8F8; /* Branco acinzentado */
+    --text-color: #333333; /* Cinza escuro */
+    --gradient: linear-gradient(135deg, #8B0000, #B22222);
+}
+
+/* Reset e estilos gerais */
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Estilização dos inputs e botões */
+.form-group {
+    margin: 15px 0;
+    text-align: left;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: var(--primary-color);
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0px 0px 8px rgba(178, 34, 34, 0.6);
+}
+
+/* Botão estilizado */
+button {
+    background: var(--gradient);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s ease-in-out;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(139, 0, 0, 0.3);
+}
+
+/* Resultados */
+#results {
+    margin-top: 20px;
+}
+
+#peopleList {
+    background: var(--background-color);
+    padding: 10px;
+    border-radius: 5px;
+    border-left: 5px solid var(--secondary-color);
+}
+
+/* Animações sutis */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
