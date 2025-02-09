@@ -28,6 +28,36 @@ body {
     animation: fadeIn 1s ease-in-out;
 }
 
+/* Footer */
+.footer {
+    margin-top: 40px;
+    padding: 20px;
+    background: var(--gradient);
+    color: white;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+}
+.footer a {
+    color: #FFD700;
+    font-weight: bold;
+    text-decoration: none;
+}
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Adição de gradientes e animações sutis */
+.header, .collab-section, .footer {
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Animação de hover nos botões */
+button:hover {
+    background: linear-gradient(135deg, #B22222, #8B0000);
+    transform: scale(1.05);
+}
+
+
 /* Seção explicativa */
 .header {
     padding: 20px;
