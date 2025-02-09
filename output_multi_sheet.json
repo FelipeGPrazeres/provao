@@ -1,5 +1,5 @@
 {
-    "L1 tete": [
+    "L1 - Renda": [
         {
             "Curso": "CIÊNCIAS DA COMPUTAÇÃO",
             "Instituição": "USP SÃO CARLOS",
@@ -583,7 +583,7 @@
             "Grupo": "GRUPO"
         }
     ],
-    "L2": [
+    "L2 - Renda + PPI": [
         {
             "Curso": "QUÍMICA",
             "Instituição": "USP BUTANTÃ",
@@ -771,7 +771,7 @@
             "Grupo": "GRUPO"
         }
     ],
-    "L3": [
+    "L3 - Nenhuma cota": [
         {
             "Curso": "ENGENHARIA DA COMPUTAÇÃO",
             "Instituição": "UNICAMP",
@@ -1325,7 +1325,7 @@
             "Grupo": "GRUPO"
         }
     ],
-    "L4": [
+    "L4 - Apenas PPI": [
         {
             "Curso": "MEDICINA",
             "Instituição": "USP PINHEIROS",
