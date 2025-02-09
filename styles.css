@@ -15,7 +15,7 @@ body {
     text-align: center;
     margin: 0;
     padding: 0;
-    margin-bottom:50px;
+    margin-bottom:200px;
 }
 
 .container {
@@ -67,7 +67,6 @@ body {
     background: #8B0000;
     color: white;
     border-radius: 10px 10px 0 0;
-    position: fixed;
 }
 .footer a {
     color: #FFD700;
