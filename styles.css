@@ -126,16 +126,6 @@ button:hover {
     text-decoration: underline;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    .container {
-        width: 95%;
-    }
-    .header {
-        font-size: 18px;
-    }
-}
-
 /* Animações sutis */
 @keyframes fadeIn {
     from {
@@ -147,3 +137,88 @@ button:hover {
         transform: translateY(0);
     }
 }
+
+    /* Responsividade melhorada para celulares */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+
+    .header {
+        font-size: 18px;
+    }
+
+    input, select, button {
+        font-size: 16px;
+        padding: 8px;
+    }
+}
+
+/* Ajuste do layout para melhorar a ordem de preenchimento */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Melhor destaque para indicar a ordem correta (Categoria → Curso) */
+#categorySelect, #courseInput {
+    border: 2px solid var(--secondary-color);
+}
+
+/* Desabilitar campos até que a categoria seja selecionada */
+#courseInput:disabled, #searchButton:disabled {
+    background: #ddd;
+    cursor: not-allowed;
+}
+
+/* Estilização do popup */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    display: none;
+}
+
+.popup h2 {
+    color: var(--primary-color);
+}
+
+.popup button {
+    margin-top: 10px;
+    background: var(--gradient);
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Ocultar os resultados até que a busca seja feita */
+#results {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    background: var(--background-color);
+    border-radius: 10px;
+    border-left: 5px solid var(--secondary-color);
+}
+
+/* Melhorar a visualização dos resultados */
+.person {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.person:last-child {
+    border-bottom: none;
+}
+
