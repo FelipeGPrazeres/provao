@@ -28,39 +28,56 @@ body {
     animation: fadeIn 1s ease-in-out;
 }
 
-/* Footer */
-footer {
-    background: linear-gradient(90deg, #9E0B0F, #D32F2F, #F5E6E6);
+/* Estilização do popup */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 400px;
+    background: white;
     padding: 20px;
     border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    display: none;
+}
+
+.popup h2 {
+    color: var(--primary-color);
+}
+
+.popup button {
+    margin-top: 10px;
+    background: var(--gradient);
     color: white;
     font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.footer-container {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.social-button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 8px 15px;
-    border-radius: 25px;
+/* Footer */
+.footer {
+    margin-top: 40px;
+    padding: 20px;
+    background: linear-gradient(135deg, #9E0B0F, #D32F2F, #F5E6E6);;
     color: white;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+    justify-content: space-between;
+}
+.footer a {
+    color: #FFD700;
+    font-weight: bold;
     text-decoration: none;
-    transition: background 0.3s;
+}
+.footer a:hover {
+    text-decoration: underline;
 }
 
-.social-button:hover {
-    background: rgba(255, 255, 255, 0.4);
-}
 
 /* Contatos lado a lado */
 .contact-container {
@@ -230,36 +247,6 @@ button:hover {
     cursor: not-allowed;
 }
 
-/* Estilização do popup */
-.popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    max-width: 400px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    display: none;
-}
-
-.popup h2 {
-    color: var(--primary-color);
-}
-
-.popup button {
-    margin-top: 10px;
-    background: var(--gradient);
-    color: white;
-    font-weight: bold;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
 
 /* Ocultar os resultados até que a busca seja feita */
 #results {
