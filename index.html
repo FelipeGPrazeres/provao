@@ -4,78 +4,63 @@
     <link rel="stylesheet" href="styles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Busca por Curso</title>
+    <title>Provão Paulista - Simulador de Notas</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .container { width: 80%; margin: 0 auto; padding-top: 20px; }
-        #categorySelect, #institutionInput, #courseInput { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; }
-        #searchButton { padding: 10px 20px; cursor: pointer; }
-        #results { margin-top: 20px; border: 1px solid #eee; padding: 10px; }
-        .person { margin-bottom: 10px; padding: 10px; border-bottom: 1px dashed #ddd; }
-        .person:last-child { border-bottom: none; }
-        .header, .collab-section, .contact-section { text-align: center; margin-bottom: 20px; }
-        .contact-section a { color: red; text-decoration: none; font-weight: bold; }
-        .contact-section a:hover { text-decoration: underline; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background: #f9f9f9; text-align: center; padding: 10px; }
+        .container { max-width: 400px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { font-size: 20px; margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin: 10px 0 5px; text-align: left; }
+        select, input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        button { width: 100%; padding: 10px; margin-top: 15px; background: #007BFF; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #results { margin-top: 20px; text-align: left; }
+        .person { background: #f1f1f1; padding: 10px; border-radius: 5px; margin-top: 10px; }
+        .popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: none; z-index: 1000; max-width: 90%; }
+        .popup button { background: red; margin-top: 10px; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 999; }
     </style>
 </head>
 <body>
-
-    <!-- Cabeçalho com explicação -->
-    <header class="header">
-        <h1>📚 Provão Paulista - Visualizador de Notas</h1>
-        <p>Nosso objetivo é ajudar vestibulandos a terem mais clareza sobre suas chances de aprovação, oferecendo um simulador baseado nos dados de notas anteriores.</p>
-    </header>
-
-    <!-- Formulário de busca -->
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+        <h2>⚠️ Observação</h2>
+        <p>As notas exibidas são baseadas nos dados disponíveis e podem não representar o corte exato para aprovação.</p>
+        <button onclick="fecharPopup()">Fechar</button>
+    </div>
+    
     <div class="container">
-        <h1>Buscar Alunos por Curso e Instituição</h1>
-
-        <label for="categorySelect">Selecione a Categoria:</label>
+        <h1>📚 Simulador de Notas - Provão Paulista</h1>
+        <label for="categorySelect">1️⃣ Escolha uma Categoria:</label>
         <select id="categorySelect">
             <option value="">Selecione uma categoria</option>
-            <!-- Categorias serão carregadas aqui -->
         </select>
 
-        <label for="institutionInput">Filtrar por Instituição (opcional):</label>
-        <input type="text" id="institutionInput" list="institutionsList" placeholder="Digite o nome da Instituição (opcional)">
-        <datalist id="institutionsList"></datalist>
-
-        <label for="courseInput">Selecione ou digite o curso:</label>
+        <label for="courseInput">2️⃣ Digite ou escolha o Curso:</label>
         <input type="text" id="courseInput" list="coursesList" placeholder="Digite o nome do curso" disabled>
         <datalist id="coursesList"></datalist>
 
-        <button id="searchButton" disabled>Buscar</button>
+        <label for="institutionInput">(Opcional) Filtrar por Instituição:</label>
+        <input type="text" id="institutionInput" list="institutionsList" placeholder="Digite o nome da Instituição">
+        <datalist id="institutionsList"></datalist>
 
-        <div id="results">
-            <h2>Resultados:</h2>
-            <div id="peopleList"></div>
-        </div>
+        <button id="searchButton" disabled>🔍 Buscar</button>
+        <div id="results"><h2>Resultados:</h2><div id="peopleList"></div></div>
     </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("popup").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        });
+        function fecharPopup() {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
+</body>
+</html>
 
-    <!-- Seção para colaboração -->
-    <div class="collab-section">
-        <h2>📩 Ajude outros estudantes!</h2>
-        <p>Se você foi aprovado, compartilhe sua nota para ajudar futuros candidatos:</p>
-        <a href="https://forms.gle/2cgZPhm3xofxtYFB8" target="_blank">📋 Enviar minha Nota</a>
-    </div>
-
-    <!-- Observação sobre as notas -->
-    <div class="container">
-        <h3>⚠️ Observação</h3>
-        <p>As notas exibidas são baseadas nos dados que conseguimos reunir até o momento. Nem todas as notas são de aprovados, mas pretendemos aprimorar esse sistema com mais informações no futuro.</p>
-    </div>
-
-    <!-- Contato -->
-    <div class="contact-section">
-        <h2>📞 Contato</h2>
-        <p><strong>Kauan Yuri</strong></p>
-        <p>📱 WhatsApp: <a href="https://wa.me/5516994297281" target="_blank">16 99429-7281</a></p>
-        <p>📷 Instagram: <a href="https://www.instagram.com/dev.kauan" target="_blank">@dev.kauan</a></p>
-
-        <p><strong>Felipe Galvão</strong></p>
-        <p>📱 WhatsApp: <a href="https://wa.me/SEUNUMEROAQUI" target="_blank">Seu Número</a></p>
-        <p>📷 Instagram: <a href="https://www.instagram.com/SEUINSTAGRAM" target="_blank">@SEUINSTAGRAM</a></p>
-    </div>
 
     <script>
         const categorySelect = document.getElementById('categorySelect');
