@@ -8,40 +8,28 @@
     <style>
         body { font-family: Arial, sans-serif; }
         .container { width: 80%; margin: 0 auto; padding-top: 20px; }
-        #categorySelect, #institutionInput, #courseInput { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; }
+        #categorySelect { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; }
+        #institutionInput { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; }
+        #courseInput { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; }
         #searchButton { padding: 10px 20px; cursor: pointer; }
-        #results { margin-top: 20px; border: 1px solid #eee; padding: 10px; }
+        #results {
+            margin-top: 20px;
+            border: 1px solid #eee;
+            padding: 10px;
+            display: none; /* Initially hide the results div */
+        }
         .person { margin-bottom: 10px; padding: 10px; border-bottom: 1px dashed #ddd; }
         .person:last-child { border-bottom: none; }
-        .header, .collab-section, .contact-section { text-align: center; margin-bottom: 20px; }
-        .contact-section a { color: red; text-decoration: none; font-weight: bold; }
-        .contact-section a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-
-    <!-- Cabeçalho com explicação -->
-    <header class="header">
-        <h1>📚 Provão Paulista - Visualizador de Notas</h1>
-        <p>Nosso objetivo é ajudar vestibulandos a terem mais clareza sobre suas chances de aprovação, oferecendo um simulador baseado nos dados de notas anteriores.</p>
-    </header>
-
-    
-    <!-- Observação sobre as notas -->
-    <div id="popup" class="popup">
-    <h2>Observação</h2>
-    <p>Os dados apresentados aqui são baseados nas informações enviadas por alunos. No futuro, teremos dados mais completos.</p>
-    <button id="closePopup">Entendi</button>
-</div>
-
-    <!-- Formulário de busca -->
     <div class="container">
         <h1>Buscar Alunos por Curso e Instituição</h1>
 
         <label for="categorySelect">Selecione a Categoria:</label>
         <select id="categorySelect">
             <option value="">Selecione uma categoria</option>
-            <!-- Categorias serão carregadas aqui -->
+            <!-- Categories will be loaded here -->
         </select>
 
         <label for="institutionInput">Filtrar por Instituição (opcional):</label>
@@ -56,81 +44,59 @@
 
         <div id="results">
             <h2>Resultados:</h2>
-            <div id="peopleList"></div>
+            <div id="peopleList">
+
+                <!-- Resultados da busca aparecerão aqui -->
+            </div>
         </div>
     </div>
 
-    <!-- Seção para colaboração -->
-    <div class="collab-section">
-        <h2>📩 Ajude outros estudantes!</h2>
-        <p>Se você foi aprovado, compartilhe sua nota para ajudar futuros candidatos:</p>
-        <a href="https://forms.gle/2cgZPhm3xofxtYFB8" target="_blank">📋 Enviar minha Nota</a>
-    </div>
-
-
-    <!-- Contato -->
-    <div class="contact-section">
-        <h2>📞 Contato</h2>
-        <p><strong>Kauan Yuri</strong></p>
-        <p>📱 WhatsApp: <a href="https://wa.me/5516994297281" target="_blank">16 99429-7281</a></p>
-        <p>📷 Instagram: <a href="https://www.instagram.com/dev.kauan" target="_blank">@dev.kauan</a></p>
-
-        <p><strong>Felipe Galvão</strong></p>
-        <p>📱 WhatsApp: <a href="https://wa.me/SEUNUMEROAQUI" target="_blank">Seu Número</a></p>
-        <p>📷 Instagram: <a href="https://www.instagram.com/SEUINSTAGRAM" target="_blank">@SEUINSTAGRAM</a></p>
-    </div>
-
-
-
-    
     <script>
         const categorySelect = document.getElementById('categorySelect');
         const institutionInput = document.getElementById('institutionInput');
         const courseInput = document.getElementById('courseInput');
         const searchButton = document.getElementById('searchButton');
-        const resultsDiv = document.getElementById('peopleList');
+        const resultsDiv = document.getElementById('results'); // Get the results div
+        const peopleListDiv = document.getElementById('peopleList'); // Get the peopleList div
         const coursesList = document.getElementById('coursesList');
         const institutionsList = document.getElementById('institutionsList');
-        let allCourses = {};
-        let allInstitutions = {};
-        let currentCategory = null;
+        let allCourses = {}; // Store courses per category
+        let allInstitutions = {}; // Store institutions per category
+        let currentCategory = null; // Currently selected category
 
-     // Mostrar popup ao carregar
-        popup.style.display = "block";
-        closePopup.addEventListener("click", () => {
-            popup.style.display = "none";
-        });
-
+        // Load categories into the category dropdown
         fetch('https://provao.onrender.com/categories')
             .then(response => response.json())
             .then(categories => {
                 categories.forEach(category => {
                     let option = document.createElement('option');
                     option.value = category;
-                    option.textContent = category;
+                    option.textContent = category; // Display category name
                     categorySelect.appendChild(option);
                 });
             });
 
         categorySelect.addEventListener('change', () => {
             currentCategory = categorySelect.value;
-            courseInput.disabled = false;
-            searchButton.disabled = false;
-            courseInput.value = '';
-            institutionInput.value = '';
-            coursesList.innerHTML = '';
-            institutionsList.innerHTML = '';
+            courseInput.disabled = false; // Enable course input when category is selected
+            searchButton.disabled = false; // Enable search button when category is selected
+            courseInput.value = ''; // Clear previous input
+            institutionInput.value = ''; // Clear institution input
+            coursesList.innerHTML = ''; // Clear previous course suggestions
+            institutionsList.innerHTML = ''; // Clear previous institution suggestions
 
             if (currentCategory) {
+                // Fetch courses for the selected category
                 fetch(`https://provao.onrender.com/courses?category=${currentCategory}`)
                     .then(response => response.json())
                     .then(courses => {
-                        allCourses[currentCategory] = courses;
+                        allCourses[currentCategory] = courses; // Store courses for this category
                     });
+                // Fetch institutions for the selected category
                 fetch(`https://provao.onrender.com/institutions?category=${currentCategory}`)
                     .then(response => response.json())
                     .then(institutions => {
-                        allInstitutions[currentCategory] = institutions;
+                        allInstitutions[currentCategory] = institutions; // Store institutions for this category
                     });
             } else {
                 courseInput.disabled = true;
@@ -140,7 +106,7 @@
 
         institutionInput.addEventListener('input', () => {
             const currentInput = institutionInput.value;
-            institutionsList.innerHTML = '';
+            institutionsList.innerHTML = ''; // Clear previous institution suggestions
 
             if (currentInput.length >= 3 && currentCategory) {
                 const categoryInstitutions = allInstitutions[currentCategory] || [];
@@ -156,9 +122,10 @@
             }
         });
 
+
         courseInput.addEventListener('input', () => {
             const currentInput = courseInput.value;
-            coursesList.innerHTML = '';
+            coursesList.innerHTML = ''; // Clear previous course suggestions
 
             if (currentInput.length >= 3 && currentCategory) {
                 const categoryCourses = allCourses[currentCategory] || [];
@@ -174,9 +141,10 @@
             }
         });
 
+
         searchButton.addEventListener('click', () => {
             const selectedCourse = courseInput.value;
-            const selectedInstitution = institutionInput.value;
+            const selectedInstitution = institutionInput.value; // Get institution input value
             if (!selectedCourse) {
                 alert("Por favor, digite ou selecione um curso.");
                 return;
@@ -188,27 +156,42 @@
             }
 
             const requestBody = { course: selectedCourse, category: currentCategory };
-            if (selectedInstitution) {
+            if (selectedInstitution) { // Add institution to request body if it's not empty
                 requestBody.institution = selectedInstitution;
             }
 
             fetch('https://provao.onrender.com/filter_course', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(requestBody)
             })
             .then(response => response.json())
             .then(people => {
-                resultsDiv.innerHTML = people.length > 0 ? people.map(person => `
-                    <div class="person">
-                        <p><strong>Instituição:</strong> ${person.Instituição}</p>
-                        <p><strong>Curso:</strong> ${person.Curso}</p>
-                        <p><strong>Nota:</strong> ${person.Nota}</p>
-                        <p><strong>Grupo:</strong> ${person.Grupo}</p>
-                    </div>`).join('') : '<p>Nenhum aluno encontrado.</p>';
+                resultsDiv.style.display = 'block'; // Show results div on search
+                peopleListDiv.innerHTML = ''; // Limpa resultados anteriores
+                if (people && people.length > 0) {
+                    people.forEach(person => {
+                        const personDiv = document.createElement('div');
+                        personDiv.classList.add('person');
+                        personDiv.innerHTML = `
+                            <p><strong>Instituição:</strong> ${person.Institui\u00e7\u00e3o}</p>
+                            <p><strong>Curso:</strong> ${person.Curso}</p>
+                            <p><strong>Nota:</strong> ${person.Nota}</p>
+                            <p><strong>Grupo:</strong> ${person.Grupo}</p>
+                        `;
+                        peopleListDiv.appendChild(personDiv);
+                    });
+                } else {
+                    peopleListDiv.innerHTML = '<p>Nenhum aluno encontrado para este curso e instituição nesta categoria.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao buscar dados:', error);
+                peopleListDiv.innerHTML = '<p>Erro ao buscar os dados. Tente novamente mais tarde.</p>';
             });
         });
     </script>
-
 </body>
 </html>
