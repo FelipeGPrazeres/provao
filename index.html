@@ -120,7 +120,7 @@
             const currentInput = courseInput.value;
             coursesList.innerHTML = ''; // Clear previous course suggestions
 
-            if (currentInput.length >= 4 && currentCategory) {
+            if (currentInput.length >= 3 && currentCategory) {
                 const categoryCourses = allCourses[currentCategory] || [];
                 const filteredCourses = categoryCourses.filter(course =>
                     course.toLowerCase().startsWith(currentInput.toLowerCase())
