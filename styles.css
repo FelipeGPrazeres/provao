@@ -38,7 +38,7 @@ body {
     border-radius: 10px 10px 0 0;
 }
 .footer a {
-    color: #FFD700;
+    color: linear-gradient(135deg, #B22222, #8B0000);
     font-weight: bold;
     text-decoration: none;
 }
@@ -54,7 +54,7 @@ body {
     margin-top: 20px;
 }
 .contact-box {
-    background: linear-gradient(135deg, #B22222, #8B0000);
+    background: linear-gradient(135deg, #B22222, #d61313);
     padding: 15px;
     border-radius: 10px;
     width: 250px;
