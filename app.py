@@ -63,19 +63,15 @@ def filter_course():
     if selected_course:
         filtered_data = [
             item for item in filtered_data
-            if item.get('Curso', '').lower() in selected_course.lower()
+            if selected_course.lower() in item.get('Curso', '').lower()
         ]
     if selected_institution: # Apply institution filter if provided
         filtered_data = [
             item for item in filtered_data
-            if item.get('Instituição', '').lower() == selected_institution.lower()  
-        ]
-        filtered_data = [
-            item for item in filtered_data
-            if selected_institution.lower() in item.get('Instituição', '').lower()  
+            if selected_institution.lower() in item.get('Instituição', '').lower() # Substring check - CORRECTED
         ]
 
-    return jsonify(filtered_data)
+    return jsonify(filtered_data) # jsonify is CORRECT here in the route handler
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
