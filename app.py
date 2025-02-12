@@ -63,12 +63,16 @@ def filter_course():
     if selected_course:
         filtered_data = [
             item for item in filtered_data
-            if item.get('Curso', '').lower() == selected_course.lower()
+            if item.get('Curso', '').lower() in selected_course.lower()
         ]
     if selected_institution: # Apply institution filter if provided
         filtered_data = [
             item for item in filtered_data
-            if item.get('Instituição', '').lower() == selected_institution.lower()
+            if item.get('Instituição', '').lower() == selected_institution.lower()  
+        ]
+        filtered_data = [
+            item for item in filtered_data
+            if selected_institution.lower() in item.get('Instituição', '').lower()  
         ]
 
     return jsonify(filtered_data)
