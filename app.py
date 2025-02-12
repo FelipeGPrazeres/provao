@@ -51,30 +51,27 @@ def get_institutions():
 
 @app.route('/filter_course', methods=['POST'])
 def filter_course():
-    print("filter_course function CALLED!") # **NEW DEBUG LOG - Function entry**
+    selected_course = request.json.get('course')
     selected_institution = request.json.get('institution') # Get institution from request
     category = request.json.get('category')
 
-    if not category or category not in data_categories:
-        return jsonify({"error": "Categoria não fornecida ou inválida"}), 400
+    if not selected_course or not category or category not in data_categories:
+        return jsonify({"error": "Curso ou categoria não fornecidos ou inválidos"}), 400
 
     category_data = data_categories[category]
-    filtered_data = category_data  # Start with all data for the category
-
+    filtered_data = category_data
+    if selected_course:
+        filtered_data = [
+            item for item in filtered_data
+            if selected_course.lower() in item.get('Curso', '').lower()
+        ]
     if selected_institution: # Apply institution filter if provided
-        filtered_data = [] # Re-initialize filtered_data here to collect matches
-        search_term_lower = selected_institution.lower() # Lowercase search term ONCE
+        filtered_data = [
+            item for item in filtered_data
+            if selected_institution.lower() in item.get('Instituição', '').lower()  
+        ]
 
-        for item in category_data:
-            institution_name = item.get('Instituição', '') # Get institution name
-            institution_name_lower = institution_name.lower() # Lowercase institution name
-
-            print(f"Comparing search term: '{search_term_lower}' with institution name: '{institution_name_lower}'") # **DEBUG LOGGING - COMPARE VALUES**
-
-            if search_term_lower in institution_name_lower: # Substring check
-                filtered_data.append(item) # Add matching item
-
-    return jsonify(filtered_data) # Return jsonify of the (potentially filtered) data
+    return jsonify(filtered_data)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
