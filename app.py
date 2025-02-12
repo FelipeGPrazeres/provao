@@ -51,6 +51,7 @@ def get_institutions():
 
 @app.route('/filter_course', methods=['POST'])
 def filter_course():
+    print("filter_course function CALLED!") # **NEW DEBUG LOG - Function entry**
     selected_institution = request.json.get('institution') # Get institution from request
     category = request.json.get('category')
 
