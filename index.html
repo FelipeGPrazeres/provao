@@ -44,7 +44,28 @@
     </div>
 
     <!-- Search Form -->
-    <div class="container">
+     <div class="containerCalculadora">
+        <div class="calculadora">
+            <h1>Calculadora de Nota
+            </h1>
+            <label for="acertos">Quantidade de Acertos 2023:</label>
+            <input type="number" id="acertos" placeholder="Digite a quantidade de acertos em 2023">
+            <p></p>
+            <label for="acertos">Quantidade de Acertos 2024:</label>
+            <input type="number" id="acertos2" placeholder="Digite a quantidade de acertos em 2024">
+            <p></p>
+            <label for="acertos">Quantidade de Acertos 2025:</label>
+            <input type="number" id="acertos3" placeholder="Digite a quantidade de acertos em 2025">
+            <p></p>
+            <label for="acertos">Nota na Redação:</label>
+            <input type="number" id="acertosR" placeholder="Digite a sua nota na redação">
+            <p></p>
+            <button id="calculateButton">Calcular</button>
+            <div id="result"></div>
+        </div> 
+     </div>
+     <br>    
+    <div class="container">   
         <h1>Buscar Alunos por Curso e Instituição</h1>
 
         <label for="categorySelect">Selecione a Categoria:</label>
@@ -106,6 +127,7 @@
         const institutionInput = document.getElementById('institutionInput');
         const courseInput = document.getElementById('courseInput');
         const searchButton = document.getElementById('searchButton');
+        const calculateButton = document.getElementById('calculateButton');
         const resultsDiv = document.getElementById('results');
         const peopleListDiv = document.getElementById('peopleList');
         const coursesList = document.getElementById('coursesList');
@@ -227,6 +249,16 @@
                         <p><strong>Grupo:</strong> ${person.Grupo}</p>
                     </div>`).join('') : '<p>Nenhum aluno encontrado.</p>';
             });
+        });
+        calculateButton.addEventListener('click', () => {
+            let acertos = Number(document.getElementById('acertos').value);
+            let acertos2 = Number(document.getElementById('acertos2').value);
+            let acertos3 = Number(document.getElementById('acertos3').value);
+            let acertosR = Number(document.getElementById('acertosR').value);
+            let notaCalculadora = ((acertos + acertos2 + acertos3) / 270) * 0.85 + (acertosR / 20) * 0.15;
+            let notaReal = (notaCalculadora * 100).toFixed(3);   
+            document.getElementById('result').innerHTML = `<h2>Sua nota é: ${notaReal}</h2>`;
+            console.log(notaCalculadora)
         });
     </script>
 
