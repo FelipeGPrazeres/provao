@@ -1,6 +1,5 @@
-/* styles.css */
 :root {
-    /* Paleta de vermelhos original */
+    /* Paleta de vermelhos */
     --primary-color: #ed0707;
     --secondary-color: #B22222;
     --background-color: #F8F8F8;
@@ -23,12 +22,19 @@ body {
 
 /* Barra de navegação */
 .top-nav {
+    width: 100%;
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.nav-inner {
+    max-width: 1100px;
+    width: 90%;
+    margin: 0 auto; 
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--primary-color);
-    color: #fff;
-    padding: 10px 20px;
+    padding: 10px 0;
 }
 
 .nav-left {
@@ -45,23 +51,6 @@ body {
 .dot {
     color: #FFD700;
     font-weight: bold;
-}
-
-.nav-links ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #fff;
-    font-weight: 500;
-    transition: color 0.3s;
-}
-
-.nav-links a:hover {
-    color: #FFD700;
 }
 
 .nav-button {
@@ -199,18 +188,18 @@ body {
     color: var(--primary-color);
 }
 
-/* Áreas de busca */
+/* Container de busca */
 .search-container {
-    display: flex;
-    flex-wrap: wrap;
     width: 90%;
     max-width: 1100px;
     margin: 20px auto;
     background: #fff;
     border-radius: 10px;
     padding: 20px;
-    gap: 40px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
 }
 
 .search-fields {
@@ -257,8 +246,8 @@ body {
     cursor: not-allowed;
 }
 
-/* Container de resultados */
-.container {
+/* Resultados abaixo do formulário */
+#results {
     width: 90%;
     max-width: 1100px;
     margin: 20px auto;
@@ -266,10 +255,11 @@ body {
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
     padding: 20px;
+    display: none; /* inicialmente escondido */
 }
 
-#results {
-    display: none; 
+#results h2 {
+    color: var(--primary-color);
 }
 
 #peopleList {
@@ -353,16 +343,10 @@ body {
         flex-direction: column;
         gap: 20px;
     }
-
-    .nav-links ul {
-        display: none; /* Exemplo de ocultar o menu em telas menores */
-    }
-
     .top-nav {
         flex-direction: column;
         align-items: flex-start;
     }
-
     .nav-button {
         align-self: center;
         margin-top: 10px;
@@ -373,91 +357,13 @@ body {
     .nav-left h1 {
         font-size: 1.3em;
     }
-
     .search-fields h2 {
         font-size: 1em;
     }
-
     .collab-section {
         padding: 15px;
     }
-
     .footer h3 {
         font-size: 1.1em;
     }
-}
-/* Exemplo de estilo CSS para alinhar o conteúdo do header à página */
-.top-nav {
-    width: 100%;
-    background: var(--primary-color);
-    color: #fff;
-    /* Remova padding diretamente aqui se desejar que a margem
-       seja controlada pelo .nav-inner */
-}
-
-.nav-inner {
-    /* Largura máxima para centralizar */
-    max-width: 1100px;
-    /* Ajuste conforme a necessidade */
-    width: 90%;
-    margin: 0 auto; 
-    /* Centraliza horizontalmente */
-
-    /* Alinhamento flex */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.nav-left {
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Espaço entre “MEUSISU” e o botão */
-}
-
-.nav-left h1 {
-    font-size: 1.6em;
-    margin: 0;
-}
-
-.dot {
-    color: #FFD700;
-    font-weight: bold;
-}
-
-/* Botão "Minhas Notas" */
-.nav-button {
-    background: none;
-    border: 2px solid #fff;
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: all 0.3s ease;
-    /* Ajuste de margens se necessário */
-}
-
-.nav-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-}
-
-/* Navegação à direita */
-.nav-links ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    margin: 0; /* Garante que não haja espaços extras */
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #fff;
-    font-weight: 500;
-    transition: color 0.3s;
-}
-
-.nav-links a:hover {
-    color: #FFD700;
 }

@@ -12,266 +12,275 @@
         <!-- Container interno para alinhamento -->
         <div class="nav-inner">
             <div class="nav-left">
-                <h1>MEUSISU<span class="dot">.</span></h1>
-                <button class="nav-button" id="toggleCalculator">Minhas Notas</button>
+                <h1>MEUPROVAO<span class="dot">.</span></h1>
+                <button class="nav-button" id="toggleCalculator">Minha Nota</button>
             </div>
         </div>
     </header>
-<!-- Container principal -->
-<div class="main-container">
 
-    <!-- Popup (Oculto por padrão) -->
-    <div id="popup" class="popup">
-        <div id="popupContent">
-            <h2>Observação</h2>
-            <p>As notas exibidas são baseadas nos dados disponíveis e podem não representar o corte exato para aprovação. No futuro, teremos dados mais completos.</p>
-            <p>O site está no início do desenvolvimento!</p>
-            <button id="closePopup">Entendi</button>
+    <!-- Container principal -->
+    <div class="main-container">
+
+        <!-- Popup (Oculto por padrão) -->
+        <div id="popup" class="popup">
+            <div id="popupContent">
+                <h2>Observação</h2>
+                <p>As notas exibidas são baseadas nos dados disponíveis e podem não representar o corte exato para aprovação. No futuro, teremos dados mais completos.</p>
+                <p>O site está no início do desenvolvimento!</p>
+                <button id="closePopup">Entendi</button>
+            </div>
         </div>
-    </div>
 
-    <!-- Seção da Calculadora -->
-    <div class="containerCalculadora">
-        <div class="calculadora">
-            <div class="input-row">
-                <div class="input-group">
-                    <label for="acertos">Acertos 2023:</label>
-                    <input type="number" id="acertos" placeholder="Acertos 2023">
-                </div>
-                <div class="input-group">
-                    <label for="acertos2">Acertos 2024:</label>
-                    <input type="number" id="acertos2" placeholder="Acertos 2024">
-                </div>
-                <div class="input-group">
-                    <label for="acertos3">Acertos 2025:</label>
-                    <input type="number" id="acertos3" placeholder="Acertos 2025">
-                </div>
-                <div class="input-group">
-                    <label for="acertosR">Redação:</label>
-                    <input type="number" id="acertosR" placeholder="Nota Redação">
-                </div>
+        <!-- Seção da Calculadora -->
+        <div class="containerCalculadora">
+            <div class="calculadora">
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="acertos">Acertos 2023:</label>
+                        <input type="number" id="acertos" placeholder="Acertos 2023">
+                    </div>
+                    <div class="input-group">
+                        <label for="acertos2">Acertos 2024:</label>
+                        <input type="number" id="acertos2" placeholder="Acertos 2024">
+                    </div>
+                    <div class="input-group">
+                        <label for="acertos3">Acertos 2025:</label>
+                        <input type="number" id="acertos3" placeholder="Acertos 2025">
+                    </div>
+                    <div class="input-group">
+                        <label for="acertosR">Redação:</label>
+                        <input type="number" id="acertosR" placeholder="Nota Redação">
+                    </div>
 
-                <div class="button-result-group">
-                    <button id="calculateButton">Calcular</button>
-                    <div id="result"></div>
+                    <div class="button-result-group">
+                        <button id="calculateButton">Calcular</button>
+                        <div id="result"></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Formulário de Busca -->
-    <div class="search-container">
-        <div class="search-fields">
-            <h2>Busque pelas suas preferências:</h2>
-            <label for="categorySelect">Selecione a Categoria:</label>
-            <select id="categorySelect">
-                <option value="">Selecione uma categoria</option>
-            </select>
+        <!-- Formulário de Busca -->
+        <div class="search-container">
+            <div class="search-fields">
+                <h2>Busque pelas suas preferências:</h2>
+                <label for="categorySelect">Selecione a Categoria:</label>
+                <select id="categorySelect">
+                    <option value="">Selecione uma categoria</option>
+                </select>
 
-            <label for="institutionInput">Filtrar por Instituição (opcional):</label>
-            <input type="text" id="institutionInput" list="institutionsList" placeholder="Digite o nome da Instituição (opcional)">
-            <datalist id="institutionsList"></datalist>
+                <label for="institutionInput">Filtrar por Instituição (opcional):</label>
+                <input type="text" id="institutionInput" list="institutionsList" placeholder="Digite o nome da Instituição (opcional)">
+                <datalist id="institutionsList"></datalist>
 
-            <label for="courseInput">Selecione ou digite o curso:</label>
-            <input type="text" id="courseInput" list="coursesList" placeholder="Digite o nome do curso" disabled>
-            <datalist id="coursesList"></datalist>
+                <label for="courseInput">Selecione ou digite o curso:</label>
+                <input type="text" id="courseInput" list="coursesList" placeholder="Digite o nome do curso" disabled>
+                <datalist id="coursesList"></datalist>
 
-            <button id="searchButton" disabled>Buscar</button>
-        </div> 
+                <button id="searchButton" disabled>Buscar</button>
+            </div>
+        </div>
+
+        <!-- Resultados (exibido APÓS o container de busca) -->
         <div id="results">
             <h2>Resultados:</h2>
             <div id="peopleList"></div>
         </div>
-    </div>
 
-    <!-- Seção de colaboração -->
-    <div class="collab-section">
-        <h2>Já foi aprovado?</h2>
-        <p>Compartilhe sua nota para ajudar futuros candidatos:</p>
-        <a href="https://forms.gle/2cgZPhm3xofxtYFB8" target="_blank">Enviar minha Nota</a>
-    </div>
-    
-    <!-- Footer -->
-    <footer class="footer">
-        <h3>Grupo de Apoio para Vestibulandos 2025</h3>
-        <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
-        <a href="https://chat.whatsapp.com/EP0btFILC5s38znclDM3pO" target="_blank">Entrar no Grupo</a>
-        
-        <h3>Contato</h3>
-        <div class="contact-container">
-            <div class="contact-box">
-                <p><strong>Kauan Yuri</strong></p>
-                <p>WhatsApp: <a href="https://wa.me/5516994297281" target="_blank">16 99429-7281</a></p>
-                <p>Instagram: <a href="https://www.instagram.com/dev.kauan" target="_blank">@dev.kauan</a></p>
-            </div>
-            <div class="contact-box">
-                <p><strong>Felipe Galvão</strong></p>
-                <p>WhatsApp: <a href="https://wa.me/5516992145809" target="_blank">16 99214-5809</a></p>
-                <p>Instagram: <a href="https://www.instagram.com/felipe.prazeresz" target="_blank">@felipe.prazeresz</a></p>
-            </div>
+        <!-- Seção de colaboração -->
+        <div class="collab-section">
+            <h2>Já foi aprovado?</h2>
+            <p>Compartilhe sua nota para ajudar futuros candidatos:</p>
+            <a href="https://forms.gle/2cgZPhm3xofxtYFB8" target="_blank">Enviar minha Nota</a>
         </div>
-    </footer>
-</div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <h3>Grupo de Apoio para Vestibulandos 2025</h3>
+            <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
+            <a href="https://chat.whatsapp.com/EP0btFILC5s38znclDM3pO" target="_blank">Entrar no Grupo</a>
+            
+            <h3>Contato</h3>
+            <div class="contact-container">
+                <div class="contact-box">
+                    <p><strong>Kauan Yuri</strong></p>
+                    <p>WhatsApp: <a href="https://wa.me/5516994297281" target="_blank">16 99429-7281</a></p>
+                    <p>Instagram: <a href="https://www.instagram.com/dev.kauan" target="_blank">@dev.kauan</a></p>
+                </div>
+                <div class="contact-box">
+                    <p><strong>Felipe Galvão</strong></p>
+                    <p>WhatsApp: <a href="https://wa.me/5516992145809" target="_blank">16 99214-5809</a></p>
+                    <p>Instagram: <a href="https://www.instagram.com/felipe.prazeresz" target="_blank">@felipe.prazeresz</a></p>
+                </div>
+            </div>
+        </footer>
+    </div>
 
-<script>
-    const categorySelect = document.getElementById('categorySelect');
-    const institutionInput = document.getElementById('institutionInput');
-    const courseInput = document.getElementById('courseInput');
-    const searchButton = document.getElementById('searchButton');
-    const calculateButton = document.getElementById('calculateButton');
-    const resultsDiv = document.getElementById('results');
-    const peopleListDiv = document.getElementById('peopleList');
-    const coursesList = document.getElementById('coursesList');
-    const institutionsList = document.getElementById('institutionsList');
-    const popup = document.getElementById('popup');
-    const closePopup = document.getElementById('closePopup');
-    const toggleCalculator = document.getElementById('toggleCalculator');
-    const calculatorContainer = document.querySelector('.containerCalculadora');
+    <script>
+        const categorySelect = document.getElementById('categorySelect');
+        const institutionInput = document.getElementById('institutionInput');
+        const courseInput = document.getElementById('courseInput');
+        const searchButton = document.getElementById('searchButton');
+        const calculateButton = document.getElementById('calculateButton');
+        const resultsDiv = document.getElementById('results');
+        const peopleListDiv = document.getElementById('peopleList');
+        const coursesList = document.getElementById('coursesList');
+        const institutionsList = document.getElementById('institutionsList');
+        const popup = document.getElementById('popup');
+        const closePopup = document.getElementById('closePopup');
+        const toggleCalculator = document.getElementById('toggleCalculator');
+        const calculatorContainer = document.querySelector('.containerCalculadora');
 
-    let allCourses = {};
-    let allInstitutions = {};
-    let currentCategory = null;
+        let allCourses = {};
+        let allInstitutions = {};
+        let currentCategory = null;
 
-    // Exibe popup ao carregar
-    window.addEventListener('DOMContentLoaded', () => {
-        popup.style.display = "block";
-    });
+        // Exibe popup ao carregar
+        window.addEventListener('DOMContentLoaded', () => {
+            popup.style.display = "block";
+        });
 
-    closePopup.addEventListener("click", () => {
-        popup.style.display = "none";
-    });
+        closePopup.addEventListener("click", () => {
+            popup.style.display = "none";
+        });
 
-    // Fetch de categorias
-    fetch('https://provao.onrender.com/categories')
-        .then(response => response.json())
-        .then(categories => {
-            categories.forEach(category => {
-                let option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                categorySelect.appendChild(option);
+        // Esconde a seção de resultados inicialmente
+        resultsDiv.style.display = 'none';
+
+        // Fetch de categorias
+        fetch('https://provao.onrender.com/categories')
+            .then(response => response.json())
+            .then(categories => {
+                categories.forEach(category => {
+                    let option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    categorySelect.appendChild(option);
+                });
+            });
+
+        // Listener de mudança de categoria
+        categorySelect.addEventListener('change', () => {
+            currentCategory = categorySelect.value;
+            courseInput.disabled = false;
+            searchButton.disabled = false;
+            courseInput.value = '';
+            institutionInput.value = '';
+            coursesList.innerHTML = '';
+            institutionsList.innerHTML = '';
+
+            if (currentCategory) {
+                fetch(`https://provao.onrender.com/courses?category=${currentCategory}`)
+                    .then(response => response.json())
+                    .then(courses => {
+                        allCourses[currentCategory] = courses;
+                    });
+                fetch(`https://provao.onrender.com/institutions?category=${currentCategory}`)
+                    .then(response => response.json())
+                    .then(institutions => {
+                        allInstitutions[currentCategory] = institutions;
+                    });
+            } else {
+                courseInput.disabled = true;
+                searchButton.disabled = true;
+            }
+        });
+
+        // Filtra instituições
+        institutionInput.addEventListener('input', () => {
+            const currentInput = institutionInput.value;
+            institutionsList.innerHTML = '';
+
+            if (currentInput.length >= 3 && currentCategory) {
+                const categoryInstitutions = allInstitutions[currentCategory] || [];
+                const filteredInstitutions = categoryInstitutions.filter(institution =>
+                    institution.toLowerCase().startsWith(currentInput.toLowerCase())
+                );
+
+                filteredInstitutions.forEach(institution => {
+                    let option = document.createElement('option');
+                    option.value = institution;
+                    institutionsList.appendChild(option);
+                });
+            }
+        });
+
+        // Filtra cursos
+        courseInput.addEventListener('input', () => {
+            const currentInput = courseInput.value;
+            coursesList.innerHTML = '';
+
+            if (currentInput.length >= 3 && currentCategory) {
+                const categoryCourses = allCourses[currentCategory] || [];
+                const filteredCourses = categoryCourses.filter(course =>
+                    course.toLowerCase().startsWith(currentInput.toLowerCase())
+                );
+
+                filteredCourses.forEach(course => {
+                    let option = document.createElement('option');
+                    option.value = course;
+                    coursesList.appendChild(option);
+                });
+            }
+        });
+
+        // Botão de busca
+        searchButton.addEventListener('click', () => {
+            const selectedCourse = courseInput.value;
+            const selectedInstitution = institutionInput.value;
+
+            if (!selectedCourse) {
+                alert("Por favor, digite ou selecione um curso.");
+                return;
+            }
+            if (!currentCategory) {
+                alert("Por favor, selecione uma categoria.");
+                return;
+            }
+
+            const requestBody = { course: selectedCourse, category: currentCategory };
+            if (selectedInstitution) {
+                requestBody.institution = selectedInstitution;
+            }
+
+            fetch('https://provao.onrender.com/filter_course', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => response.json())
+            .then(people => {
+                // Exibe a div de resultados abaixo do formulário
+                resultsDiv.style.display = 'block';
+                // Popula a lista de pessoas
+                peopleListDiv.innerHTML = people.length > 0 
+                    ? people.map(person => `
+                        <div class="person">
+                            <p><strong>Instituição:</strong> ${person.Instituição}</p>
+                            <p><strong>Curso:</strong> ${person.Curso}</p>
+                            <p><strong>Nota:</strong> ${person.Nota}</p>
+                            <p><strong>Grupo:</strong> ${person.Grupo}</p>
+                        </div>
+                    `).join('')
+                    : '<p>Nenhum aluno encontrado.</p>';
             });
         });
 
-    // Listener de mudança de categoria
-    categorySelect.addEventListener('change', () => {
-        currentCategory = categorySelect.value;
-        courseInput.disabled = false;
-        searchButton.disabled = false;
-        courseInput.value = '';
-        institutionInput.value = '';
-        coursesList.innerHTML = '';
-        institutionsList.innerHTML = '';
-
-        if (currentCategory) {
-            fetch(`https://provao.onrender.com/courses?category=${currentCategory}`)
-                .then(response => response.json())
-                .then(courses => {
-                    allCourses[currentCategory] = courses;
-                });
-            fetch(`https://provao.onrender.com/institutions?category=${currentCategory}`)
-                .then(response => response.json())
-                .then(institutions => {
-                    allInstitutions[currentCategory] = institutions;
-                });
-        } else {
-            courseInput.disabled = true;
-            searchButton.disabled = true;
-        }
-    });
-
-    // Filtra instituições
-    institutionInput.addEventListener('input', () => {
-        const currentInput = institutionInput.value;
-        institutionsList.innerHTML = '';
-
-        if (currentInput.length >= 3 && currentCategory) {
-            const categoryInstitutions = allInstitutions[currentCategory] || [];
-            const filteredInstitutions = categoryInstitutions.filter(institution =>
-                institution.toLowerCase().startsWith(currentInput.toLowerCase())
-            );
-
-            filteredInstitutions.forEach(institution => {
-                let option = document.createElement('option');
-                option.value = institution;
-                institutionsList.appendChild(option);
-            });
-        }
-    });
-
-    // Filtra cursos
-    courseInput.addEventListener('input', () => {
-        const currentInput = courseInput.value;
-        coursesList.innerHTML = '';
-
-        if (currentInput.length >= 3 && currentCategory) {
-            const categoryCourses = allCourses[currentCategory] || [];
-            const filteredCourses = categoryCourses.filter(course =>
-                course.toLowerCase().startsWith(currentInput.toLowerCase())
-            );
-
-            filteredCourses.forEach(course => {
-                let option = document.createElement('option');
-                option.value = course;
-                coursesList.appendChild(option);
-            });
-        }
-    });
-    document.getElementById('results').style.display = 'none';
-
-    // Botão de busca
-    searchButton.addEventListener('click', () => {
-        const selectedCourse = courseInput.value;
-        const selectedInstitution = institutionInput.value;
-        if (!selectedCourse) {
-            alert("Por favor, digite ou selecione um curso.");
-            return;
-        }
-
-        if (!currentCategory) {
-            alert("Por favor, selecione uma categoria.");
-            return;
-        }
-
-        const requestBody = { course: selectedCourse, category: currentCategory };
-        if (selectedInstitution) {
-            requestBody.institution = selectedInstitution;
-        }
-
-        fetch('https://provao.onrender.com/filter_course', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody)
-        })
-        .then(response => response.json())
-        .then(people => {
-            document.getElementById('results').style.display = 'block';
-            peopleListDiv.innerHTML = people.length > 0 ? people.map(person => `
-                <div class="person">
-                    <p><strong>Instituição:</strong> ${person.Instituição}</p>
-                    <p><strong>Curso:</strong> ${person.Curso}</p>
-                    <p><strong>Nota:</strong> ${person.Nota}</p>
-                    <p><strong>Grupo:</strong> ${person.Grupo}</p>
-                </div>`).join('') : '<p>Nenhum aluno encontrado.</p>';
+        // Cálculo de notas
+        calculateButton.addEventListener('click', () => {
+            let acertos = Number(document.getElementById('acertos').value);
+            let acertos2 = Number(document.getElementById('acertos2').value);
+            let acertos3 = Number(document.getElementById('acertos3').value);
+            let acertosR = Number(document.getElementById('acertosR').value);
+            let notaCalculadora = ((acertos / 90) * 0.15) + ((acertos2 / 90) * 0.25) + ((acertos3 / 90) * 0.40) + ((acertosR / 20) * 0.20);
+            let notaReal = (notaCalculadora * 100).toFixed(3);   
+            document.getElementById('result').innerHTML = `<h2>Sua nota é: ${notaReal}</h2>`;
         });
-        document.getElementById('results').style.display = 'block';
-    });
 
-    // Cálculo de notas
-    calculateButton.addEventListener('click', () => {
-        let acertos = Number(document.getElementById('acertos').value);
-        let acertos2 = Number(document.getElementById('acertos2').value);
-        let acertos3 = Number(document.getElementById('acertos3').value);
-        let acertosR = Number(document.getElementById('acertosR').value);
-        let notaCalculadora = ((acertos / 90) * 0.15) + ((acertos2 / 90) * 0.25) + ((acertos3 / 90) * 0.40) + ((acertosR / 20) * 0.20);
-        let notaReal = (notaCalculadora * 100).toFixed(3);   
-        document.getElementById('result').innerHTML = `<h2>Sua nota é: ${notaReal}</h2>`;
-    });
-
-    // Exibe/oculta calculadora
-    toggleCalculator.addEventListener('click', () => {
-        calculatorContainer.classList.toggle('visible');
-    });
-</script>
+        // Exibe/oculta calculadora
+        toggleCalculator.addEventListener('click', () => {
+            calculatorContainer.classList.toggle('visible');
+        });
+    </script>
 </body>
 </html>
