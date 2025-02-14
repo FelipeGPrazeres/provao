@@ -1,5 +1,5 @@
 :root {
-    /* Paleta de vermelhos */
+    /* Paleta de vermelhos original */
     --primary-color: #ed0707;
     --secondary-color: #B22222;
     --background-color: #F8F8F8;
@@ -246,7 +246,7 @@ body {
     cursor: not-allowed;
 }
 
-/* Resultados abaixo do formulário */
+/* Resultados */
 #results {
     width: 90%;
     max-width: 1100px;
@@ -255,7 +255,7 @@ body {
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
     padding: 20px;
-    display: none; /* inicialmente escondido */
+    display: none;
 }
 
 #results h2 {
@@ -303,9 +303,31 @@ body {
     margin-top: 20px;
 }
 
+/* Container interno do footer para controlar largura e espaçamento */
+.footer-inner {
+    width: 95%;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Ajuste a seu gosto para espaço extra: */
+    gap: 20px;
+}
+
+/* Margem inferior no link, separando do contato */
+.group-link {
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
 .footer h3 {
     font-size: 1.2em;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+}
+
+.footer p {
+    margin-bottom: 0.5em;
 }
 
 .footer a {
@@ -320,12 +342,13 @@ body {
     text-decoration: underline;
 }
 
+/* Contatos */
 .contact-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 30px;
-    margin-top: 20px;
+    margin-top: 5px;
 }
 
 .contact-box {
@@ -335,6 +358,12 @@ body {
     min-width: 200px;
     max-width: 220px;
     text-align: left;
+}
+
+/* Impede quebra de linha em telefones */
+.contact-box p a,
+.contact-box p {
+    white-space: nowrap;
 }
 
 /* Responsividade */
@@ -353,6 +382,17 @@ body {
     }
 }
 
+@media (max-width: 600px) {
+    /* 2 campos por linha na calculadora */
+    .input-row {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .input-group {
+        width: calc(50% - 10px);
+    }
+}
+
 @media (max-width: 480px) {
     .nav-left h1 {
         font-size: 1.3em;
@@ -362,6 +402,9 @@ body {
     }
     .collab-section {
         padding: 15px;
+    }
+    .footer-inner {
+        width: 95%;
     }
     .footer h3 {
         font-size: 1.1em;

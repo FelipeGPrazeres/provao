@@ -9,7 +9,6 @@
 <body>
 
     <header class="top-nav">
-        <!-- Container interno para alinhamento -->
         <div class="nav-inner">
             <div class="nav-left">
                 <h1>MEUPROVAO<span class="dot">.</span></h1>
@@ -81,7 +80,7 @@
             </div>
         </div>
 
-        <!-- Resultados (exibido APÓS o container de busca) -->
+        <!-- Resultados -->
         <div id="results">
             <h2>Resultados:</h2>
             <div id="peopleList"></div>
@@ -96,21 +95,32 @@
         
         <!-- Footer -->
         <footer class="footer">
-            <h3>Grupo de Apoio para Vestibulandos 2025</h3>
-            <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
-            <a href="https://chat.whatsapp.com/EP0btFILC5s38znclDM3pO" target="_blank">Entrar no Grupo</a>
-            
-            <h3>Contato</h3>
-            <div class="contact-container">
-                <div class="contact-box">
-                    <p><strong>Kauan Yuri</strong></p>
-                    <p>WhatsApp: <a href="https://wa.me/5516994297281" target="_blank">16 99429-7281</a></p>
-                    <p>Instagram: <a href="https://www.instagram.com/dev.kauan" target="_blank">@dev.kauan</a></p>
-                </div>
-                <div class="contact-box">
-                    <p><strong>Felipe Galvão</strong></p>
-                    <p>WhatsApp: <a href="https://wa.me/5516992145809" target="_blank">16 99214-5809</a></p>
-                    <p>Instagram: <a href="https://www.instagram.com/felipe.prazeresz" target="_blank">@felipe.prazeresz</a></p>
+            <!-- Container interno para melhor controle de largura -->
+            <div class="footer-inner">
+                <h3>Grupo de Apoio para Vestibulandos 2025</h3>
+                <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
+                <a class="group-link" href="https://chat.whatsapp.com/EP0btFILC5s38znclDM3pO" target="_blank">Entrar no Grupo</a>
+                
+                <h3>Contato</h3>
+                <div class="contact-container">
+                    <div class="contact-box">
+                        <p><strong>Kauan Yuri</strong></p>
+                        <p>WhatsApp:
+                            <a href="https://wa.me/5516994297281" target="_blank">16 99429-7281</a>
+                        </p>
+                        <p>Instagram:
+                            <a href="https://www.instagram.com/dev.kauan" target="_blank">@dev.kauan</a>
+                        </p>
+                    </div>
+                    <div class="contact-box">
+                        <p><strong>Felipe Galvão</strong></p>
+                        <p>WhatsApp:
+                            <a href="https://wa.me/5516992145809" target="_blank">16 99214-5809</a>
+                        </p>
+                        <p>Instagram:
+                            <a href="https://www.instagram.com/felipe.prazeresz" target="_blank">@felipe.prazeresz</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </footer>
@@ -144,7 +154,7 @@
             popup.style.display = "none";
         });
 
-        // Esconde a seção de resultados inicialmente
+        // Esconde resultados inicialmente
         resultsDiv.style.display = 'none';
 
         // Fetch de categorias
@@ -159,7 +169,7 @@
                 });
             });
 
-        // Listener de mudança de categoria
+        // Ao mudar a categoria
         categorySelect.addEventListener('change', () => {
             currentCategory = categorySelect.value;
             courseInput.disabled = false;
@@ -250,9 +260,8 @@
             })
             .then(response => response.json())
             .then(people => {
-                // Exibe a div de resultados abaixo do formulário
+                // Exibe resultados abaixo do formulário
                 resultsDiv.style.display = 'block';
-                // Popula a lista de pessoas
                 peopleListDiv.innerHTML = people.length > 0 
                     ? people.map(person => `
                         <div class="person">
@@ -272,7 +281,11 @@
             let acertos2 = Number(document.getElementById('acertos2').value);
             let acertos3 = Number(document.getElementById('acertos3').value);
             let acertosR = Number(document.getElementById('acertosR').value);
-            let notaCalculadora = ((acertos / 90) * 0.15) + ((acertos2 / 90) * 0.25) + ((acertos3 / 90) * 0.40) + ((acertosR / 20) * 0.20);
+            let notaCalculadora = ((acertos / 90) * 0.15) 
+                                + ((acertos2 / 90) * 0.25) 
+                                + ((acertos3 / 90) * 0.40) 
+                                + ((acertosR / 20) * 0.20);
+
             let notaReal = (notaCalculadora * 100).toFixed(3);   
             document.getElementById('result').innerHTML = `<h2>Sua nota é: ${notaReal}</h2>`;
         });
