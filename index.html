@@ -28,8 +28,44 @@
 
     <!-- Header with explanation -->
     <header class="header">
-        <h1>📚 Meu Provão - Visualizador de Notas</h1>
-        <p>Nosso objetivo é ajudar vestibulandos a terem mais clareza sobre suas chances de aprovação, oferecendo um simulador baseado nos dados de notas anteriores do Provão Paulista.</p>
+        <div class="headerText">
+            <div class="header-top">
+                <h1>📚 Meu Provão</h1>
+                <button class="nav-button" id="toggleCalculator">Minha Nota</button>
+            </div>
+            
+            <!-- Simplified calculator container -->
+            <div class="containerCalculadora">
+                <div class="calculadora">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="acertos">Acertos 2023:</label>
+                            <input type="number" id="acertos" placeholder="Acertos 2023">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="acertos2">Acertos 2024:</label>
+                            <input type="number" id="acertos2" placeholder="Acertos 2024">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="acertos3">Acertos 2025:</label>
+                            <input type="number" id="acertos3" placeholder="Acertos 2025">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="acertosR">Redação:</label>
+                            <input type="number" id="acertosR" placeholder="Nota Redação">
+                        </div>
+
+                        <div class="button-result-group">
+                            <button id="calculateButton">Calcular</button>
+                            <div id="result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
     
@@ -44,28 +80,13 @@
     </div>
 
     <!-- Search Form -->
-     <div class="containerCalculadora">
-        <div class="calculadora">
-            <h1>Calculadora de Nota
-            </h1>
-            <label for="acertos">Quantidade de Acertos 2023:</label>
-            <input type="number" id="acertos" placeholder="Digite a quantidade de acertos em 2023">
-            <p></p>
-            <label for="acertos">Quantidade de Acertos 2024:</label>
-            <input type="number" id="acertos2" placeholder="Digite a quantidade de acertos em 2024">
-            <p></p>
-            <label for="acertos">Quantidade de Acertos 2025:</label>
-            <input type="number" id="acertos3" placeholder="Digite a quantidade de acertos em 2025">
-            <p></p>
-            <label for="acertos">Nota na Redação:</label>
-            <input type="number" id="acertosR" placeholder="Digite a sua nota na redação">
-            <p></p>
-            <button id="calculateButton">Calcular</button>
-            <div id="result"></div>
-        </div> 
-     </div>
-     <br>    
+    <br>    
+    <div class="container">
+        <p style="font-weight: bold;">Nosso objetivo é ajudar vestibulandos a terem mais clareza sobre suas chances de aprovação, oferecendo um simulador baseado nos dados de notas anteriores do Provão Paulista.</p>
+    </div>
+    <br>
     <div class="container">   
+        
         <h1>Buscar Alunos por Curso e Instituição</h1>
 
         <label for="categorySelect">Selecione a Categoria:</label>
@@ -259,6 +280,14 @@
             let notaReal = (notaCalculadora * 100).toFixed(3);   
             document.getElementById('result').innerHTML = `<h2>Sua nota é: ${notaReal}</h2>`;
             console.log(notaCalculadora)
+        });
+
+        const toggleCalculator = document.getElementById('toggleCalculator');
+        const calculatorContainer = document.querySelector('.containerCalculadora');
+        
+        toggleCalculator.addEventListener('click', () => {
+            calculatorContainer.classList.toggle('visible');
+            document.querySelector('.header').classList.toggle('expanded');
         });
     </script>
 
