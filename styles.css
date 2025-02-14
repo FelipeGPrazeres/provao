@@ -37,7 +37,7 @@ body {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     animation: fadeIn 1s ease-in-out;
-    
+    justify-content: center;
 }
 .containerCalculadora {
     display: none;
@@ -82,8 +82,6 @@ body {
 .input-row {
     display: flex;
     flex-direction: row;
-    gap: 20px;
-    width: 100%;
     justify-content: center;
     align-items: flex-end;
     margin-bottom: 20px;
@@ -92,18 +90,14 @@ body {
     padding: 0 20px;
     display: flex;
     flex-direction: row;
-    gap: 20px;
-    width: 100%;
     justify-content: center;
     align-items: flex-end;
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
     align-items: center;
     width: 100%;
-    gap: 10px; /* Add gap between inputs */
+    gap: 50px; /* Add gap between inputs */
 }
 
 .input-group {
@@ -449,7 +443,7 @@ button:hover {
         margin: 0;
         padding: 0 20px;
         width: 95%;
-        gap: 10px;
+        gap: 0px;
     }
     
     .input-group {
@@ -544,7 +538,7 @@ button:hover {
         padding: 0 10px;
         margin: 0;
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
     }
 
     .input-group {
@@ -593,7 +587,7 @@ button:hover {
     }
 
     .input-row {
-        gap: 15px;
+        gap: 10px;
     }
 
     .input-group {
