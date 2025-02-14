@@ -255,7 +255,7 @@
             let acertos2 = Number(document.getElementById('acertos2').value);
             let acertos3 = Number(document.getElementById('acertos3').value);
             let acertosR = Number(document.getElementById('acertosR').value);
-            let notaCalculadora = ((acertos + acertos2 + acertos3) / 270) * 0.85 + (acertosR / 20) * 0.15;
+            let notaCalculadora = ((acertos / 90) * 0.15) + ((acertos2 / 90) * 0.25) + ((acertos3 / 90) * 0.40) + ((acertosR / 20) * 0.20);
             let notaReal = (notaCalculadora * 100).toFixed(3);   
             document.getElementById('result').innerHTML = `<h2>Sua nota é: ${notaReal}</h2>`;
             console.log(notaCalculadora)
