@@ -200,6 +200,20 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 40px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.collab-section {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .search-fields {
