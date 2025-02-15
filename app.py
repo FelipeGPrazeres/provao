@@ -1,13 +1,19 @@
+# filepath: /c:/Users/Felip/Downloads/testes/2/provao/app.py
 from flask import Flask, jsonify, request
 import json
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, origins=["https://provao-1.onrender.com"]) # **SPECIFIC ORIGIN - REPLACE WITH YOUR FRONTEND URL**
+CORS(app, origins=["https://lightskyblue-grouse-667245.hostingersite.com/"]) 
+# ^ Allows cross-origin requests from the specified frontend
 
 JSON_FILE_PATH = 'output_multi_sheet.json'
 
 def load_data():
+    """
+    Loads the JSON data from a file and returns a dictionary
+    representing categories and their items.
+    """
     try:
         with open(JSON_FILE_PATH, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -22,56 +28,71 @@ data_categories = load_data()
 
 @app.route('/categories')
 def get_categories():
+    """
+    Returns the list of available categories 
+    (keys of the data_categories dictionary).
+    """
     return jsonify(list(data_categories.keys()))
 
 @app.route('/courses')
 def get_courses():
+    """
+    Expects a 'category' query parameter. If valid, returns
+    the set of 'Curso' values for that category in the JSON data.
+    """
     category = request.args.get('category')
     if not category or category not in data_categories:
+        # 400 if category not provided or invalid
         return jsonify([]), 400
 
     category_data = data_categories[category]
-    courses = set()
-    for item in category_data:
-        courses.add(item.get('Curso', ''))
+    courses = {item.get('Curso', '') for item in category_data}
+    # Collects unique course names in a set
     return jsonify(list(courses))
 
 @app.route('/institutions')
 def get_institutions():
+    """
+    Similar to /courses, but fetches 'Instituição' values 
+    for a valid category.
+    """
     category = request.args.get('category')
     if not category or category not in data_categories:
         return jsonify([]), 400
 
     category_data = data_categories[category]
-    institutions = set()
-    for item in category_data:
-        institutions.add(item.get('Instituição', ''))
+    institutions = {item.get('Instituição', '') for item in category_data}
     return jsonify(list(institutions))
-
 
 @app.route('/filter_course', methods=['POST'])
 def filter_course():
+    """
+    Accepts JSON with 'course', 'institution', and 'category'.
+    Filters the dataset by 'Curso' and optionally by 'Instituição'.
+    Returns list of matching data objects.
+    """
     selected_course = request.json.get('course')
-    selected_institution = request.json.get('institution') # Get institution from request
+    selected_institution = request.json.get('institution')
     category = request.json.get('category')
 
     if not selected_course or not category or category not in data_categories:
         return jsonify({"error": "Curso ou categoria não fornecidos ou inválidos"}), 400
 
     category_data = data_categories[category]
-    filtered_data = category_data
-    if selected_course:
+    filtered_data = [
+        item for item in category_data
+        if selected_course.lower() in item.get('Curso', '').lower()
+    ]
+
+    # Apply institution filter only if provided
+    if selected_institution:
         filtered_data = [
             item for item in filtered_data
-            if selected_course.lower() in item.get('Curso', '').lower()
-        ]
-    if selected_institution: # Apply institution filter if provided
-        filtered_data = [
-            item for item in filtered_data
-            if selected_institution.lower() in item.get('Instituição', '').lower()  
+            if selected_institution.lower() in item.get('Instituição', '').lower()
         ]
 
     return jsonify(filtered_data)
 
 if __name__ == '__main__':
+    # Runs the Flask app locally on port 5001
     app.run(debug=True, port=5001)
