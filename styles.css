@@ -118,7 +118,7 @@ body {
 
 /* Oculto por padrão */
 .containerCalculadora {
-    width: 80%;
+    width: 90%;
     max-width: 800px;
     background: #fff;
     border-radius: 8px;
