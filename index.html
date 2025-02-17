@@ -263,14 +263,23 @@
                 // Exibe resultados abaixo do formulário
                 resultsDiv.style.display = 'block';
                 peopleListDiv.innerHTML = people.length > 0 
-                    ? people.map(person => `
-                        <div class="person">
-                            <p><strong>Instituição:</strong> ${person.Instituição}</p>
-                            <p><strong>Curso:</strong> ${person.Curso}</p>
-                            <p><strong>Nota:</strong> ${person.Nota}</p>
-                            <p><strong>Grupo:</strong> ${person.Grupo}</p>
-                        </div>
-                    `).join('')
+                    ? people.map(person => {
+                        if (person.Nota < notaReal) {
+                            return `<div class="personMaior">
+                                <p><strong>Instituição:</strong> ${person.Instituição}</p>
+                                <p><strong>Curso:</strong> ${person.Curso}</p>
+                                <p><strong>Nota:</strong> ${person.Nota}</p>
+                                <p><strong>Grupo:</strong> ${person.Grupo}</p>
+                            </div>`;
+                        } else {
+                            return `<div class="person">
+                                <p><strong>Instituição:</strong> ${person.Instituição}</p>
+                                <p><strong>Curso:</strong> ${person.Curso}</p>
+                                <p><strong>Nota:</strong> ${person.Nota}</p>
+                                <p><strong>Grupo:</strong> ${person.Grupo}</p>
+                            </div>`;
+                        }
+                    }).join('')
                     : '<p>Nenhum aluno encontrado.</p>';
             });
         });
