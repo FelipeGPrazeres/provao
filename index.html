@@ -260,6 +260,9 @@
             })
             .then(response => response.json())
             .then(people => {
+                // Define notaReal for comparison
+                let notaReal = 0; // Set this to the actual value you want to compare with
+
                 // Exibe resultados abaixo do formulário
                 resultsDiv.style.display = 'block';
                 peopleListDiv.innerHTML = people.length > 0 
