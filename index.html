@@ -267,7 +267,7 @@
                 resultsDiv.style.display = 'block';
                 peopleListDiv.innerHTML = people.length > 0 
                     ? people.map(person => {
-                        if (person.Nota < notaReal) {
+                        if (parseFloat(person.Nota) < notaReal) {
                             return `<div class="personMaior">
                                 <p><strong>Instituição:</strong> ${person.Instituição}</p>
                                 <p><strong>Curso:</strong> ${person.Curso}</p>
