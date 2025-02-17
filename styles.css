@@ -283,12 +283,12 @@ body {
 .person {
     border-bottom: 1px dashed #ccc;
     padding: 10px 0;
-    border: 5px solid var(--secondary-color);
+    border-left: 5px solid var(--secondary-color);
 }
 .personMaior {
     border-bottom: 1px dashed #ccc;
     padding: 10px 0;
-    border: 5px solid #00ff00;
+    border-left: 5px solid #00ff00;
 }
 
 /* Seção de colaboração */
