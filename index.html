@@ -298,7 +298,7 @@
                                 + ((acertos3 / 90) * 0.40) 
                                 + ((acertosR / 20) * 0.20);
 
-            let notaReal = (notaCalculadora * 100).toFixed(3);   
+            notaReal = (notaCalculadora * 100).toFixed(3);   
             document.getElementById('result').innerHTML = `<h2>Sua nota é: ${notaReal}</h2>`;
         });
 
