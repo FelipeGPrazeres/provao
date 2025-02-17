@@ -233,6 +233,22 @@
                 });
             }
         });
+        let notaReal = 0;
+        let acertos = Number(document.getElementById('acertos').value);
+        let acertos2 = Number(document.getElementById('acertos2').value);
+        let acertos3 = Number(document.getElementById('acertos3').value);
+        let acertosR = Number(document.getElementById('acertosR').value);
+        let notaCalculadora = 0;
+        // Cálculo de notas
+        calculateButton.addEventListener('click', () => {
+            notaCalculadora = ((acertos / 90) * 0.15) 
+                                + ((acertos2 / 90) * 0.25)
+                                + ((acertos3 / 90) * 0.40) 
+                                + ((acertosR / 20) * 0.20);
+
+            notaReal = (notaCalculadora * 100).toFixed(3);   
+            document.getElementById('result').innerHTML = `<h2>Sua nota é: ${notaReal}</h2>`;
+        });
 
         // Botão de busca
         searchButton.addEventListener('click', () => {
@@ -260,9 +276,6 @@
             })
             .then(response => response.json())
             .then(people => {
-                // Define notaReal for comparison
-                let notaReal = 0; // Set this to the actual value you want to compare with
-
                 // Exibe resultados abaixo do formulário
                 resultsDiv.style.display = 'block';
                 peopleListDiv.innerHTML = people.length > 0 
@@ -285,21 +298,6 @@
                     }).join('')
                     : '<p>Nenhum aluno encontrado.</p>';
             });
-        });
-
-        // Cálculo de notas
-        calculateButton.addEventListener('click', () => {
-            let acertos = Number(document.getElementById('acertos').value);
-            let acertos2 = Number(document.getElementById('acertos2').value);
-            let acertos3 = Number(document.getElementById('acertos3').value);
-            let acertosR = Number(document.getElementById('acertosR').value);
-            let notaCalculadora = ((acertos / 90) * 0.15) 
-                                + ((acertos2 / 90) * 0.25) 
-                                + ((acertos3 / 90) * 0.40) 
-                                + ((acertosR / 20) * 0.20);
-
-            notaReal = (notaCalculadora * 100).toFixed(3);   
-            document.getElementById('result').innerHTML = `<h2>Sua nota é: ${notaReal}</h2>`;
         });
 
         // Exibe/oculta calculadora
