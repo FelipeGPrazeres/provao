@@ -112,20 +112,44 @@ body {
     cursor: pointer;
 }
 
-/* Calculadora */
+/*==================================================*/
+/* Calculadora (com transição de “slide” ao clicar) */
+/*==================================================*/
+
+/* Oculto por padrão */
 .containerCalculadora {
-    display: none;
     width: 80%;
     max-width: 800px;
-    margin-top: 20px;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+
+    /* Parte crucial: animando a altura e ocultando completamente */
+    max-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    
+    /* Removemos margin e padding inicialmente para não ocupar espaço */
+    margin-top: 0;
+    padding: 0;
+    
+    /* Transições suaves */
+    transition: 
+       max-height 0.4s ease, 
+       opacity 0.4s ease,
+       visibility 0.4s,
+       margin-top 0.4s,
+       padding 0.4s;
 }
 
+/* Quando .visible, definimos valores adequados para mostrar o conteúdo */
 .containerCalculadora.visible {
-    display: block;
+    max-height: 800px; /* altura suficiente */
+    visibility: visible;
+    opacity: 1;
+    margin-top: 20px;
+    padding: 20px;
 }
 
 .calculadora {
@@ -280,17 +304,30 @@ body {
     margin-top: 15px;
 }
 
-.person {
-    border-bottom: 1px dashed #ccc;
-    padding: 10px 0;
-    border-left: 5px solid var(--secondary-color);
-    padding-left: 10px;
-}
+/* Divs de resultado */
+.person,
 .personMaior {
     border-bottom: 1px dashed #ccc;
     padding: 10px 0;
-    border-left: 5px solid #00ff00;
     padding-left: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* person tem borda vermelha */
+.person {
+    border-left: 5px solid var(--secondary-color);
+}
+
+/* personMaior tem borda verde */
+.personMaior {
+    border-left: 5px solid #00ff00;
+}
+
+/* Efeito “zoom” no hover */
+.person:hover,
+.personMaior:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 /* Seção de colaboração */
@@ -325,7 +362,6 @@ body {
     margin-top: 20px;
 }
 
-/* Container interno do footer para controlar largura e espaçamento */
 .footer-inner {
     width: 95%;
     max-width: 1100px;
@@ -333,11 +369,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Ajuste a seu gosto para espaço extra: */
     gap: 20px;
 }
 
-/* Margem inferior no link, separando do contato */
 .group-link {
     margin-bottom: 20px;
     display: inline-block;

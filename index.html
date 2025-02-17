@@ -12,6 +12,7 @@
         <div class="nav-inner">
             <div class="nav-left">
                 <h1>MEUPROVAO<span class="dot">.</span></h1>
+                <!-- Botão "Minha Nota" (Agora com animação de expansão) -->
                 <button class="nav-button" id="toggleCalculator">Minha Nota</button>
             </div>
         </div>
@@ -30,8 +31,8 @@
             </div>
         </div>
 
-        <!-- Seção da Calculadora -->
-        <div class="containerCalculadora">
+        <!-- Seção da Calculadora (expansão via max-height) -->
+        <div class="containerCalculadora" id="calculatorContainer">
             <div class="calculadora">
                 <div class="input-row">
                     <div class="input-group">
@@ -138,12 +139,15 @@
         const institutionsList = document.getElementById('institutionsList');
         const popup = document.getElementById('popup');
         const closePopup = document.getElementById('closePopup');
+        
         const toggleCalculator = document.getElementById('toggleCalculator');
-        const calculatorContainer = document.querySelector('.containerCalculadora');
+        const calculatorContainer = document.getElementById('calculatorContainer');
 
         let allCourses = {};
         let allInstitutions = {};
         let currentCategory = null;
+        let notaReal = 0;
+        let notaCalculadora = 0;
 
         // Exibe popup ao carregar
         window.addEventListener('DOMContentLoaded', () => {
@@ -233,8 +237,7 @@
                 });
             }
         });
-        let notaReal = 0;
-        let notaCalculadora = 0;
+
         // Cálculo de notas
         calculateButton.addEventListener('click', () => {
             let acertos = Number(document.getElementById('acertos').value);
@@ -301,7 +304,7 @@
             });
         });
 
-        // Exibe/oculta calculadora
+        // Exibe/oculta calculadora com animação de expansão (similar ao menu)
         toggleCalculator.addEventListener('click', () => {
             calculatorContainer.classList.toggle('visible');
         });
