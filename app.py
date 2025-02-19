@@ -15,6 +15,15 @@ CORS(app, origins=[
 
 JSON_FILE_PATH = 'output_multi_sheet.json'
 
+def keep_alive_loop():
+    while True:
+        try:
+            requests.get('https://provao.onrender.com/keep_alive')
+            requests.get('https://provao.onrender.com/ping_categories')
+        except Exception as e:
+            print("Error in keep_alive_loop:", e)
+        time.sleep(120)
+
 def load_data():
     """
     Loads the JSON data from a file and returns a dictionary
