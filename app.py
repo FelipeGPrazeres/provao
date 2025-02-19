@@ -107,6 +107,12 @@ def keep_alive():
     """
     return jsonify({"status": "Server is alive"})
 
+@app.route('/ping_categories')  # New ping endpoint - try pinging /categories route
+def ping_categories():
+    """Pings the /categories endpoint as a form of activity."""
+    categories = get_categories() # Actually call the /categories route logic
+    return categories # Return the categories JSON response (same as /categories)
+
 if __name__ == '__main__':
     # Runs the Flask app locally on port 5001
     app.run(debug=True, port=5001)

@@ -304,7 +304,7 @@
         // Sistema de requisição periodico para impedir que a aplicação durma
         function keepAlive() {
             const keepAliveUrl = 'https://provao.onrender.com/keep_alive'; // Using absolute URL
-
+            
             console.log("keepAlive() function called - Fetching URL:", keepAliveUrl); // **DEBUG LOG: Function start and URL**
 
             fetch(keepAliveUrl)
@@ -323,6 +323,22 @@
                 .catch(error => {
                     console.error("keepAlive() - Erro ao manter ativo:", error); // Error log (as before)
                 });
+            fetch('https://provao.onrender.com/ping_categories') 
+                .then(response => {
+                        console.log("keepAlive() - fetch response received. Status:", response.status); // **DEBUG LOG: Response status**
+                        if (!response.ok) { // Check if response status is NOT OK (e.g., 404, 500)
+                            console.error("keepAlive() - HTTP error!", response.status, response.statusText); // **DEBUG LOG: HTTP Error**
+                            throw new Error(`HTTP error! status: ${response.status}`); // Propagate error to .catch()
+                        }
+                        return response.json(); // Try to parse JSON only for successful responses
+                    })
+                    .then(data => {
+                        console.log("keepAlive() - JSON data received:", data); // **DEBUG LOG: JSON data**
+                        console.log("Servidor ativo:", data.status); // Success log (as before)
+                    })
+                    .catch(error => {
+                        console.error("keepAlive() - Erro ao manter ativo:", error); // Error log (as before)
+                    });
         }
 
         // Chama a função imediatamente e depois a cada 5 minutos (300.000ms)
