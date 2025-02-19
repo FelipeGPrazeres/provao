@@ -96,6 +96,13 @@ def filter_course():
 
     return jsonify(filtered_data)
 
+@app.route('/keep_alive')
+def keep_alive():
+    """Endpoint para manter o backend ativo."""
+    return jsonify({"status": "alive"}), 200
+
+    
+
 if __name__ == '__main__':
     # Runs the Flask app locally on port 5001
     app.run(debug=True, port=5001)

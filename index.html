@@ -307,6 +307,17 @@
         toggleCalculator.addEventListener('click', () => {
             calculatorContainer.classList.toggle('visible');
         });
+
+        // Sistema de requisição periodico para impedir que a aplicação durma
+        function keepAlive() {
+        fetch('/keep_alive')
+            .then(response => response.json())
+            .then(data => console.log("Servidor ativo:", data.status))
+            .catch(error => console.error("Erro ao manter ativo:", error));
+    }
+        // Chama a função imediatamente e depois a cada 5 minutos (300.000ms)
+        keepAlive();
+        setInterval(keepAlive, 300000);
     </script>
 </body>
 </html>
