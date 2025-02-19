@@ -1,6 +1,9 @@
 # filepath: /c:/Users/Felip/Downloads/testes/2/provao/app.py
 from flask import Flask, jsonify, request
 import json
+import threading
+import time
+import requests
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -97,11 +100,18 @@ def filter_course():
     return jsonify(filtered_data)
 
 @app.route('/keep_alive')
-def keep_alive():
-    """Endpoint para manter o backend ativo."""
-    return jsonify({"status": "alive"}), 200
-
-    
+def keep_awake():
+    url = "http://127.0.0.1:5001/categories"  # Ajuste para a URL correta do seu backend
+    while True:
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                print("Mantendo o servidor ativo...")
+            else:
+                print(f"Erro ao manter ativo: {response.status_code} - {response.text}")
+        except Exception as e:
+            print(f"Erro ao manter ativo: {e}")
+        time.sleep(300)  # 5 minutos
 
 if __name__ == '__main__':
     # Runs the Flask app locally on port 5001
