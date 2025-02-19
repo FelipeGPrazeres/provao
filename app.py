@@ -101,7 +101,7 @@ def filter_course():
 
 @app.route('/keep_alive')
 def keep_awake():
-    url = "http://127.0.0.1:5001/categories"  # Ajuste para a URL correta do seu backend
+    url = "https://provao-1.onrender.com/categories"  # Ajuste para a URL correta do seu backend
     while True:
         try:
             response = requests.get(url)
