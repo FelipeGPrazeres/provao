@@ -302,48 +302,38 @@
         });
 
         // Sistema de requisição periodico para impedir que a aplicação durma
-        function keepAlive() {
-            const keepAliveUrl = 'https://provao.onrender.com/keep_alive'; // Using absolute URL
-            
-            console.log("keepAlive() function called - Fetching URL:", keepAliveUrl); // **DEBUG LOG: Function start and URL**
+        async function keepAlive() {
+            try {
+                const keepAliveUrl = 'https://provao.onrender.com/keep_alive'; // Using absolute URL
+                const pingCategoriesUrl = 'https://provao.onrender.com/ping_categories';
 
-            fetch(keepAliveUrl)
-                .then(response => {
-                    console.log("keepAlive() - fetch response received. Status:", response.status); // **DEBUG LOG: Response status**
-                    if (!response.ok) { // Check if response status is NOT OK (e.g., 404, 500)
-                        console.error("keepAlive() - HTTP error!", response.status, response.statusText); // **DEBUG LOG: HTTP Error**
-                        throw new Error(`HTTP error! status: ${response.status}`); // Propagate error to .catch()
-                    }
-                    return response.json(); // Try to parse JSON only for successful responses
-                })
-                .then(data => {
-                    console.log("keepAlive() - JSON data received:", data); // **DEBUG LOG: JSON data**
-                    console.log("Servidor ativo:", data.status); // Success log (as before)
-                })
-                .catch(error => {
-                    console.error("keepAlive() - Erro ao manter ativo:", error); // Error log (as before)
-                });
-            fetch('https://provao.onrender.com/ping_categories') 
-                .then(response => {
-                        console.log("keepAlive() - fetch response received. Status:", response.status); // **DEBUG LOG: Response status**
-                        if (!response.ok) { // Check if response status is NOT OK (e.g., 404, 500)
-                            console.error("keepAlive() - HTTP error!", response.status, response.statusText); // **DEBUG LOG: HTTP Error**
-                            throw new Error(`HTTP error! status: ${response.status}`); // Propagate error to .catch()
-                        }
-                        return response.json(); // Try to parse JSON only for successful responses
-                    })
-                    .then(data => {
-                        console.log("keepAlive() - JSON data received:", data); // **DEBUG LOG: JSON data**
-                        console.log("Servidor ativo:", data.status); // Success log (as before)
-                    })
-                    .catch(error => {
-                        console.error("keepAlive() - Erro ao manter ativo:", error); // Error log (as before)
-                    });
+                console.log("keepAlive() function called - Fetching URL:", keepAliveUrl); // **DEBUG LOG: Function start and URL**
+
+                const keepAliveResponse = await fetch(keepAliveUrl);
+                if (!keepAliveResponse.ok) {
+                    console.error("keepAlive() - HTTP error!", keepAliveResponse.status, keepAliveResponse.statusText); // **DEBUG LOG: HTTP Error**
+                    throw new Error(`HTTP error! status: ${keepAliveResponse.status}`);
+                }
+                const keepAliveData = await keepAliveResponse.json();
+                console.log("keepAlive() - JSON data received:", keepAliveData); // **DEBUG LOG: JSON data**
+                console.log("Servidor ativo:", keepAliveData.status); // Success log (as before)
+
+                const pingCategoriesResponse = await fetch(pingCategoriesUrl);
+                if (!pingCategoriesResponse.ok) {
+                    console.error("keepAlive() - HTTP error!", pingCategoriesResponse.status, pingCategoriesResponse.statusText); // **DEBUG LOG: HTTP Error**
+                    throw new Error(`HTTP error! status: ${pingCategoriesResponse.status}`);
+                }
+                const pingCategoriesData = await pingCategoriesResponse.json();
+                console.log("keepAlive() - JSON data received:", pingCategoriesData); // **DEBUG LOG: JSON data**
+                console.log("Servidor ativo:", pingCategoriesData.status); // Success log (as before)
+            } catch (error) {
+                console.error("keepAlive() - Erro ao manter ativo:", error); // Error log (as before)
+            }
         }
 
         // Chama a função imediatamente e depois a cada 5 minutos (300.000ms)
         keepAlive();
-        setInterval(keepAlive, 300000);''
+        setInterval(keepAlive, 60000);
     </script>
 </body>
 </html>
