@@ -35,7 +35,7 @@ data_categories = load_data()
 @app.route('/categories')
 def get_categories():
     """
-    Returns the list of available categories 
+    Returns the list of available categories
     (keys of the data_categories dictionary).
     """
     return jsonify(list(data_categories.keys()))
@@ -59,7 +59,7 @@ def get_courses():
 @app.route('/institutions')
 def get_institutions():
     """
-    Similar to /courses, but fetches 'Instituição' values 
+    Similar to /courses, but fetches 'Instituição' values
     for a valid category.
     """
     category = request.args.get('category')
@@ -100,18 +100,12 @@ def filter_course():
     return jsonify(filtered_data)
 
 @app.route('/keep_alive')
-def keep_awake():
-    url = "https://provao-1.onrender.com/categories"  # Ajuste para a URL correta do seu backend
-    while True:
-        try:
-            response = requests.get(url)
-            if response.status_code == 200:
-                print("Mantendo o servidor ativo...")
-            else:
-                print(f"Erro ao manter ativo: {response.status_code} - {response.text}")
-        except Exception as e:
-            print(f"Erro ao manter ativo: {e}")
-        time.sleep(300)  # 5 minutos
+def keep_alive():
+    """
+    Simple route to keep the server alive.
+    Returns a JSON response with a success status.
+    """
+    return jsonify({"status": "Server is alive"}) # Corrected to return jsonify
 
 if __name__ == '__main__':
     # Runs the Flask app locally on port 5001

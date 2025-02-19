@@ -172,7 +172,6 @@
                 });
             });
 
-        // Ao mudar a categoria
         categorySelect.addEventListener('change', () => {
             currentCategory = categorySelect.value;
             courseInput.disabled = false;
@@ -199,7 +198,6 @@
             }
         });
 
-        // Filtra instituições
         institutionInput.addEventListener('input', () => {
             const currentInput = institutionInput.value;
             institutionsList.innerHTML = '';
@@ -218,7 +216,6 @@
             }
         });
 
-        // Filtra cursos
         courseInput.addEventListener('input', () => {
             const currentInput = courseInput.value;
             coursesList.innerHTML = '';
@@ -237,31 +234,14 @@
             }
         });
 
-        // Cálculo de notas
-        calculateButton.addEventListener('click', () => {
-            let acertos = Number(document.getElementById('acertos').value);
-            let acertos2 = Number(document.getElementById('acertos2').value);
-            let acertos3 = Number(document.getElementById('acertos3').value);
-            let acertosR = Number(document.getElementById('acertosR').value);
-
-            notaCalculadora = ((acertos / 90) * 0.15) 
-                            + ((acertos2 / 90) * 0.25)
-                            + ((acertos3 / 90) * 0.40) 
-                            + ((acertosR / 20) * 0.20);
-
-            notaReal = (notaCalculadora * 100).toFixed(3);
-            document.getElementById('result').innerHTML = `<h2>Sua nota é: ${notaReal}</h2>`;
-        });
-
-        // Botão de busca
         searchButton.addEventListener('click', () => {
             const selectedCourse = courseInput.value;
             const selectedInstitution = institutionInput.value;
-
             if (!selectedCourse) {
                 alert("Por favor, digite ou selecione um curso.");
                 return;
             }
+
             if (!currentCategory) {
                 alert("Por favor, selecione uma categoria.");
                 return;
@@ -279,8 +259,7 @@
             })
             .then(response => response.json())
             .then(people => {
-                // Exibe resultados abaixo do formulário
-                resultsDiv.style.display = 'block';
+                document.getElementById('results').style.display = 'block'; // Show results div
                 peopleListDiv.innerHTML = people.length > 0 
                     ? people.map(person => {
                         if (parseFloat(person.Nota) < notaReal) {
@@ -301,6 +280,20 @@
                     }).join('')
                     : '<p>Nenhum aluno encontrado.</p>';
             });
+        });
+        calculateButton.addEventListener('click', () => {
+            let acertos = Number(document.getElementById('acertos').value);
+            let acertos2 = Number(document.getElementById('acertos2').value);
+            let acertos3 = Number(document.getElementById('acertos3').value);
+            let acertosR = Number(document.getElementById('acertosR').value);
+
+            notaCalculadora = ((acertos / 90) * 0.15) 
+                            + ((acertos2 / 90) * 0.25)
+                            + ((acertos3 / 90) * 0.40) 
+                            + ((acertosR / 20) * 0.20);
+
+            notaReal = (notaCalculadora * 100).toFixed(3);
+            document.getElementById('result').innerHTML = `<h2>Sua nota é: ${notaReal}</h2>`;
         });
 
         // Exibe/oculta calculadora com animação de expansão (similar ao menu)
