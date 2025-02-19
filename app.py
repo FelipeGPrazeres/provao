@@ -105,7 +105,7 @@ def keep_alive():
     Simple route to keep the server alive.
     Returns a JSON response with a success status.
     """
-    return jsonify({"status": "Server is alive"}) # Corrected to return jsonify
+    return jsonify({"status": "Server is alive"})
 
 if __name__ == '__main__':
     # Runs the Flask app locally on port 5001
