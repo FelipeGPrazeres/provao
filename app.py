@@ -125,3 +125,7 @@ def ping_categories():
 if __name__ == '__main__':
     # Runs the Flask app locally on port 5001
     app.run(debug=True, port=5001)
+if __name__ == '__main__':
+    threading.Thread(target=keep_alive_loop, daemon=True).start()
+    print("Started keep_alive_loop in the background.")
+    app.run(debug=True, port=5001)
