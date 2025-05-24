@@ -9,7 +9,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, origins=[
     "https://provao-1.onrender.com",                 # Old frontend origin (keep if needed)
-    "https://lightskyblue-grouse-667245.hostingersite.com"  # **ADD NEW FRONTEND ORIGIN HERE**
+    "https://lightskyblue-grouse-667245.hostingersite.com",  # **ADD NEW FRONTEND ORIGIN HERE**
+    "null" # Permitir origem 'null' para testes locais com file://
 ])
 # ^ Allows cross-origin requests from the specified frontend
 
