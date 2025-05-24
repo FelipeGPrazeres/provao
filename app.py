@@ -132,10 +132,10 @@ def ping_categories():
     return categories # Return the categories JSON response (same as /categories)
 
 if __name__ == '__main__':
-    # Runs the Flask app locally on port 5001
-    app.run(debug=True, port=5001)
-
-if __name__ == '__main__':
+    # Inicia o loop keep_alive em uma thread separada para desenvolvimento local
+    # Em produção, o Render ou outro serviço de hospedagem lidará com keep-alive se necessário, ou use um serviço de ping externo.
     threading.Thread(target=keep_alive_loop, daemon=True).start()
-    print("Started keep_alive_loop in the background.")
-    app.run(debug=True, port=10000)
+    print("Started keep_alive_loop in the background for local development.")
+    # Executa o aplicativo Flask localmente na porta 10000 para desenvolvimento
+    # O Gunicorn será usado em produção e pegará a porta do ambiente.
+    app.run(debug=True, host='0.0.0.0', port=10000)
