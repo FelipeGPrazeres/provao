@@ -46,9 +46,9 @@ data_categories = load_data()
 def index_page():
     return render_template('index.html')
 
-@app.route('/submit_data')
-def submit_data_page():
-    return render_template('submit_data.html')
+@app.route('/formulario')
+def formulario_page():
+    return render_template('formulario.html')
 
 @app.route('/categories')
 def get_categories():
