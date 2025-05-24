@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEUPROVAO</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -128,6 +129,11 @@
     </div>
 
     <script>
+        // Configuração do Cliente Supabase
+        const SUPABASE_URL = 'https://iradczvlimgyukwbwqcl.supabase.co'; // Substitua pela sua URL
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyYWRjenZsaW1neXVrd2J3cWNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgxMTQwMDcsImV4cCI6MjA2MzY5MDAwN30.CcLvcjhUaNvgSEHFunka_Er-RQ8iwMKInP5lvIrlqIY'; // Substitua pela sua chave anônima
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         const categorySelect = document.getElementById('categorySelect');
         const institutionInput = document.getElementById('institutionInput');
         const courseInput = document.getElementById('courseInput');
@@ -161,41 +167,72 @@
         // Esconde resultados inicialmente
         resultsDiv.style.display = 'none';
 
-        // Fetch de categorias
-        fetch('https://provao.onrender.com/categories')
-            .then(response => response.json())
-            .then(categories => {
-                categories.forEach(category => {
-                    let option = document.createElement('option');
-                    option.value = category;
-                    option.textContent = category;
-                    categorySelect.appendChild(option);
-                });
-            });
+        // Fetch de categorias do Supabase
+        async function fetchCategories() {
+            try {
+                const { data, error } = await supabase
+                    .from('categorias') // Substitua 'categorias' pelo nome da sua tabela de categorias
+                    .select('nome');    // Substitua 'nome' pelo nome da sua coluna de nome da categoria
 
-        categorySelect.addEventListener('change', () => {
+                if (error) {
+                    console.error('Erro ao buscar categorias:', error);
+                    return;
+                }
+
+                if (data) {
+                    data.forEach(category => {
+                        let option = document.createElement('option');
+                        option.value = category.nome; // Ajuste 'nome' se necessário
+                        option.textContent = category.nome; // Ajuste 'nome' se necessário
+                        categorySelect.appendChild(option);
+                    });
+                }
+            } catch (err) {
+                console.error('Erro inesperado ao buscar categorias:', err);
+            }
+        }
+        fetchCategories();
+
+        categorySelect.addEventListener('change', async () => {
             currentCategory = categorySelect.value;
-            courseInput.disabled = false;
-            searchButton.disabled = false;
+            courseInput.disabled = !currentCategory;
+            searchButton.disabled = !currentCategory;
             courseInput.value = '';
             institutionInput.value = '';
             coursesList.innerHTML = '';
             institutionsList.innerHTML = '';
+            allCourses[currentCategory] = []; // Resetar cursos para a categoria
+            allInstitutions[currentCategory] = []; // Resetar instituições para a categoria
 
             if (currentCategory) {
-                fetch(`https://provao.onrender.com/courses?category=${currentCategory}`)
-                    .then(response => response.json())
-                    .then(courses => {
-                        allCourses[currentCategory] = courses;
-                    });
-                fetch(`https://provao.onrender.com/institutions?category=${currentCategory}`)
-                    .then(response => response.json())
-                    .then(institutions => {
-                        allInstitutions[currentCategory] = institutions;
-                    });
-            } else {
-                courseInput.disabled = true;
-                searchButton.disabled = true;
+                try {
+                    // Fetch de cursos para a categoria selecionada
+                    const { data: coursesData, error: coursesError } = await supabase
+                        .from('cursos') // Substitua 'cursos' pelo nome da sua tabela de cursos
+                        .select('nome') // Substitua 'nome' pelo nome da sua coluna de nome do curso
+                        .eq('categoria_nome', currentCategory); // Supondo que você tenha uma coluna 'categoria_nome' na tabela 'cursos'
+
+                    if (coursesError) {
+                        console.error('Erro ao buscar cursos:', coursesError);
+                    } else if (coursesData) {
+                        allCourses[currentCategory] = coursesData.map(course => course.nome); // Ajuste 'nome' se necessário
+                    }
+
+                    // Fetch de instituições para a categoria selecionada
+                    const { data: institutionsData, error: institutionsError } = await supabase
+                        .from('instituicoes') // Substitua 'instituicoes' pelo nome da sua tabela de instituições
+                        .select('nome') // Substitua 'nome' pelo nome da sua coluna de nome da instituição
+                        .eq('categoria_nome', currentCategory); // Supondo que você tenha uma coluna 'categoria_nome' na tabela 'instituicoes'
+
+                    if (institutionsError) {
+                        console.error('Erro ao buscar instituições:', institutionsError);
+                    } else if (institutionsData) {
+                        allInstitutions[currentCategory] = institutionsData.map(inst => inst.nome); // Ajuste 'nome' se necessário
+                    }
+
+                } catch (err) {
+                    console.error('Erro ao buscar cursos ou instituições:', err);
+                }
             }
         });
 
@@ -203,9 +240,8 @@
             const currentInput = institutionInput.value;
             institutionsList.innerHTML = '';
 
-            if (currentInput.length >= 3 && currentCategory) {
-                const categoryInstitutions = allInstitutions[currentCategory] || [];
-                const filteredInstitutions = categoryInstitutions.filter(institution =>
+            if (currentInput.length >= 3 && currentCategory && allInstitutions[currentCategory]) {
+                const filteredInstitutions = allInstitutions[currentCategory].filter(institution =>
                     institution.toLowerCase().startsWith(currentInput.toLowerCase())
                 );
 
@@ -221,9 +257,8 @@
             const currentInput = courseInput.value;
             coursesList.innerHTML = '';
 
-            if (currentInput.length >= 3 && currentCategory) {
-                const categoryCourses = allCourses[currentCategory] || [];
-                const filteredCourses = categoryCourses.filter(course =>
+            if (currentInput.length >= 3 && currentCategory && allCourses[currentCategory]) {
+                const filteredCourses = allCourses[currentCategory].filter(course =>
                     course.toLowerCase().startsWith(currentInput.toLowerCase())
                 );
 
@@ -235,7 +270,7 @@
             }
         });
 
-        searchButton.addEventListener('click', () => {
+        searchButton.addEventListener('click', async () => {
             const selectedCourse = courseInput.value;
             const selectedInstitution = institutionInput.value;
             if (!selectedCourse) {
@@ -248,39 +283,57 @@
                 return;
             }
 
-            const requestBody = { course: selectedCourse, category: currentCategory };
-            if (selectedInstitution) {
-                requestBody.institution = selectedInstitution;
-            }
+            try {
+                let query = supabase
+                    .from('submissoes_notas') // Substitua 'submissoes_notas' pelo nome da sua tabela de submissões
+                    .select('instituicao_nome, curso_nome, nota_final, grupo_categoria') // Ajuste os nomes das colunas
+                    .eq('curso_nome', selectedCourse)
+                    .eq('grupo_categoria', currentCategory);
 
-            fetch('https://provao.onrender.com/filter_course', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestBody)
-            })
-            .then(response => response.json())
-            .then(people => {
-                document.getElementById('results').style.display = 'block'; // Show results div
-                peopleListDiv.innerHTML = people.length > 0 
+                if (selectedInstitution) {
+                    query = query.eq('instituicao_nome', selectedInstitution);
+                }
+
+                const { data: people, error } = await query;
+
+                if (error) {
+                    console.error('Erro ao buscar resultados:', error);
+                    peopleListDiv.innerHTML = '<p>Erro ao buscar dados. Tente novamente.</p>';
+                    return;
+                }
+
+                document.getElementById('results').style.display = 'block';
+                peopleListDiv.innerHTML = people && people.length > 0
                     ? people.map(person => {
-                        if (parseFloat(person.Nota) < notaReal) {
+                        // Adapte os nomes das colunas conforme a sua tabela no Supabase
+                        const instituicao = person.instituicao_nome || 'N/A';
+                        const curso = person.curso_nome || 'N/A';
+                        const nota = person.nota_final !== null ? parseFloat(person.nota_final).toFixed(3) : 'N/A';
+                        const grupo = person.grupo_categoria || 'N/A';
+
+                        const notaPessoa = parseFloat(person.nota_final); // Usar a nota da pessoa para comparação
+
+                        if (!isNaN(notaPessoa) && !isNaN(notaReal) && notaPessoa < notaReal) {
                             return `<div class="personMaior">
-                                <p><strong>Instituição:</strong> ${person.Instituição}</p>
-                                <p><strong>Curso:</strong> ${person.Curso}</p>
-                                <p><strong>Nota:</strong> ${person.Nota}</p>
-                                <p><strong>Grupo:</strong> ${person.Grupo}</p>
+                                <p><strong>Instituição:</strong> ${instituicao}</p>
+                                <p><strong>Curso:</strong> ${curso}</p>
+                                <p><strong>Nota:</strong> ${nota}</p>
+                                <p><strong>Grupo:</strong> ${grupo}</p>
                             </div>`;
                         } else {
                             return `<div class="person">
-                                <p><strong>Instituição:</strong> ${person.Instituição}</p>
-                                <p><strong>Curso:</strong> ${person.Curso}</p>
-                                <p><strong>Nota:</strong> ${person.Nota}</p>
-                                <p><strong>Grupo:</strong> ${person.Grupo}</p>
+                                <p><strong>Instituição:</strong> ${instituicao}</p>
+                                <p><strong>Curso:</strong> ${curso}</p>
+                                <p><strong>Nota:</strong> ${nota}</p>
+                                <p><strong>Grupo:</strong> ${grupo}</p>
                             </div>`;
                         }
                     }).join('')
                     : '<p>Nenhum aluno encontrado.</p>';
-            });
+            } catch (err) {
+                console.error('Erro inesperado na busca:', err);
+                peopleListDiv.innerHTML = '<p>Ocorreu um erro inesperado. Tente novamente.</p>';
+            }
         });
         calculateButton.addEventListener('click', () => {
             let acertos = Number(document.getElementById('acertos').value);
@@ -301,40 +354,6 @@
         toggleCalculator.addEventListener('click', () => {
             calculatorContainer.classList.toggle('visible');
         });
-
-        // Sistema de requisição periodico para impedir que a aplicação durma
-        async function keepAlive() {
-            try {
-                const keepAliveUrl = 'https://provao.onrender.com/keep_alive';
-                const pingCategoriesUrl = 'https://provao.onrender.com/ping_categories';
-
-                console.log("keepAlive() function called - Fetching URL:", keepAliveUrl);
-
-                const keepAliveResponse = await fetch(keepAliveUrl);
-                if (!keepAliveResponse.ok) {
-                    console.error("keepAlive() - HTTP error!", keepAliveResponse.status, keepAliveResponse.statusText);
-                    throw new Error(`HTTP error! status: ${keepAliveResponse.status}`);
-                }
-                const keepAliveData = await keepAliveResponse.json();
-                console.log("keepAlive() - JSON data received:", keepAliveData);
-                console.log("Servidor ativo:", keepAliveData.status);
-
-                const pingCategoriesResponse = await fetch(pingCategoriesUrl);
-                if (!pingCategoriesResponse.ok) {
-                    console.error("keepAlive() - HTTP error!", pingCategoriesResponse.status, pingCategoriesResponse.statusText);
-                    throw new Error(`HTTP error! status: ${pingCategoriesResponse.status}`);
-                }
-                const pingCategoriesData = await pingCategoriesResponse.json();
-                console.log("keepAlive() - JSON data received:", pingCategoriesData);
-                console.log("Servidor ativo:", pingCategoriesData.status);
-            } catch (error) {
-                console.error("keepAlive() - Erro ao manter ativo:", error);
-            }
-        }
-
-        // Chama a função imediatamente e depois a cada 5 minutos (300.000ms)
-        keepAlive();
-        setInterval(keepAlive, 60000);
     </script>
 </body>
 </html>

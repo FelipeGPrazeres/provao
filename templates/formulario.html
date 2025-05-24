@@ -83,8 +83,8 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="campoUnicoNumero">Seu Número:</label>
-                        <input type="number" id="campoUnicoNumero" placeholder="Digite seu número" required>
+                        <label for="campoUnicoNumero">Sua nota final:</label>
+                        <input type="number" id="campoUnicoNumero" placeholder="Digite sua nota" required>
                     </div>
                     
                     <button type="submit" class="nav-button">Enviar Dados</button>
@@ -165,24 +165,36 @@
 
         async function loadFilterData() {
             try {
-                const categoriesResponse = await fetch('https://provao.onrender.com/categories');
-                const categories = await categoriesResponse.json();
+                // Carregar todas as instituições
+                const { data: institutionsData, error: institutionsError } = await supabaseClient
+                    .from('instituicoes') // CONFIRME O NOME DA TABELA 'instituicoes'
+                    .select('nome'); // CONFIRME O NOME DA COLUNA 'nome'
 
-                if (categories.length > 0) {
-                    const defaultCategory = categories[0];
-
-                    const institutionsResponse = await fetch(`https://provao.onrender.com/institutions?category=${defaultCategory}`);
-                    allAvailableInstitutions = await institutionsResponse.json();
-
-                    const coursesResponse = await fetch(`https://provao.onrender.com/courses?category=${defaultCategory}`);
-                    allAvailableCourses = await coursesResponse.json();
-
-                    console.log('Dados de filtro carregados para a categoria:', defaultCategory);
-                } else {
-                    console.warn('Nenhuma categoria encontrada para carregar os filtros.');
+                if (institutionsError) {
+                    console.error('Erro ao carregar instituições:', institutionsError);
+                } else if (institutionsData) {
+                    allAvailableInstitutions = institutionsData.map(inst => inst.nome);
+                    console.log('Instituições carregadas:', allAvailableInstitutions.length);
                 }
+
+                // Carregar todos os cursos
+                const { data: coursesData, error: coursesError } = await supabaseClient
+                    .from('cursos') // CONFIRME O NOME DA TABELA 'cursos'
+                    .select('nome'); // CONFIRME O NOME DA COLUNA 'nome'
+
+                if (coursesError) {
+                    console.error('Erro ao carregar cursos:', coursesError);
+                } else if (coursesData) {
+                    allAvailableCourses = coursesData.map(course => course.nome);
+                    console.log('Cursos carregados:', allAvailableCourses.length);
+                }
+
+                if (!institutionsError && !coursesError) {
+                    console.log('Dados de filtro (instituições e cursos) carregados do Supabase.');
+                }
+
             } catch (error) {
-                console.error('Erro ao carregar dados para os filtros:', error);
+                console.error('Erro ao carregar dados para os filtros do Supabase:', error);
             }
         }
 
@@ -227,48 +239,55 @@
             event.preventDefault(); 
             console.log('Default form submission prevented.');
 
-            const campo1 = document.getElementById('campo1').value;
-            const campo2 = document.getElementById('campo2').value;
-            const campo3 = document.getElementById('campo3').value;
-            const campo4 = document.getElementById('campo4').value;
-            const campoUnicoNumero = parseFloat(document.getElementById('campoUnicoNumero').value);
+            const nomeCompleto = document.getElementById('campo1').value; // Renomeado para clareza
+            const tipoCota = document.getElementById('campo2').value;     // Renomeado para clareza
+            const instituicao = document.getElementById('campo3').value;  // Renomeado para clareza
+            const curso = document.getElementById('campo4').value;       // Renomeado para clareza
+            const notaFinal = parseFloat(document.getElementById('campoUnicoNumero').value);
 
-            console.log('Data collected:', { campo1, campo2, campo3, campo4, campoUnicoNumero });
+            console.log('Data collected:', { nomeCompleto, tipoCota, instituicao, curso, notaFinal });
 
-            if (!campo2) {
+            if (!tipoCota) {
                 formMessage.textContent = 'Por favor, selecione uma opção para o Tipo de Cota.';
                 formMessage.style.color = 'red';
                 return;
             }
+            
+            // Limpar mensagem anterior
+            formMessage.textContent = ''; 
 
             console.log('Attempting to send data to Supabase...');
             try {
+                // CONFIRME O NOME DA TABELA 'dados_formulario' E OS NOMES DAS COLUNAS ABAIXO
                 const { data, error } = await supabaseClient
-                    .from('dados_formulario') // Substitua pelo nome da sua tabela no Supabase
+                    .from('dados_formulario') 
                     .insert([
                         { 
-                            nome: campo1,
-                            tipo_cota: campo2,
-                            instituicao: campo3,
-                            curso: campo4,
-                            numero_unico: campoUnicoNumero // Novo nome da coluna para o campo numérico
+                            nome: nomeCompleto,
+                            tipo_cota: tipoCota,
+                            instituicao_nome: instituicao, // Ajustado para corresponder a um padrão comum
+                            curso_nome: curso,           // Ajustado para corresponder a um padrão comum
+                            nota_final: notaFinal,
+                            // Você pode querer adicionar outras colunas aqui, como:
+                            // aprovado: false, // (ou um status inicial)
+                            // data_envio: new Date(),
+                            // user_id: supabaseClient.auth.user() ? supabaseClient.auth.user().id : null // Se tiver autenticação
                         }
                     ]);
 
                 if (error) {
-                    console.error('Supabase error:', error);
-                    throw error;
+                    console.error('Erro ao enviar dados para o Supabase:', error);
+                    formMessage.textContent = 'Erro ao enviar dados: ' + error.message;
+                    formMessage.style.color = 'red';
+                } else {
+                    console.log('Dados enviados com sucesso para o Supabase:', data);
+                    formMessage.textContent = 'Dados enviados com sucesso!';
+                    formMessage.style.color = 'green';
+                    document.getElementById('dataForm').reset(); // Limpa o formulário
                 }
-
-                console.log('Data sent successfully to Supabase:', data);
-                formMessage.textContent = 'Dados enviados com sucesso!';
-                formMessage.style.color = 'green';
-                this.reset();
-                institutionsList.innerHTML = '';
-                coursesList.innerHTML = '';
-            } catch (error) {
-                console.error('Erro ao enviar dados:', error.message);
-                formMessage.textContent = 'Erro ao enviar dados: ' + error.message;
+            } catch (err) {
+                console.error('Erro inesperado durante a submissão:', err);
+                formMessage.textContent = 'Ocorreu um erro inesperado. Tente novamente.';
                 formMessage.style.color = 'red';
             }
         });
