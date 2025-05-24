@@ -2,3 +2,5 @@ flask
 flask-cors
 gunicorn
 requests
+supabase
+python-dotenv

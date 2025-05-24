@@ -63,10 +63,6 @@
                         <label for="campo2">Tipo de Cota:</label>
                         <select id="campo2" required>
                             <option value="">Selecione uma opção</option>
-                            <option value="L1_renda">L1 (renda)</option>
-                            <option value="L2_renda_ppi">L2 (renda+ppi)</option>
-                            <option value="L3_sem_cota">L3 (sem cota)</option>
-                            <option value="L4_apenas_ppi">L4 (apenas ppi)</option>
                         </select>
                     </div>
 
@@ -135,11 +131,16 @@
         const institutionsList = document.getElementById('institutionsList');
         const coursesList = document.getElementById('coursesList');
         const formMessage = document.getElementById('formMessage');
+        const tipoCotaSelect = document.getElementById('campo2');
 
         const toggleCalculatorSubmit = document.getElementById('toggleCalculatorSubmit');
         const calculatorContainerSubmit = document.getElementById('calculatorContainerSubmit');
         const calculateButtonSubmit = document.getElementById('calculateButtonSubmit');
         let notaRealSubmit = 0;
+
+        let allAvailableInstitutions = {};
+        let allAvailableCourses = {};
+        let currentFormCategory = null;
 
         toggleCalculatorSubmit.addEventListener('click', () => {
             calculatorContainerSubmit.classList.toggle('visible');
@@ -160,55 +161,68 @@
             document.getElementById('resultSubmit').innerHTML = `<h2>Sua nota é: ${notaRealSubmit}</h2>`;
         });
 
-        let allAvailableInstitutions = [];
-        let allAvailableCourses = [];
-
-        async function loadFilterData() {
+        async function loadFormCategories() {
             try {
-                // Carregar todas as instituições distintas da tabela dados_formulario
-                const { data: institutionsData, error: institutionsError } = await supabaseClient
-                    .from('dados_formulario') 
-                    .select('instituicao'); // CONFIRME: Coluna 'instituicao'
+                const response = await fetch('/get_json_categories');
+                if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
+                const categoriesFromJson = await response.json();
 
-                if (institutionsError) {
-                    console.error('Erro ao carregar instituições da tabela dados_formulario:', institutionsError);
-                } else if (institutionsData) {
-                    allAvailableInstitutions = [...new Set(institutionsData.map(item => item.instituicao).filter(Boolean))].sort();
-                    console.log('Instituições (sugestões) carregadas de dados_formulario:', allAvailableInstitutions.length);
+                tipoCotaSelect.innerHTML = '<option value="">Selecione uma opção</option>';
+                if (categoriesFromJson && categoriesFromJson.length > 0) {
+                    categoriesFromJson.sort().forEach(categoryValue => {
+                        let option = document.createElement('option');
+                        option.value = categoryValue;
+                        option.textContent = categoryValue;
+                        tipoCotaSelect.appendChild(option);
+                    });
                 }
-
-                // Carregar todos os cursos distintos da tabela dados_formulario
-                const { data: coursesData, error: coursesError } = await supabaseClient
-                    .from('dados_formulario') 
-                    .select('curso'); // CONFIRME: Coluna 'curso'
-
-                if (coursesError) {
-                    console.error('Erro ao carregar cursos da tabela dados_formulario:', coursesError);
-                } else if (coursesData) {
-                    allAvailableCourses = [...new Set(coursesData.map(item => item.curso).filter(Boolean))].sort();
-                    console.log('Cursos (sugestões) carregados de dados_formulario:', allAvailableCourses.length);
-                }
-
-                if (!institutionsError && !coursesError) {
-                    console.log('Dados de filtro (sugestões de instituições e cursos) carregados de dados_formulario.');
-                }
-
             } catch (error) {
-                console.error('Erro ao carregar dados para os filtros (sugestões) de dados_formulario:', error);
+                console.error('Erro ao carregar tipos de cota para o formulário:', error);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', loadFilterData);
+        tipoCotaSelect.addEventListener('change', async () => {
+            currentFormCategory = tipoCotaSelect.value;
+            campo3Input.value = '';
+            campo4Input.value = '';
+            institutionsList.innerHTML = '';
+            coursesList.innerHTML = '';
+            allAvailableInstitutions[currentFormCategory] = [];
+            allAvailableCourses[currentFormCategory] = [];
+
+            if (currentFormCategory) {
+                try {
+                    const instResponse = await fetch(`/get_json_institutions?category=${currentFormCategory}`);
+                    if (!instResponse.ok) throw new Error(`Instituições HTTP error! ${instResponse.status}`);
+                    const institutionsFromJson = await instResponse.json();
+                    if (institutionsFromJson) {
+                        allAvailableInstitutions[currentFormCategory] = institutionsFromJson.sort();
+                    }
+
+                    const crsResponse = await fetch(`/get_json_courses?category=${currentFormCategory}`);
+                    if (!crsResponse.ok) throw new Error(`Cursos HTTP error! ${crsResponse.status}`);
+                    const coursesFromJson = await crsResponse.json();
+                    if (coursesFromJson) {
+                        allAvailableCourses[currentFormCategory] = coursesFromJson.sort();
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar sugestões para o formulário baseadas na cota:', error);
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFormCategories();
+        });
 
         campo3Input.addEventListener('input', () => {
             const currentInput = campo3Input.value.toLowerCase();
             institutionsList.innerHTML = '';
 
-            if (currentInput.length >= 2) {
-                const filteredInstitutions = allAvailableInstitutions.filter(institution =>
+            if (currentFormCategory && currentInput.length >= 2 && allAvailableInstitutions[currentFormCategory]) {
+                const filteredInstitutions = allAvailableInstitutions[currentFormCategory].filter(institution =>
                     institution.toLowerCase().includes(currentInput)
                 );
-
                 filteredInstitutions.forEach(institution => {
                     let option = document.createElement('option');
                     option.value = institution;
@@ -221,11 +235,10 @@
             const currentInput = campo4Input.value.toLowerCase();
             coursesList.innerHTML = '';
 
-            if (currentInput.length >= 2) {
-                const filteredCourses = allAvailableCourses.filter(course =>
+            if (currentFormCategory && currentInput.length >= 2 && allAvailableCourses[currentFormCategory]) {
+                const filteredCourses = allAvailableCourses[currentFormCategory].filter(course =>
                     course.toLowerCase().includes(currentInput)
                 );
-
                 filteredCourses.forEach(course => {
                     let option = document.createElement('option');
                     option.value = course;
@@ -239,10 +252,10 @@
             event.preventDefault(); 
             console.log('Default form submission prevented.');
 
-            const nomeCompleto = document.getElementById('campo1').value; // Renomeado para clareza
-            const tipoCota = document.getElementById('campo2').value;     // Renomeado para clareza
-            const instituicao = document.getElementById('campo3').value;  // Renomeado para clareza
-            const curso = document.getElementById('campo4').value;       // Renomeado para clareza
+            const nomeCompleto = document.getElementById('campo1').value;
+            const tipoCota = document.getElementById('campo2').value;
+            const instituicao = document.getElementById('campo3').value;
+            const curso = document.getElementById('campo4').value;
             const notaFinal = parseFloat(document.getElementById('campoUnicoNumero').value);
 
             console.log('Data collected:', { nomeCompleto, tipoCota, instituicao, curso, notaFinal });
@@ -253,7 +266,6 @@
                 return;
             }
             
-            // Limpar mensagem anterior
             formMessage.textContent = ''; 
 
             console.log('Attempting to send data to Supabase...');
@@ -264,9 +276,9 @@
                         { 
                             nome: nomeCompleto,
                             tipo_cota: tipoCota,
-                            instituicao: instituicao,      // CORRIGIDO: para 'instituicao'
-                            curso: curso,                  // CORRIGIDO: para 'curso'
-                            numero_unico: notaFinal        // CORRIGIDO: para 'numero_unico'
+                            instituicao: instituicao,
+                            curso: curso,
+                            numero_unico: notaFinal
                         }
                     ]);
 
@@ -278,7 +290,7 @@
                     console.log('Dados enviados com sucesso para o Supabase:', data);
                     formMessage.textContent = 'Dados enviados com sucesso!';
                     formMessage.style.color = 'green';
-                    document.getElementById('dataForm').reset(); // Limpa o formulário
+                    document.getElementById('dataForm').reset();
                 }
             } catch (err) {
                 console.error('Erro inesperado durante a submissão:', err);

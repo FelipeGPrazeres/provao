@@ -129,11 +129,6 @@
     </div>
 
     <script>
-        // Configuração do Cliente Supabase
-        const SUPABASE_URL = 'https://iradczvlimgyukwbwqcl.supabase.co'; // Substitua pela sua URL
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyYWRjenZsaW1neXVrd2J3cWNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgxMTQwMDcsImV4cCI6MjA2MzY5MDAwN30.CcLvcjhUaNvgSEHFunka_Er-RQ8iwMKInP5lvIrlqIY'; // Substitua pela sua chave anônima
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
         const categorySelect = document.getElementById('categorySelect');
         const institutionInput = document.getElementById('institutionInput');
         const courseInput = document.getElementById('courseInput');
@@ -167,43 +162,37 @@
         // Esconde resultados inicialmente
         resultsDiv.style.display = 'none';
 
-        // Fetch de categorias (tipos de cota) do Supabase
+        // Fetch de categorias do JSON (via Flask backend)
         async function fetchCategories() {
             try {
-                // Usando 'dados_formulario' como a tabela principal
-                const { data, error } = await supabase
-                    .from('dados_formulario') 
-                    .select('tipo_cota');
-
-                if (error) {
-                    console.error('Erro ao buscar categorias (tipos de cota):', error);
-                    return;
+                const response = await fetch('/get_json_categories'); // Nova rota Flask
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                const categoriesFromJson = await response.json();
 
-                if (data) {
-                    // Obter valores distintos e remover nulos/vazios
-                    const distinctCategories = [...new Set(data.map(item => item.tipo_cota).filter(Boolean))];
-                    distinctCategories.sort(); // Opcional: ordenar categorias
-
-                    categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>'; // Limpar e adicionar placeholder
-                    distinctCategories.forEach(categoryValue => {
+                categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
+                if (categoriesFromJson && categoriesFromJson.length > 0) {
+                    categoriesFromJson.sort().forEach(categoryValue => {
                         let option = document.createElement('option');
                         option.value = categoryValue;
-                        option.textContent = categoryValue; // Exibe o valor da cota
+                        option.textContent = categoryValue;
                         categorySelect.appendChild(option);
                     });
+                } else {
+                    console.warn("Nenhuma categoria recebida do backend (JSON).");
                 }
             } catch (err) {
-                console.error('Erro inesperado ao buscar categorias (tipos de cota):', err);
+                console.error('Erro ao buscar categorias do JSON via backend:', err);
             }
         }
         fetchCategories();
 
         categorySelect.addEventListener('change', async () => {
-            currentCategory = categorySelect.value; // currentCategory agora é um tipo_cota
+            currentCategory = categorySelect.value;
             courseInput.disabled = !currentCategory;
             searchButton.disabled = !currentCategory;
-            institutionInput.disabled = !currentCategory; // Habilitar input de instituição
+            institutionInput.disabled = !currentCategory;
             courseInput.value = '';
             institutionInput.value = '';
             coursesList.innerHTML = '';
@@ -214,31 +203,24 @@
 
             if (currentCategory) {
                 try {
-                    // Fetch de cursos para a categoria (tipo_cota) selecionada
-                    const { data: coursesData, error: coursesError } = await supabase
-                        .from('dados_formulario')
-                        .select('curso')
-                        .eq('tipo_cota', currentCategory);
-
-                    if (coursesError) {
-                        console.error('Erro ao buscar cursos:', coursesError);
-                    } else if (coursesData) {
-                        allCourses[currentCategory] = [...new Set(coursesData.map(item => item.curso).filter(Boolean))].sort();
+                    // Fetch de cursos para a categoria selecionada (do JSON via Flask)
+                    const coursesResponse = await fetch(`/get_json_courses?category=${currentCategory}`);
+                    if (!coursesResponse.ok) throw new Error(`Cursos HTTP error! ${coursesResponse.status}`);
+                    const coursesFromJson = await coursesResponse.json();
+                    if (coursesFromJson) {
+                        allCourses[currentCategory] = coursesFromJson.sort(); // JSON já deve retornar lista de strings
                     }
 
-                    // Fetch de instituições para a categoria (tipo_cota) selecionada
-                    const { data: institutionsData, error: institutionsError } = await supabase
-                        .from('dados_formulario')
-                        .select('instituicao')
-                        .eq('tipo_cota', currentCategory);
-
-                    if (institutionsError) {
-                        console.error('Erro ao buscar instituições:', institutionsError);
-                    } else if (institutionsData) {
-                        allInstitutions[currentCategory] = [...new Set(institutionsData.map(item => item.instituicao).filter(Boolean))].sort();
+                    // Fetch de instituições para a categoria selecionada (do JSON via Flask)
+                    const institutionsResponse = await fetch(`/get_json_institutions?category=${currentCategory}`);
+                    if (!institutionsResponse.ok) throw new Error(`Instituições HTTP error! ${institutionsResponse.status}`);
+                    const institutionsFromJson = await institutionsResponse.json();
+                    if (institutionsFromJson) {
+                        allInstitutions[currentCategory] = institutionsFromJson.sort(); // JSON já deve retornar lista de strings
                     }
+
                 } catch (err) {
-                    console.error('Erro ao buscar cursos ou instituições:', err);
+                    console.error('Erro ao buscar cursos ou instituições do JSON via backend:', err);
                 }
             } else {
                  institutionInput.disabled = true;
@@ -282,9 +264,9 @@
         searchButton.addEventListener('click', async () => {
             const selectedCourse = courseInput.value;
             const selectedInstitution = institutionInput.value;
-            // currentCategory já está definido pelo categorySelect.addEventListener e é o 'tipo_cota'
+            // currentCategory já é o tipo_cota selecionado
 
-            if (!currentCategory) { // Verifica se uma categoria (tipo_cota) foi selecionada
+            if (!currentCategory) {
                 alert("Por favor, selecione uma categoria (tipo de cota).");
                 return;
             }
@@ -294,29 +276,36 @@
                 return;
             }
 
+            const searchPayload = {
+                category: currentCategory,
+                course: selectedCourse,
+                institution: selectedInstitution || null // Enviar null se vazio
+            };
+
             try {
-                let query = supabase
-                    .from('dados_formulario')
-                    .select('instituicao, curso, numero_unico, tipo_cota')
-                    .eq('tipo_cota', currentCategory)
-                    .eq('curso', selectedCourse);
+                const response = await fetch('/search_supabase', { // Nova rota Flask para buscar no Supabase
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(searchPayload)
+                });
 
-                if (selectedInstitution) {
-                    query = query.eq('instituicao', selectedInstitution);
-                }
-
-                const { data: people, error } = await query;
-
-                if (error) {
-                    console.error('Erro ao buscar resultados:', error);
-                    peopleListDiv.innerHTML = '<p>Erro ao buscar dados. Tente novamente.</p>';
-                    resultsDiv.style.display = 'block'; // Manter visível para mostrar o erro
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ message: "Erro desconhecido ao buscar dados."}));
+                    console.error('Erro ao buscar dados do Supabase via backend:', response.status, errorData);
+                    peopleListDiv.innerHTML = `<p>Erro ao buscar dados: ${errorData.error || errorData.message || response.statusText}</p>`;
+                    resultsDiv.style.display = 'block';
                     return;
                 }
+
+                const people = await response.json(); // Dados vêm do Supabase via backend
 
                 document.getElementById('results').style.display = 'block';
                 peopleListDiv.innerHTML = people && people.length > 0
                     ? people.map(person => {
+                        // As colunas devem corresponder ao que o backend /search_supabase retorna
+                        // que são: instituicao, curso, numero_unico, tipo_cota
                         const instituicao = person.instituicao || 'N/A';
                         const curso = person.curso || 'N/A';
                         const nota = person.numero_unico !== null ? parseFloat(person.numero_unico).toFixed(3) : 'N/A';
@@ -324,7 +313,6 @@
 
                         const notaPessoa = parseFloat(person.numero_unico);
 
-                        // Comparação com notaReal (da calculadora)
                         if (!isNaN(notaPessoa) && notaReal !== null && notaReal > 0 && notaPessoa < notaReal) {
                             return `<div class="personMaior">
                                 <p><strong>Instituição:</strong> ${instituicao}</p>
@@ -343,9 +331,9 @@
                     }).join('')
                     : '<p>Nenhum aluno encontrado para os critérios selecionados.</p>';
             } catch (err) {
-                console.error('Erro inesperado na busca:', err);
+                console.error('Erro inesperado na busca via backend:', err);
                 peopleListDiv.innerHTML = '<p>Ocorreu um erro inesperado. Tente novamente.</p>';
-                resultsDiv.style.display = 'block'; // Manter visível para mostrar o erro
+                resultsDiv.style.display = 'block';
             }
         });
         calculateButton.addEventListener('click', () => {
