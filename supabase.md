@@ -5,4 +5,4 @@ base de dados do provão paulista
 * **tipo_cota**: Tipo `text`.
 * **instituicao**: Tipo `text`.
 * **curso**: Tipo `text`.
-* **numero1**: Tipo `float8` 
+* **numero_unico**: Tipo `float8` 

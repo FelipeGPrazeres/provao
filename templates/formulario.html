@@ -165,36 +165,36 @@
 
         async function loadFilterData() {
             try {
-                // Carregar todas as instituições
+                // Carregar todas as instituições distintas da tabela dados_formulario
                 const { data: institutionsData, error: institutionsError } = await supabaseClient
-                    .from('instituicoes') // CONFIRME O NOME DA TABELA 'instituicoes'
-                    .select('nome'); // CONFIRME O NOME DA COLUNA 'nome'
+                    .from('dados_formulario') 
+                    .select('instituicao'); // CONFIRME: Coluna 'instituicao'
 
                 if (institutionsError) {
-                    console.error('Erro ao carregar instituições:', institutionsError);
+                    console.error('Erro ao carregar instituições da tabela dados_formulario:', institutionsError);
                 } else if (institutionsData) {
-                    allAvailableInstitutions = institutionsData.map(inst => inst.nome);
-                    console.log('Instituições carregadas:', allAvailableInstitutions.length);
+                    allAvailableInstitutions = [...new Set(institutionsData.map(item => item.instituicao).filter(Boolean))].sort();
+                    console.log('Instituições (sugestões) carregadas de dados_formulario:', allAvailableInstitutions.length);
                 }
 
-                // Carregar todos os cursos
+                // Carregar todos os cursos distintos da tabela dados_formulario
                 const { data: coursesData, error: coursesError } = await supabaseClient
-                    .from('cursos') // CONFIRME O NOME DA TABELA 'cursos'
-                    .select('nome'); // CONFIRME O NOME DA COLUNA 'nome'
+                    .from('dados_formulario') 
+                    .select('curso'); // CONFIRME: Coluna 'curso'
 
                 if (coursesError) {
-                    console.error('Erro ao carregar cursos:', coursesError);
+                    console.error('Erro ao carregar cursos da tabela dados_formulario:', coursesError);
                 } else if (coursesData) {
-                    allAvailableCourses = coursesData.map(course => course.nome);
-                    console.log('Cursos carregados:', allAvailableCourses.length);
+                    allAvailableCourses = [...new Set(coursesData.map(item => item.curso).filter(Boolean))].sort();
+                    console.log('Cursos (sugestões) carregados de dados_formulario:', allAvailableCourses.length);
                 }
 
                 if (!institutionsError && !coursesError) {
-                    console.log('Dados de filtro (instituições e cursos) carregados do Supabase.');
+                    console.log('Dados de filtro (sugestões de instituições e cursos) carregados de dados_formulario.');
                 }
 
             } catch (error) {
-                console.error('Erro ao carregar dados para os filtros do Supabase:', error);
+                console.error('Erro ao carregar dados para os filtros (sugestões) de dados_formulario:', error);
             }
         }
 
@@ -258,20 +258,15 @@
 
             console.log('Attempting to send data to Supabase...');
             try {
-                // CONFIRME O NOME DA TABELA 'dados_formulario' E OS NOMES DAS COLUNAS ABAIXO
                 const { data, error } = await supabaseClient
                     .from('dados_formulario') 
                     .insert([
                         { 
                             nome: nomeCompleto,
                             tipo_cota: tipoCota,
-                            instituicao_nome: instituicao, // Ajustado para corresponder a um padrão comum
-                            curso_nome: curso,           // Ajustado para corresponder a um padrão comum
-                            nota_final: notaFinal,
-                            // Você pode querer adicionar outras colunas aqui, como:
-                            // aprovado: false, // (ou um status inicial)
-                            // data_envio: new Date(),
-                            // user_id: supabaseClient.auth.user() ? supabaseClient.auth.user().id : null // Se tiver autenticação
+                            instituicao: instituicao,      // CORRIGIDO: para 'instituicao'
+                            curso: curso,                  // CORRIGIDO: para 'curso'
+                            numero_unico: notaFinal        // CORRIGIDO: para 'numero_unico'
                         }
                     ]);
 

@@ -167,72 +167,81 @@
         // Esconde resultados inicialmente
         resultsDiv.style.display = 'none';
 
-        // Fetch de categorias do Supabase
+        // Fetch de categorias (tipos de cota) do Supabase
         async function fetchCategories() {
             try {
+                // Usando 'dados_formulario' como a tabela principal
                 const { data, error } = await supabase
-                    .from('categorias') // Substitua 'categorias' pelo nome da sua tabela de categorias
-                    .select('nome');    // Substitua 'nome' pelo nome da sua coluna de nome da categoria
+                    .from('dados_formulario') 
+                    .select('tipo_cota');
 
                 if (error) {
-                    console.error('Erro ao buscar categorias:', error);
+                    console.error('Erro ao buscar categorias (tipos de cota):', error);
                     return;
                 }
 
                 if (data) {
-                    data.forEach(category => {
+                    // Obter valores distintos e remover nulos/vazios
+                    const distinctCategories = [...new Set(data.map(item => item.tipo_cota).filter(Boolean))];
+                    distinctCategories.sort(); // Opcional: ordenar categorias
+
+                    categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>'; // Limpar e adicionar placeholder
+                    distinctCategories.forEach(categoryValue => {
                         let option = document.createElement('option');
-                        option.value = category.nome; // Ajuste 'nome' se necessário
-                        option.textContent = category.nome; // Ajuste 'nome' se necessário
+                        option.value = categoryValue;
+                        option.textContent = categoryValue; // Exibe o valor da cota
                         categorySelect.appendChild(option);
                     });
                 }
             } catch (err) {
-                console.error('Erro inesperado ao buscar categorias:', err);
+                console.error('Erro inesperado ao buscar categorias (tipos de cota):', err);
             }
         }
         fetchCategories();
 
         categorySelect.addEventListener('change', async () => {
-            currentCategory = categorySelect.value;
+            currentCategory = categorySelect.value; // currentCategory agora é um tipo_cota
             courseInput.disabled = !currentCategory;
             searchButton.disabled = !currentCategory;
+            institutionInput.disabled = !currentCategory; // Habilitar input de instituição
             courseInput.value = '';
             institutionInput.value = '';
             coursesList.innerHTML = '';
             institutionsList.innerHTML = '';
-            allCourses[currentCategory] = []; // Resetar cursos para a categoria
-            allInstitutions[currentCategory] = []; // Resetar instituições para a categoria
+            
+            allCourses[currentCategory] = []; 
+            allInstitutions[currentCategory] = [];
 
             if (currentCategory) {
                 try {
-                    // Fetch de cursos para a categoria selecionada
+                    // Fetch de cursos para a categoria (tipo_cota) selecionada
                     const { data: coursesData, error: coursesError } = await supabase
-                        .from('cursos') // Substitua 'cursos' pelo nome da sua tabela de cursos
-                        .select('nome') // Substitua 'nome' pelo nome da sua coluna de nome do curso
-                        .eq('categoria_nome', currentCategory); // Supondo que você tenha uma coluna 'categoria_nome' na tabela 'cursos'
+                        .from('dados_formulario')
+                        .select('curso')
+                        .eq('tipo_cota', currentCategory);
 
                     if (coursesError) {
                         console.error('Erro ao buscar cursos:', coursesError);
                     } else if (coursesData) {
-                        allCourses[currentCategory] = coursesData.map(course => course.nome); // Ajuste 'nome' se necessário
+                        allCourses[currentCategory] = [...new Set(coursesData.map(item => item.curso).filter(Boolean))].sort();
                     }
 
-                    // Fetch de instituições para a categoria selecionada
+                    // Fetch de instituições para a categoria (tipo_cota) selecionada
                     const { data: institutionsData, error: institutionsError } = await supabase
-                        .from('instituicoes') // Substitua 'instituicoes' pelo nome da sua tabela de instituições
-                        .select('nome') // Substitua 'nome' pelo nome da sua coluna de nome da instituição
-                        .eq('categoria_nome', currentCategory); // Supondo que você tenha uma coluna 'categoria_nome' na tabela 'instituicoes'
+                        .from('dados_formulario')
+                        .select('instituicao')
+                        .eq('tipo_cota', currentCategory);
 
                     if (institutionsError) {
                         console.error('Erro ao buscar instituições:', institutionsError);
                     } else if (institutionsData) {
-                        allInstitutions[currentCategory] = institutionsData.map(inst => inst.nome); // Ajuste 'nome' se necessário
+                        allInstitutions[currentCategory] = [...new Set(institutionsData.map(item => item.instituicao).filter(Boolean))].sort();
                     }
-
                 } catch (err) {
                     console.error('Erro ao buscar cursos ou instituições:', err);
                 }
+            } else {
+                 institutionInput.disabled = true;
             }
         });
 
@@ -273,25 +282,27 @@
         searchButton.addEventListener('click', async () => {
             const selectedCourse = courseInput.value;
             const selectedInstitution = institutionInput.value;
+            // currentCategory já está definido pelo categorySelect.addEventListener e é o 'tipo_cota'
+
+            if (!currentCategory) { // Verifica se uma categoria (tipo_cota) foi selecionada
+                alert("Por favor, selecione uma categoria (tipo de cota).");
+                return;
+            }
+            
             if (!selectedCourse) {
                 alert("Por favor, digite ou selecione um curso.");
                 return;
             }
 
-            if (!currentCategory) {
-                alert("Por favor, selecione uma categoria.");
-                return;
-            }
-
             try {
                 let query = supabase
-                    .from('submissoes_notas') // Substitua 'submissoes_notas' pelo nome da sua tabela de submissões
-                    .select('instituicao_nome, curso_nome, nota_final, grupo_categoria') // Ajuste os nomes das colunas
-                    .eq('curso_nome', selectedCourse)
-                    .eq('grupo_categoria', currentCategory);
+                    .from('dados_formulario')
+                    .select('instituicao, curso, numero_unico, tipo_cota')
+                    .eq('tipo_cota', currentCategory)
+                    .eq('curso', selectedCourse);
 
                 if (selectedInstitution) {
-                    query = query.eq('instituicao_nome', selectedInstitution);
+                    query = query.eq('instituicao', selectedInstitution);
                 }
 
                 const { data: people, error } = await query;
@@ -299,40 +310,42 @@
                 if (error) {
                     console.error('Erro ao buscar resultados:', error);
                     peopleListDiv.innerHTML = '<p>Erro ao buscar dados. Tente novamente.</p>';
+                    resultsDiv.style.display = 'block'; // Manter visível para mostrar o erro
                     return;
                 }
 
                 document.getElementById('results').style.display = 'block';
                 peopleListDiv.innerHTML = people && people.length > 0
                     ? people.map(person => {
-                        // Adapte os nomes das colunas conforme a sua tabela no Supabase
-                        const instituicao = person.instituicao_nome || 'N/A';
-                        const curso = person.curso_nome || 'N/A';
-                        const nota = person.nota_final !== null ? parseFloat(person.nota_final).toFixed(3) : 'N/A';
-                        const grupo = person.grupo_categoria || 'N/A';
+                        const instituicao = person.instituicao || 'N/A';
+                        const curso = person.curso || 'N/A';
+                        const nota = person.numero_unico !== null ? parseFloat(person.numero_unico).toFixed(3) : 'N/A';
+                        const grupo = person.tipo_cota || 'N/A';
 
-                        const notaPessoa = parseFloat(person.nota_final); // Usar a nota da pessoa para comparação
+                        const notaPessoa = parseFloat(person.numero_unico);
 
-                        if (!isNaN(notaPessoa) && !isNaN(notaReal) && notaPessoa < notaReal) {
+                        // Comparação com notaReal (da calculadora)
+                        if (!isNaN(notaPessoa) && notaReal !== null && notaReal > 0 && notaPessoa < notaReal) {
                             return `<div class="personMaior">
                                 <p><strong>Instituição:</strong> ${instituicao}</p>
                                 <p><strong>Curso:</strong> ${curso}</p>
                                 <p><strong>Nota:</strong> ${nota}</p>
-                                <p><strong>Grupo:</strong> ${grupo}</p>
+                                <p><strong>Grupo (Cota):</strong> ${grupo}</p>
                             </div>`;
                         } else {
                             return `<div class="person">
                                 <p><strong>Instituição:</strong> ${instituicao}</p>
                                 <p><strong>Curso:</strong> ${curso}</p>
                                 <p><strong>Nota:</strong> ${nota}</p>
-                                <p><strong>Grupo:</strong> ${grupo}</p>
+                                <p><strong>Grupo (Cota):</strong> ${grupo}</p>
                             </div>`;
                         }
                     }).join('')
-                    : '<p>Nenhum aluno encontrado.</p>';
+                    : '<p>Nenhum aluno encontrado para os critérios selecionados.</p>';
             } catch (err) {
                 console.error('Erro inesperado na busca:', err);
                 peopleListDiv.innerHTML = '<p>Ocorreu um erro inesperado. Tente novamente.</p>';
+                resultsDiv.style.display = 'block'; // Manter visível para mostrar o erro
             }
         });
         calculateButton.addEventListener('click', () => {
