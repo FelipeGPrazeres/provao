@@ -13,50 +13,84 @@
         <div class="nav-inner">
             <div class="nav-left">
                 <h1>MEUPROVAO<span class="dot">.</span></h1>
+                <button class="nav-button" id="toggleCalculatorSubmit">Minha Nota</button>
+            </div>
+            <div class="nav-right">
+                <a href="index.html" class="nav-button">Buscar Notas</a>
             </div>
         </div>
     </header>
 
     <div class="main-container">
-        <div class="form-container">
-            <h2>Enviar Novos Dados</h2>
-            <form id="dataForm">
-                <div class="input-group">
-                    <label for="campo1">Nome:</label>
-                    <input type="text" id="campo1" placeholder="Digite seu nome completo" required>
-                </div>
+        <div class="containerCalculadora" id="calculatorContainerSubmit">
+            <div class="calculadora">
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="acertosSubmit">Acertos 2023:</label>
+                        <input type="number" id="acertosSubmit" placeholder="Acertos 2023">
+                    </div>
+                    <div class="input-group">
+                        <label for="acertos2Submit">Acertos 2024:</label>
+                        <input type="number" id="acertos2Submit" placeholder="Acertos 2024">
+                    </div>
+                    <div class="input-group">
+                        <label for="acertos3Submit">Acertos 2025:</label>
+                        <input type="number" id="acertos3Submit" placeholder="Acertos 2025">
+                    </div>
+                    <div class="input-group">
+                        <label for="acertosRSubmit">Redação:</label>
+                        <input type="number" id="acertosRSubmit" placeholder="Nota Redação">
+                    </div>
 
-                <div class="input-group">
-                    <label for="campo2">Tipo de Cota:</label>
-                    <select id="campo2" required>
-                        <option value="">Selecione uma opção</option>
-                        <option value="L1_renda">L1 (renda)</option>
-                        <option value="L2_renda_ppi">L2 (renda+ppi)</option>
-                        <option value="L3_sem_cota">L3 (sem cota)</option>
-                        <option value="L4_apenas_ppi">L4 (apenas ppi)</option>
-                    </select>
+                    <div class="button-result-group">
+                        <button id="calculateButtonSubmit">Calcular</button>
+                        <div id="resultSubmit"></div>
+                    </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="input-group">
-                    <label for="campo3">Instituição:</label>
-                    <input type="text" id="campo3" list="institutionsList" placeholder="Digite ou selecione a Instituição" required>
-                    <datalist id="institutionsList"></datalist>
-                </div>
+        <div class="search-container">
+            <div class="search-fields">
+                <h2>Enviar Novos Dados</h2>
+                <form id="dataForm">
+                    <div class="input-group">
+                        <label for="campo1">Nome:</label>
+                        <input type="text" id="campo1" placeholder="Digite seu nome completo" required>
+                    </div>
 
-                <div class="input-group">
-                    <label for="campo4">Curso:</label>
-                    <input type="text" id="campo4" list="coursesList" placeholder="Digite ou selecione o Curso" required>
-                    <datalist id="coursesList"></datalist>
-                </div>
+                    <div class="input-group">
+                        <label for="campo2">Tipo de Cota:</label>
+                        <select id="campo2" required>
+                            <option value="">Selecione uma opção</option>
+                            <option value="L1_renda">L1 (renda)</option>
+                            <option value="L2_renda_ppi">L2 (renda+ppi)</option>
+                            <option value="L3_sem_cota">L3 (sem cota)</option>
+                            <option value="L4_apenas_ppi">L4 (apenas ppi)</option>
+                        </select>
+                    </div>
 
-                <div class="input-group">
-                    <label for="campoUnicoNumero">Seu Número:</label>
-                    <input type="number" id="campoUnicoNumero" placeholder="Digite seu número" required>
-                </div>
-                
-                <button type="submit">Enviar Dados</button>
-            </form>
-            <p id="formMessage"></p>
+                    <div class="input-group">
+                        <label for="campo3">Instituição:</label>
+                        <input type="text" id="campo3" list="institutionsList" placeholder="Digite ou selecione a Instituição" required>
+                        <datalist id="institutionsList"></datalist>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="campo4">Curso:</label>
+                        <input type="text" id="campo4" list="coursesList" placeholder="Digite ou selecione o Curso" required>
+                        <datalist id="coursesList"></datalist>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="campoUnicoNumero">Seu Número:</label>
+                        <input type="number" id="campoUnicoNumero" placeholder="Digite seu número" required>
+                    </div>
+                    
+                    <button type="submit" class="nav-button">Enviar Dados</button>
+                </form>
+                <p id="formMessage"></p>
+            </div>
         </div>
     </div>
 
@@ -101,6 +135,30 @@
         const institutionsList = document.getElementById('institutionsList');
         const coursesList = document.getElementById('coursesList');
         const formMessage = document.getElementById('formMessage');
+
+        const toggleCalculatorSubmit = document.getElementById('toggleCalculatorSubmit');
+        const calculatorContainerSubmit = document.getElementById('calculatorContainerSubmit');
+        const calculateButtonSubmit = document.getElementById('calculateButtonSubmit');
+        let notaRealSubmit = 0;
+
+        toggleCalculatorSubmit.addEventListener('click', () => {
+            calculatorContainerSubmit.classList.toggle('visible');
+        });
+
+        calculateButtonSubmit.addEventListener('click', () => {
+            let acertos = Number(document.getElementById('acertosSubmit').value);
+            let acertos2 = Number(document.getElementById('acertos2Submit').value);
+            let acertos3 = Number(document.getElementById('acertos3Submit').value);
+            let acertosR = Number(document.getElementById('acertosRSubmit').value);
+
+            let notaCalculadoraSubmit = ((acertos / 90) * 0.15) 
+                                    + ((acertos2 / 90) * 0.25)
+                                    + ((acertos3 / 90) * 0.40) 
+                                    + ((acertosR / 20) * 0.20);
+
+            notaRealSubmit = (notaCalculadoraSubmit * 100).toFixed(3);
+            document.getElementById('resultSubmit').innerHTML = `<h2>Sua nota é: ${notaRealSubmit}</h2>`;
+        });
 
         let allAvailableInstitutions = [];
         let allAvailableCourses = [];
@@ -189,7 +247,7 @@
                     .from('dados_formulario') // Substitua pelo nome da sua tabela no Supabase
                     .insert([
                         { 
-                            campo1: campo1, 
+                            nome: campo1,
                             tipo_cota: campo2,
                             instituicao: campo3,
                             curso: campo4,
