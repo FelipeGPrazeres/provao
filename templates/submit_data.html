@@ -165,16 +165,16 @@
 
         async function loadFilterData() {
             try {
-                const categoriesResponse = await fetch('https://provao.onrender.com/categories');
+                const categoriesResponse = await fetch('https://provao-1.onrender.com/categories');
                 const categories = await categoriesResponse.json();
 
                 if (categories.length > 0) {
                     const defaultCategory = categories[0];
 
-                    const institutionsResponse = await fetch(`https://provao.onrender.com/institutions?category=${defaultCategory}`);
+                    const institutionsResponse = await fetch(`https://provao-1.onrender.com/institutions?category=${defaultCategory}`);
                     allAvailableInstitutions = await institutionsResponse.json();
 
-                    const coursesResponse = await fetch(`https://provao.onrender.com/courses?category=${defaultCategory}`);
+                    const coursesResponse = await fetch(`https://provao-1.onrender.com/courses?category=${defaultCategory}`);
                     allAvailableCourses = await coursesResponse.json();
 
                     console.log('Dados de filtro carregados para a categoria:', defaultCategory);

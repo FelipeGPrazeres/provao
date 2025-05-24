@@ -162,7 +162,7 @@
         resultsDiv.style.display = 'none';
 
         // Fetch de categorias
-        fetch('https://provao.onrender.com/categories')
+        fetch('https://provao-1.onrender.com/categories')
             .then(response => response.json())
             .then(categories => {
                 categories.forEach(category => {
@@ -183,12 +183,12 @@
             institutionsList.innerHTML = '';
 
             if (currentCategory) {
-                fetch(`https://provao.onrender.com/courses?category=${currentCategory}`)
+                fetch(`https://provao-1.onrender.com/courses?category=${currentCategory}`)
                     .then(response => response.json())
                     .then(courses => {
                         allCourses[currentCategory] = courses;
                     });
-                fetch(`https://provao.onrender.com/institutions?category=${currentCategory}`)
+                fetch(`https://provao-1.onrender.com/institutions?category=${currentCategory}`)
                     .then(response => response.json())
                     .then(institutions => {
                         allInstitutions[currentCategory] = institutions;
@@ -253,7 +253,7 @@
                 requestBody.institution = selectedInstitution;
             }
 
-            fetch('https://provao.onrender.com/filter_course', {
+            fetch('https://provao-1.onrender.com/filter_course', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestBody)
@@ -305,8 +305,8 @@
         // Sistema de requisição periodico para impedir que a aplicação durma
         async function keepAlive() {
             try {
-                const keepAliveUrl = 'https://provao.onrender.com/keep_alive'; // Using absolute URL
-                const pingCategoriesUrl = 'https://provao.onrender.com/ping_categories';
+                const keepAliveUrl = 'https://provao-1.onrender.com/keep_alive'; // Using absolute URL
+                const pingCategoriesUrl = 'https://provao-1.onrender.com/ping_categories';
 
                 console.log("keepAlive() function called - Fetching URL:", keepAliveUrl); // **DEBUG LOG: Function start and URL**
 
