@@ -1,5 +1,5 @@
 # filepath: /c:/Users/Felip/Downloads/testes/2/provao/app.py
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, url_for
 import json
 import threading
 import time
@@ -41,6 +41,14 @@ def load_data():
         return {}
 
 data_categories = load_data()
+
+@app.route('/')
+def index_page():
+    return render_template('index.html')
+
+@app.route('/submit_data')
+def submit_data_page():
+    return render_template('submit_data.html')
 
 @app.route('/categories')
 def get_categories():
