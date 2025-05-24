@@ -162,7 +162,7 @@
         resultsDiv.style.display = 'none';
 
         // Fetch de categorias
-        fetch('https://provao-1.onrender.com/categories')
+        fetch('https://provao.onrender.com/categories')
             .then(response => response.json())
             .then(categories => {
                 categories.forEach(category => {
@@ -183,12 +183,12 @@
             institutionsList.innerHTML = '';
 
             if (currentCategory) {
-                fetch(`https://provao-1.onrender.com/courses?category=${currentCategory}`)
+                fetch(`https://provao.onrender.com/courses?category=${currentCategory}`)
                     .then(response => response.json())
                     .then(courses => {
                         allCourses[currentCategory] = courses;
                     });
-                fetch(`https://provao-1.onrender.com/institutions?category=${currentCategory}`)
+                fetch(`https://provao.onrender.com/institutions?category=${currentCategory}`)
                     .then(response => response.json())
                     .then(institutions => {
                         allInstitutions[currentCategory] = institutions;
@@ -253,7 +253,7 @@
                 requestBody.institution = selectedInstitution;
             }
 
-            fetch('https://provao-1.onrender.com/filter_course', {
+            fetch('https://provao.onrender.com/filter_course', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestBody)
@@ -305,30 +305,30 @@
         // Sistema de requisição periodico para impedir que a aplicação durma
         async function keepAlive() {
             try {
-                const keepAliveUrl = 'https://provao-1.onrender.com/keep_alive'; // Using absolute URL
-                const pingCategoriesUrl = 'https://provao-1.onrender.com/ping_categories';
+                const keepAliveUrl = 'https://provao.onrender.com/keep_alive';
+                const pingCategoriesUrl = 'https://provao.onrender.com/ping_categories';
 
-                console.log("keepAlive() function called - Fetching URL:", keepAliveUrl); // **DEBUG LOG: Function start and URL**
+                console.log("keepAlive() function called - Fetching URL:", keepAliveUrl);
 
                 const keepAliveResponse = await fetch(keepAliveUrl);
                 if (!keepAliveResponse.ok) {
-                    console.error("keepAlive() - HTTP error!", keepAliveResponse.status, keepAliveResponse.statusText); // **DEBUG LOG: HTTP Error**
+                    console.error("keepAlive() - HTTP error!", keepAliveResponse.status, keepAliveResponse.statusText);
                     throw new Error(`HTTP error! status: ${keepAliveResponse.status}`);
                 }
                 const keepAliveData = await keepAliveResponse.json();
-                console.log("keepAlive() - JSON data received:", keepAliveData); // **DEBUG LOG: JSON data**
-                console.log("Servidor ativo:", keepAliveData.status); // Success log (as before)
+                console.log("keepAlive() - JSON data received:", keepAliveData);
+                console.log("Servidor ativo:", keepAliveData.status);
 
                 const pingCategoriesResponse = await fetch(pingCategoriesUrl);
                 if (!pingCategoriesResponse.ok) {
-                    console.error("keepAlive() - HTTP error!", pingCategoriesResponse.status, pingCategoriesResponse.statusText); // **DEBUG LOG: HTTP Error**
+                    console.error("keepAlive() - HTTP error!", pingCategoriesResponse.status, pingCategoriesResponse.statusText);
                     throw new Error(`HTTP error! status: ${pingCategoriesResponse.status}`);
                 }
                 const pingCategoriesData = await pingCategoriesResponse.json();
-                console.log("keepAlive() - JSON data received:", pingCategoriesData); // **DEBUG LOG: JSON data**
-                console.log("Servidor ativo:", pingCategoriesData.status); // Success log (as before)
+                console.log("keepAlive() - JSON data received:", pingCategoriesData);
+                console.log("Servidor ativo:", pingCategoriesData.status);
             } catch (error) {
-                console.error("keepAlive() - Erro ao manter ativo:", error); // Error log (as before)
+                console.error("keepAlive() - Erro ao manter ativo:", error);
             }
         }
 
