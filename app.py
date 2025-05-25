@@ -126,19 +126,55 @@ def search_supabase():
         query = query.ilike("tipo_cota", f"{selected_category}%")
         app.logger.info(f"Filtro tipo_cota aplicado: ilike \"tipo_cota\", \"{selected_category}%\"")
 
+        # Filtro de Curso
         if normalized_course:
-            course_keywords = normalized_course.split(' ')
-            for keyword in course_keywords:
-                if keyword.strip(): 
-                    query = query.ilike("curso", f"%{keyword.strip()}%")
-            app.logger.info(f"Filtro de curso (norm) aplicado com keywords: {course_keywords}")
+            course_keywords_from_input = normalized_course.split(' ')
+            app.logger.info(f"Processando keywords de CURSO normalizadas: {course_keywords_from_input}")
+            for keyword_expanded in course_keywords_from_input:
+                keyword_expanded = keyword_expanded.strip()
+                if not keyword_expanded:
+                    continue
 
+                search_forms = {keyword_expanded} 
+                for abbr, expanded_value_in_dict in abbreviations.items():
+                    if expanded_value_in_dict == keyword_expanded:
+                        search_forms.add(abbr)
+                
+                app.logger.info(f"Para keyword de curso '{keyword_expanded}', formas de busca são: {search_forms}")
+
+                if len(search_forms) > 1:
+                    or_filter_parts = [f'curso.ilike.*{form}*' for form in search_forms]
+                    query = query.or_(",".join(or_filter_parts))
+                    app.logger.info(f"Aplicado filtro OR para curso com '{keyword_expanded}': {','.join(or_filter_parts)}")
+                elif search_forms: 
+                    single_form = list(search_forms)[0]
+                    query = query.ilike("curso", f"%{single_form}%")
+                    app.logger.info(f"Aplicado filtro ILIKE para curso com '{single_form}'")
+
+        # Filtro de Instituição (lógica similar ao curso)
         if normalized_institution:
-            institution_keywords = normalized_institution.split(' ')
-            for keyword in institution_keywords:
-                 if keyword.strip():
-                    query = query.ilike("instituicao", f"%{keyword.strip()}%")
-            app.logger.info(f"Filtro de instituição (norm) aplicado com keywords: {institution_keywords}")
+            institution_keywords_from_input = normalized_institution.split(' ')
+            app.logger.info(f"Processando keywords de INSTITUIÇÃO normalizadas: {institution_keywords_from_input}")
+            for keyword_expanded in institution_keywords_from_input:
+                keyword_expanded = keyword_expanded.strip()
+                if not keyword_expanded:
+                    continue
+
+                search_forms = {keyword_expanded}
+                for abbr, expanded_value_in_dict in abbreviations.items():
+                    if expanded_value_in_dict == keyword_expanded:
+                        search_forms.add(abbr)
+                
+                app.logger.info(f"Para keyword de instituição '{keyword_expanded}', formas de busca são: {search_forms}")
+
+                if len(search_forms) > 1:
+                    or_filter_parts = [f'instituicao.ilike.*{form}*' for form in search_forms]
+                    query = query.or_(",".join(or_filter_parts))
+                    app.logger.info(f"Aplicado filtro OR para instituição com '{keyword_expanded}': {','.join(or_filter_parts)}")
+                elif search_forms:
+                    single_form = list(search_forms)[0]
+                    query = query.ilike("instituicao", f"%{single_form}%")
+                    app.logger.info(f"Aplicado filtro ILIKE para instituição com '{single_form}'")
         
         response = query.execute()
         app.logger.info(f"Resposta da query Supabase: count={response.count}, data={response.data}")
