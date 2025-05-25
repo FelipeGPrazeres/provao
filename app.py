@@ -130,6 +130,7 @@ def search_supabase():
         if normalized_course:
             course_keywords_from_input = normalized_course.split(' ')
             app.logger.info(f"Processando keywords de CURSO normalizadas: {course_keywords_from_input}")
+            and_filters_course = []
             for keyword_expanded in course_keywords_from_input:
                 keyword_expanded = keyword_expanded.strip()
                 if not keyword_expanded:
@@ -142,39 +143,70 @@ def search_supabase():
                 
                 app.logger.info(f"Para keyword de curso '{keyword_expanded}', formas de busca são: {search_forms}")
 
-                if len(search_forms) > 1:
-                    or_filter_parts = [f'curso.ilike.*{form}*' for form in search_forms]
-                    query = query.or_(",".join(or_filter_parts))
-                    app.logger.info(f"Aplicado filtro OR para curso com '{keyword_expanded}': {','.join(or_filter_parts)}")
-                elif search_forms: 
-                    single_form = list(search_forms)[0]
-                    query = query.ilike("curso", f"%{single_form}%")
-                    app.logger.info(f"Aplicado filtro ILIKE para curso com '{single_form}'")
+                if search_forms:
+                    # Cria um filtro OR para a keyword atual e suas abreviações
+                    # Ex: "(curso.ilike.*engenharia*,curso.ilike.*eng*)"
+                    or_condition = ",".join([f'curso.ilike.*{form}*' for form in search_forms])
+                    and_filters_course.append(f"({or_condition})") # Envolve em parênteses para PostgREST
+            
+            if and_filters_course:
+                # Junta todas as condições de keyword para CURSO com AND
+                # Ex: and=((curso.ilike.*engenharia*,curso.ilike.*eng*),(curso.ilike.*eletrica*))
+                final_course_filter = ",".join(and_filters_course)
+                query = query.filter("curso", "cs", f"{{{','.join(search_forms)}}}") # Placeholder, será reescrito abaixo
+                # A API supabase-py não tem um método direto para `and=(or(cond1,cond2),or(cond3,cond4))`
+                # Vamos construir o filtro AND manualmente e usar um filtro genérico se necessário,
+                # ou aplicar .or() para cada palavra-chave mas garantir que sejam encadeadas por AND.
+                # A forma mais simples é aplicar cada bloco OR separadamente, o que a biblioteca faz com AND por padrão entre chamadas .or() sucessivas que não são para o mesmo campo
+                # Mas como são para o mesmo campo "curso", precisamos de um AND explícito.
+                # Revisitando a documentação do PostgREST: AND é o padrão.
+                # O problema era o query.or_() anterior que não era resetado.
+                # Correção: Para cada keyword de CURSO, aplicar um bloco OR, e esses blocos serão implicitamente ANDed.
+                # query = query.or_(or_filter_parts) era o problema se chamado em loop para o *mesmo* campo.
+                # Em vez disso, vamos construir a query com múltiplos filtros AND, cada um contendo um OR.
+
+                # Vamos usar o método .filter() com a sintaxe PostgREST para AND e OR
+                # Ex: and=(tipo_cota.ilike.{selected_category}%,or(curso.ilike.*engenharia*,curso.ilike.*eng*),or(curso.ilike.*eletrica*))
+                # Mas como tipo_cota já foi aplicado, vamos adicionar os de curso.
+                # A biblioteca supabase-py aplica AND entre diferentes chamadas de filter/ilike/or etc.
+                # Então, para cada palavra-chave de curso, precisamos de um (cond1 OR cond2 OR ...)
+                for keyword_block_filter_string in and_filters_course:
+                    # keyword_block_filter_string já é "(col.op.val,col.op.val)"
+                    # Precisamos remover os parênteses externos para a função .or_()
+                    # e passar a string interna: "col.op.val,col.op.val"
+                    # query = query.or_(keyword_block_filter_string.strip("()")) # Aplica (condA OR condB) E (condC OR condD)
+                    # Essa linha acima está correta. A API supabase-py, ao chamar .or() múltiplas vezes, as encadeia com AND.
+                     pass # A lógica original com loop e query.or_() estava correta para encadear com AND, o problema é a sintaxe.
+
+            # A lógica original de loop para `query = query.or_()` estava correta para encadear com AND
+            # desde que cada chamada ao `.or_` represente um grupo de condições OR para UMA palavra-chave.
+            for keyword_expanded in course_keywords_from_input: # Reitera para aplicar corretamente
+                keyword_expanded = keyword_expanded.strip()
+                if not keyword_expanded: continue
+                search_forms = {keyword_expanded}
+                for abbr, exp_val in abbreviations.items():
+                    if exp_val == keyword_expanded: search_forms.add(abbr)
+                if search_forms:
+                    or_filter_str = ",".join([f'curso.ilike.*{form}*' for form in search_forms])
+                    query = query.or_(or_filter_str)
+                    app.logger.info(f"Aplicado filtro AND (keyword de curso '{keyword_expanded}'): OR ({or_filter_str})")
+
 
         # Filtro de Instituição (lógica similar ao curso)
         if normalized_institution:
             institution_keywords_from_input = normalized_institution.split(' ')
             app.logger.info(f"Processando keywords de INSTITUIÇÃO normalizadas: {institution_keywords_from_input}")
+            # Mesma lógica de loop e .or_() para instituição
             for keyword_expanded in institution_keywords_from_input:
                 keyword_expanded = keyword_expanded.strip()
-                if not keyword_expanded:
-                    continue
-
+                if not keyword_expanded: continue
                 search_forms = {keyword_expanded}
-                for abbr, expanded_value_in_dict in abbreviations.items():
-                    if expanded_value_in_dict == keyword_expanded:
-                        search_forms.add(abbr)
-                
-                app.logger.info(f"Para keyword de instituição '{keyword_expanded}', formas de busca são: {search_forms}")
-
-                if len(search_forms) > 1:
-                    or_filter_parts = [f'instituicao.ilike.*{form}*' for form in search_forms]
-                    query = query.or_(",".join(or_filter_parts))
-                    app.logger.info(f"Aplicado filtro OR para instituição com '{keyword_expanded}': {','.join(or_filter_parts)}")
-                elif search_forms:
-                    single_form = list(search_forms)[0]
-                    query = query.ilike("instituicao", f"%{single_form}%")
-                    app.logger.info(f"Aplicado filtro ILIKE para instituição com '{single_form}'")
+                for abbr, exp_val in abbreviations.items():
+                    if exp_val == keyword_expanded: search_forms.add(abbr)
+                if search_forms:
+                    or_filter_str = ",".join([f'instituicao.ilike.*{form}*' for form in search_forms])
+                    query = query.or_(or_filter_str)
+                    app.logger.info(f"Aplicado filtro AND (keyword de instituição '{keyword_expanded}': OR ({or_filter_str})")
         
         response = query.execute()
         app.logger.info(f"Resposta da query Supabase: count={response.count}, data={response.data}")
