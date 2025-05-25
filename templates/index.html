@@ -286,20 +286,61 @@
                 .then(data => {
                     loadingDiv.style.display = 'none';
                     resultsDiv.style.display = 'block';
+                    resultsDiv.innerHTML = ''; 
+
+                    // Pega a nota da calculadora, se disponível
+                    let notaCalculada = null;
+                    const resultTextElement = document.getElementById('result');
+                    if (resultTextElement && resultTextElement.textContent) {
+                        const match = resultTextElement.textContent.match(/Sua nota é: (\d+\.?\d*)/);
+                        if (match && match[1]) {
+                            notaCalculada = parseFloat(match[1]);
+                        }
+                    }
+
                     if (data && data.length > 0) {
-                        const table = document.createElement('table');
-                        const thead = document.createElement('thead');
-                        const tbody = document.createElement('tbody');
-                        thead.innerHTML = '<tr><th>Instituição</th><th>Curso</th><th>Nota de Corte (Número Único)</th></tr>';
                         data.forEach(item => {
-                            const row = tbody.insertRow();
-                            row.insertCell().textContent = item.instituicao || 'N/A';
-                            row.insertCell().textContent = item.curso || 'N/A';
-                            row.insertCell().textContent = item.numero_unico || 'N/A';
+                            const resultCard = document.createElement('div');
+                            resultCard.className = 'result-card'; // Classe para o card inteiro
+
+                            const indicatorBar = document.createElement('div');
+                            indicatorBar.className = 'result-card-indicator'; // Barra lateral
+
+                            const contentDiv = document.createElement('div');
+                            contentDiv.className = 'result-card-content';
+
+                            const instituicaoP = document.createElement('p');
+                            instituicaoP.innerHTML = `<strong>Instituição:</strong> ${item.instituicao || 'N/A'}`;
+                            contentDiv.appendChild(instituicaoP);
+
+                            const cursoP = document.createElement('p');
+                            cursoP.innerHTML = `<strong>Curso:</strong> ${item.curso || 'N/A'}`;
+                            contentDiv.appendChild(cursoP);
+
+                            const notaP = document.createElement('p');
+                            const notaCorteItem = item.numero_unico !== null ? parseFloat(item.numero_unico) : null;
+                            notaP.innerHTML = `<strong>Nota de Corte:</strong> ${notaCorteItem !== null ? notaCorteItem.toFixed(3) : 'N/A'}`;
+                            contentDiv.appendChild(notaP);
+
+                            const cotaP = document.createElement('p');
+                            cotaP.innerHTML = `<strong>Grupo (Cota):</strong> ${item.tipo_cota || 'N/A'}`;
+                            contentDiv.appendChild(cotaP);
+
+                            // Comparação de notas e aplicação da cor na barra
+                            if (notaCalculada !== null && notaCorteItem !== null) {
+                                if (notaCalculada >= notaCorteItem) {
+                                    indicatorBar.classList.add('bar-green');
+                                } else {
+                                    indicatorBar.classList.add('bar-red');
+                                }
+                            } else {
+                                indicatorBar.classList.add('bar-neutral'); // Sem nota para comparar ou sem nota de corte
+                            }
+
+                            resultCard.appendChild(indicatorBar);
+                            resultCard.appendChild(contentDiv);
+                            resultsDiv.appendChild(resultCard);
                         });
-                        table.appendChild(thead);
-                        table.appendChild(tbody);
-                        resultsDiv.appendChild(table);
                     } else {
                         resultsDiv.innerHTML = '<p>Nenhum resultado encontrado para os critérios informados.</p>' +
                                              '<p>Isso pode ocorrer se:<ul><li>Não houver dados para essa combinação específica no banco.</li>' +
@@ -323,19 +364,34 @@
 
             if (calculateButton) {
                 calculateButton.addEventListener('click', () => {
-                    const notaCorte = parseFloat(notaCorteInput.value);
-                    const suaNota = parseFloat(suaNotaInput.value);
-                    if (isNaN(notaCorte) || isNaN(suaNota)) {
-                        comparacaoResultado.textContent = 'Por favor, insira valores numéricos válidos para as notas.';
+                    const acertosInput = document.getElementById('acertos');
+                    const acertos2Input = document.getElementById('acertos2');
+                    const acertos3Input = document.getElementById('acertos3');
+                    const acertosRInput = document.getElementById('acertosR');
+                    const resultDiv = document.getElementById('result');
+
+                    if (!acertosInput || !acertos2Input || !acertos3Input || !acertosRInput || !resultDiv) {
+                        console.error("Elementos da calculadora não encontrados!");
+                        if(resultDiv) resultDiv.innerHTML = '<p style="color: red;">Erro nos elementos.</p>';
                         return;
                     }
-                    if (suaNota >= notaCorte) {
-                        comparacaoResultado.textContent = 'Parabéns! Sua nota é suficiente.';
-                        comparacaoResultado.style.color = 'green';
-                    } else {
-                        comparacaoResultado.textContent = `Você precisa de mais ${ (notaCorte - suaNota).toFixed(3) } pontos.`;
-                        comparacaoResultado.style.color = 'red';
-                    }
+
+                    const acertos = parseFloat(acertosInput.value) || 0;
+                    const acertos2 = parseFloat(acertos2Input.value) || 0;
+                    const acertos3 = parseFloat(acertos3Input.value) || 0;
+                    const acertosR = parseFloat(acertosRInput.value) || 0;
+
+                    // Fórmula da calculadora (ajuste conforme a original se necessário)
+                    const notaCalculadaFormula = 
+                        ((acertos / 90) * 0.15) + 
+                        ((acertos2 / 90) * 0.25) + 
+                        ((acertos3 / 90) * 0.40) + 
+                        ((acertosR / 20) * 0.20); // Supõe que a nota da redação é sobre 20 para o peso
+                    
+                    const notaFinalCalculada = (notaCalculadaFormula * 100).toFixed(3);
+
+                    resultDiv.innerHTML = `<h2>Sua nota é: ${notaFinalCalculada}</h2>`;
+                    resultDiv.style.color = 'var(--primary-color)'; // Garante a cor padrão do resultado
                 });
             }
 

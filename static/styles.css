@@ -113,7 +113,7 @@ body {
 }
 
 /*==================================================*/
-/* Calculadora (com transição de “slide” ao clicar) */
+/* Calculadora (com transição de "slide" ao clicar) */
 /*==================================================*/
 
 /* Oculto por padrão */
@@ -323,7 +323,7 @@ body {
     border-left: 5px solid #00ff00;
 }
 
-/* Efeito “zoom” no hover */
+/* Efeito "zoom" no hover */
 .person:hover,
 .personMaior:hover {
     transform: scale(1.02);
@@ -465,4 +465,63 @@ body {
     .footer h3 {
         font-size: 1.1em;
     }
+}
+
+/* Estilos para os cards de resultado */
+.result-card {
+    background-color: #fff; /* Fundo branco para o card */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex; /* Para alinhar a barra lateral e o conteúdo */
+    overflow: hidden; /* Para garantir que o border-radius afete a barra */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.result-card-indicator {
+    width: 10px; /* Largura da barra lateral */
+    flex-shrink: 0; /* Impede que a barra encolha */
+    /* A cor de fundo será definida pelas classes bar-green, bar-red, bar-neutral */
+}
+
+.result-card-content {
+    padding: 15px 20px;
+    flex-grow: 1; /* Faz o conteúdo ocupar o espaço restante */
+}
+
+.result-card-content p {
+    margin: 8px 0;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.result-card-content strong {
+    color: #333;
+    font-weight: 600;
+}
+
+.bar-green {
+    background-color: #4CAF50; /* Verde */
+}
+
+.bar-red {
+    background-color: #F44336; /* Vermelho */
+}
+
+.bar-neutral {
+    background-color: #ccc; /* Cinza para quando não há comparação */
+}
+
+/* Estilos para modo escuro */
+body.dark-mode .result-card {
+    background-color: #2c2c2c; /* Fundo mais escuro para o card */
+    border-color: #444;
+}
+
+body.dark-mode .result-card-content strong {
+    color: #eee;
+}
+
+body.dark-mode .result-card-content p {
+    color: #ccc;
 }
