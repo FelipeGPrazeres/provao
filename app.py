@@ -130,6 +130,10 @@ def search_supabase():
             query = query.ilike("instituicao", f"%{selected_institution.strip()}%")
             app.logger.info(f"Filtro de instituição aplicado: ilike \"instituicao\", \"%{selected_institution.strip()}%\"")
         
+        # Ordena os resultados pela coluna 'numero_unico' em ordem decrescente
+        # Resultados com 'numero_unico' nulo aparecerão por último
+        query = query.order("numero_unico", desc=True, nulls_last=True)
+
         response = query.execute()
         app.logger.info(f"Resposta da query Supabase: count={response.count}, data={response.data}")
 
