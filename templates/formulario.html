@@ -9,6 +9,16 @@
 </head>
 <body>
 
+    <!-- Popup de Instruções (Oculto por padrão, exibido via JS) -->
+    <div id="formPopup" class="popup" style="display: none;">
+        <div id="formPopupContent" class="popup-content">
+            <h2>Atenção!</h2>
+            <p>Caso não saiba sua nota, aperte em "Minha Nota" e use nossa calculadora para descobrir.</p>
+            <p style="font-size: 1.1em;">Apresente apenas sua primeira opção e tenha certeza dos dados que está colocando, pois são de <strong style="color: red;">envio único</strong>.</p>
+            <button id="closeFormPopup">Entendi</button>
+        </div>
+    </div>
+
     <header class="top-nav">
         <div class="nav-inner">
             <div class="nav-left">
@@ -55,8 +65,19 @@
                 <h2>Enviar Novos Dados</h2>
                 <form id="dataForm">
                     <div class="input-group">
-                        <label for="campo1">Nome:</label>
+                        <label for="campo1">Nome: 
+                            <span id="nomeInfoTrigger" style="cursor: pointer; font-weight: bold; color: blue; margin-left: 5px;" title="Informações sobre o campo Nome">(?)</span>
+                        </label>
                         <input type="text" id="campo1" placeholder="Digite seu nome completo" required>
+                    </div>
+
+                    <!-- Modal/Tooltip para Informação do Nome (Oculto por padrão) -->
+                    <div id="nomeInfoModal" class="popup" style="display: none; z-index: 1001; position: fixed; /* Para centralizar melhor */ top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 500px;">
+                        <div class="popup-content" style="text-align: center;">
+                            <h2>Informação sobre o Nome</h2>
+                            <p style="text-align: left;">Nome apenas para verificação de unicidade dos dados, não será disponibilizado nas buscas. Caso alguém com o nome EXATAMENTE igual ao seu já tenha feito uma submissão, mande para nós por email.</p>
+                            <button id="closeNomeInfoModal" style="margin-top: 15px;">Fechar</button>
+                        </div>
                     </div>
 
                     <div class="input-group">
@@ -298,6 +319,47 @@
                 formMessage.style.color = 'red';
             }
         });
+
+        // Popup de Instruções do Formulário
+        const formPopup = document.getElementById('formPopup');
+        const closeFormPopup = document.getElementById('closeFormPopup');
+
+        if (formPopup && closeFormPopup) { // Verifica se os elementos existem
+            window.addEventListener('DOMContentLoaded', () => {
+                formPopup.style.display = "block"; // Exibe o popup ao carregar
+            });
+
+            closeFormPopup.addEventListener("click", () => {
+                formPopup.style.display = "none";
+            });
+        } else {
+            console.warn("Elementos do popup inicial do formulário (formPopup ou closeFormPopup) não encontrados.");
+        }
+
+        // Modal de Informação do Campo Nome
+        const nomeInfoTrigger = document.getElementById('nomeInfoTrigger');
+        const nomeInfoModal = document.getElementById('nomeInfoModal');
+        const closeNomeInfoModal = document.getElementById('closeNomeInfoModal');
+
+        if (nomeInfoTrigger && nomeInfoModal && closeNomeInfoModal) { // Verifica se os elementos existem
+            nomeInfoTrigger.addEventListener('click', (event) => {
+                event.stopPropagation(); // Impede que o clique no trigger feche o modal imediatamente se o modal já estiver aberto e for clicado (no caso do listener global)
+                nomeInfoModal.style.display = 'block';
+            });
+
+            closeNomeInfoModal.addEventListener('click', () => {
+                nomeInfoModal.style.display = 'none';
+            });
+
+            // Fechar o modal de informação do nome se clicar fora do seu conteúdo
+            window.addEventListener('click', (event) => {
+                if (event.target == nomeInfoModal) { // Se o clique foi no fundo (overlay) do modal
+                    nomeInfoModal.style.display = 'none';
+                }
+            });
+        } else {
+            console.warn("Elementos do modal de informação do nome (nomeInfoTrigger, nomeInfoModal ou closeNomeInfoModal) não encontrados.");
+        }
     </script>
 </body>
 </html>
