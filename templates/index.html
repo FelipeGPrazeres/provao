@@ -70,13 +70,16 @@
                     <option value="">Selecione uma categoria</option>
                 </select>
 
-                <label for="institutionInput">Filtrar por Instituição (opcional):</label>
-                <input type="text" id="institutionInput" list="institutionsList" placeholder="Digite o nome da Instituição (opcional)">
-                <datalist id="institutionsList"></datalist>
-
-                <label for="courseInput">Selecione ou digite o curso:</label>
-                <input type="text" id="courseInput" list="coursesList" placeholder="Digite o nome do curso" disabled>
-                <datalist id="coursesList"></datalist>
+                <div class="filter-group">
+                    <label for="institution">Instituição:</label>
+                    <input type="text" id="institution" name="institution" list="institution-list" placeholder="Digite para filtrar...">
+                    <datalist id="institution-list"></datalist>
+                </div>
+                <div class="filter-group">
+                    <label for="course">Curso:</label>
+                    <input type="text" id="course" name="course" list="course-list" placeholder="Digite para filtrar...">
+                    <datalist id="course-list"></datalist>
+                </div>
 
                 <button id="searchButton" disabled>Buscar</button>
             </div>
@@ -129,231 +132,192 @@
     </div>
 
     <script>
-        const categorySelect = document.getElementById('categorySelect');
-        const institutionInput = document.getElementById('institutionInput');
-        const courseInput = document.getElementById('courseInput');
-        const searchButton = document.getElementById('searchButton');
-        const calculateButton = document.getElementById('calculateButton');
-        const resultsDiv = document.getElementById('results');
-        const peopleListDiv = document.getElementById('peopleList');
-        const coursesList = document.getElementById('coursesList');
-        const institutionsList = document.getElementById('institutionsList');
-        const popup = document.getElementById('popup');
-        const closePopup = document.getElementById('closePopup');
-        
-        const toggleCalculator = document.getElementById('toggleCalculator');
-        const calculatorContainer = document.getElementById('calculatorContainer');
+        document.addEventListener('DOMContentLoaded', () => {
+            const categorySelect = document.getElementById('categorySelect');
+            const institutionInput = document.getElementById('institution');
+            const courseInput = document.getElementById('course');
+            const searchButton = document.getElementById('searchButton');
+            const resultsDiv = document.getElementById('results');
+            const loadingDiv = document.getElementById('loading');
+            const themeToggleButton = document.getElementById('theme-toggle');
+            const instructionPopup = document.getElementById("instructionPopup");
+            const closePopupButton = document.getElementById("closePopup");
+            const calculateButton = document.getElementById('calculateButton');
+            const notaCorteInput = document.getElementById('notaCorte');
+            const suaNotaInput = document.getElementById('suaNota');
+            const comparacaoResultado = document.getElementById('comparacaoResultado');
+            const toggleCalculator = document.getElementById('toggleCalculator');
+            const calculatorContainer = document.getElementById('calculatorContainer');
 
-        let allCourses = {};
-        let allInstitutions = {};
-        let currentCategory = null;
-        let notaReal = 0;
-        let notaCalculadora = 0;
+            // --- Funções de Carregamento e Utilitários ---
+            function loadDatalistOptions(datalistId, endpoint) {
+                fetch(endpoint)
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        return response.json();
+                    })
+                    .then(data => {
+                        const datalist = document.getElementById(datalistId);
+                        if (!datalist) {
+                            console.error("Datalist element not found:", datalistId);
+                            return;
+                        }
+                        datalist.innerHTML = ''; // Limpa opções anteriores
+                        if (Array.isArray(data)) {
+                            data.forEach(item => {
+                                const option = document.createElement('option');
+                                option.value = item;
+                                datalist.appendChild(option);
+                            });
+                        } else {
+                            console.error("Data for datalist is not an array:", data);
+                        }
+                    })
+                    .catch(error => console.error(`Erro ao carregar opções para ${datalistId}:`, error));
+            }
 
-        // Exibe popup ao carregar
-        window.addEventListener('DOMContentLoaded', () => {
-            popup.style.display = "block";
-        });
-
-        closePopup.addEventListener("click", () => {
-            popup.style.display = "none";
-        });
-
-        // Esconde resultados inicialmente
-        resultsDiv.style.display = 'none';
-
-        // Fetch de categorias do JSON (via Flask backend)
-        async function fetchCategories() {
-            try {
-                const response = await fetch('/get_json_categories'); // Nova rota Flask
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const categoriesFromJson = await response.json();
-
-                categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
-                if (categoriesFromJson && categoriesFromJson.length > 0) {
-                    categoriesFromJson.sort().forEach(categoryValue => {
-                        let option = document.createElement('option');
-                        option.value = categoryValue;
-                        option.textContent = categoryValue;
-                        categorySelect.appendChild(option);
+            function loadCategories() {
+                fetch('/get_json_categories')
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        return response.json();
+                    })
+                    .then(data => {
+                        categorySelect.innerHTML = '<option value="">Selecione a Categoria de Cota</option>';
+                        if (Array.isArray(data)) {
+                            data.sort().forEach(category => {
+                                const option = document.createElement('option');
+                                option.value = category;
+                                option.textContent = category;
+                                categorySelect.appendChild(option);
+                            });
+                        } else {
+                             console.error("Data for categories is not an array:", data);
+                        }
+                        categorySelect.disabled = false;
+                    })
+                    .catch(error => {
+                        console.error('Erro ao carregar categorias:', error);
+                        categorySelect.innerHTML = '<option value="">Erro ao carregar categorias</option>';
                     });
-                } else {
-                    console.warn("Nenhuma categoria recebida do backend (JSON).");
-                }
-            } catch (err) {
-                console.error('Erro ao buscar categorias do JSON via backend:', err);
             }
-        }
-        fetchCategories();
 
-        categorySelect.addEventListener('change', async () => {
-            currentCategory = categorySelect.value;
-            courseInput.disabled = !currentCategory;
-            searchButton.disabled = !currentCategory;
-            institutionInput.disabled = !currentCategory;
-            courseInput.value = '';
-            institutionInput.value = '';
-            coursesList.innerHTML = '';
-            institutionsList.innerHTML = '';
-            
-            allCourses[currentCategory] = []; 
-            allInstitutions[currentCategory] = [];
-
-            if (currentCategory) {
-                try {
-                    // Fetch de cursos para a categoria selecionada (do JSON via Flask)
-                    const coursesResponse = await fetch(`/get_json_courses?category=${currentCategory}`);
-                    if (!coursesResponse.ok) throw new Error(`Cursos HTTP error! ${coursesResponse.status}`);
-                    const coursesFromJson = await coursesResponse.json();
-                    if (coursesFromJson) {
-                        allCourses[currentCategory] = coursesFromJson.sort(); // JSON já deve retornar lista de strings
-                    }
-
-                    // Fetch de instituições para a categoria selecionada (do JSON via Flask)
-                    const institutionsResponse = await fetch(`/get_json_institutions?category=${currentCategory}`);
-                    if (!institutionsResponse.ok) throw new Error(`Instituições HTTP error! ${institutionsResponse.status}`);
-                    const institutionsFromJson = await institutionsResponse.json();
-                    if (institutionsFromJson) {
-                        allInstitutions[currentCategory] = institutionsFromJson.sort(); // JSON já deve retornar lista de strings
-                    }
-
-                } catch (err) {
-                    console.error('Erro ao buscar cursos ou instituições do JSON via backend:', err);
-                }
-            } else {
-                 institutionInput.disabled = true;
-            }
-        });
-
-        institutionInput.addEventListener('input', () => {
-            const currentInput = institutionInput.value;
-            institutionsList.innerHTML = '';
-
-            if (currentInput.length >= 3 && currentCategory && allInstitutions[currentCategory]) {
-                const filteredInstitutions = allInstitutions[currentCategory].filter(institution =>
-                    institution.toLowerCase().startsWith(currentInput.toLowerCase())
-                );
-
-                filteredInstitutions.forEach(institution => {
-                    let option = document.createElement('option');
-                    option.value = institution;
-                    institutionsList.appendChild(option);
+            // --- Lógica de Eventos ---
+            if (themeToggleButton) {
+                themeToggleButton.addEventListener('click', () => {
+                    document.body.classList.toggle('dark-mode');
+                    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
                 });
             }
-        });
 
-        courseInput.addEventListener('input', () => {
-            const currentInput = courseInput.value;
-            coursesList.innerHTML = '';
-
-            if (currentInput.length >= 3 && currentCategory && allCourses[currentCategory]) {
-                const filteredCourses = allCourses[currentCategory].filter(course =>
-                    course.toLowerCase().startsWith(currentInput.toLowerCase())
-                );
-
-                filteredCourses.forEach(course => {
-                    let option = document.createElement('option');
-                    option.value = course;
-                    coursesList.appendChild(option);
-                });
-            }
-        });
-
-        searchButton.addEventListener('click', async () => {
-            const selectedCourse = courseInput.value;
-            const selectedInstitution = institutionInput.value;
-            // currentCategory já é o tipo_cota selecionado
-
-            if (!currentCategory) {
-                alert("Por favor, selecione uma categoria (tipo de cota).");
-                return;
-            }
-            
-            if (!selectedCourse) {
-                alert("Por favor, digite ou selecione um curso.");
-                return;
+            if (closePopupButton) {
+                closePopupButton.addEventListener('click', () => instructionPopup.style.display = "none");
             }
 
-            const searchPayload = {
-                category: currentCategory,
-                course: selectedCourse,
-                institution: selectedInstitution || null // Enviar null se vazio
-            };
+            categorySelect.addEventListener('change', () => {
+                searchButton.disabled = !categorySelect.value;
+            });
 
-            try {
-                const response = await fetch('/search_supabase', { // Nova rota Flask para buscar no Supabase
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(searchPayload)
-                });
+            searchButton.addEventListener('click', () => {
+                const selectedCategory = categorySelect.value;
+                const selectedCourse = courseInput.value.trim();
+                const selectedInstitution = institutionInput.value.trim();
 
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({ message: "Erro desconhecido ao buscar dados."}));
-                    console.error('Erro ao buscar dados do Supabase via backend:', response.status, errorData);
-                    peopleListDiv.innerHTML = `<p>Erro ao buscar dados: ${errorData.error || errorData.message || response.statusText}</p>`;
-                    resultsDiv.style.display = 'block';
+                if (!selectedCategory) {
+                    alert('Por favor, selecione uma categoria de cota.');
                     return;
                 }
 
-                const people = await response.json(); // Dados vêm do Supabase via backend
+                loadingDiv.style.display = 'block';
+                resultsDiv.innerHTML = '';
+                resultsDiv.style.display = 'none';
 
-                document.getElementById('results').style.display = 'block';
-                peopleListDiv.innerHTML = people && people.length > 0
-                    ? people.map(person => {
-                        // As colunas devem corresponder ao que o backend /search_supabase retorna
-                        // que são: instituicao, curso, numero_unico, tipo_cota
-                        const instituicao = person.instituicao || 'N/A';
-                        const curso = person.curso || 'N/A';
-                        const nota = person.numero_unico !== null ? parseFloat(person.numero_unico).toFixed(3) : 'N/A';
-                        const grupo = person.tipo_cota || 'N/A';
-
-                        const notaPessoa = parseFloat(person.numero_unico);
-
-                        if (!isNaN(notaPessoa) && notaReal !== null && notaReal > 0 && notaPessoa < notaReal) {
-                            return `<div class="personMaior">
-                                <p><strong>Instituição:</strong> ${instituicao}</p>
-                                <p><strong>Curso:</strong> ${curso}</p>
-                                <p><strong>Nota:</strong> ${nota}</p>
-                                <p><strong>Grupo (Cota):</strong> ${grupo}</p>
-                            </div>`;
-                        } else {
-                            return `<div class="person">
-                                <p><strong>Instituição:</strong> ${instituicao}</p>
-                                <p><strong>Curso:</strong> ${curso}</p>
-                                <p><strong>Nota:</strong> ${nota}</p>
-                                <p><strong>Grupo (Cota):</strong> ${grupo}</p>
-                            </div>`;
-                        }
-                    }).join('')
-                    : '<p>Nenhum aluno encontrado para os critérios selecionados.</p>';
-            } catch (err) {
-                console.error('Erro inesperado na busca via backend:', err);
-                peopleListDiv.innerHTML = '<p>Ocorreu um erro inesperado. Tente novamente.</p>';
-                resultsDiv.style.display = 'block';
+                fetch('/search_supabase', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        category: selectedCategory, 
+                        course: selectedCourse, 
+                        institution: selectedInstitution 
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { 
+                            throw new Error(err.error || `Erro ${response.status} ao buscar dados.`); 
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    loadingDiv.style.display = 'none';
+                    resultsDiv.style.display = 'block';
+                    if (data && data.length > 0) {
+                        const table = document.createElement('table');
+                        const thead = document.createElement('thead');
+                        const tbody = document.createElement('tbody');
+                        thead.innerHTML = '<tr><th>Instituição</th><th>Curso</th><th>Nota de Corte (Número Único)</th></tr>';
+                        data.forEach(item => {
+                            const row = tbody.insertRow();
+                            row.insertCell().textContent = item.instituicao || 'N/A';
+                            row.insertCell().textContent = item.curso || 'N/A';
+                            row.insertCell().textContent = item.numero_unico || 'N/A';
+                        });
+                        table.appendChild(thead);
+                        table.appendChild(tbody);
+                        resultsDiv.appendChild(table);
+                    } else {
+                        resultsDiv.innerHTML = '<p>Nenhum resultado encontrado para os critérios informados.</p>' +
+                                             '<p>Isso pode ocorrer se:<ul><li>Não houver dados para essa combinação específica no banco.</li>' +
+                                             '<li>Você digitou um nome de instituição ou curso que não corresponde exatamente (tente usar termos mais genéricos ou apenas parte do nome).</li>' +
+                                             '<li>A categoria de cota selecionada não possui entradas para o curso/instituição buscados.</li></ul></p>';
+                    }
+                })
+                .catch(error => {
+                    loadingDiv.style.display = 'none';
+                    resultsDiv.style.display = 'block';
+                    resultsDiv.innerHTML = `<p>Erro ao buscar dados: ${error.message}</p>`;
+                    console.error('Erro na busca:', error);
+                });
+            });
+            
+            if (toggleCalculator) {
+                toggleCalculator.addEventListener('click', () => {
+                    calculatorContainer.classList.toggle('visible');
+                });
             }
-        });
-        calculateButton.addEventListener('click', () => {
-            let acertos = Number(document.getElementById('acertos').value);
-            let acertos2 = Number(document.getElementById('acertos2').value);
-            let acertos3 = Number(document.getElementById('acertos3').value);
-            let acertosR = Number(document.getElementById('acertosR').value);
 
-            notaCalculadora = ((acertos / 90) * 0.15) 
-                            + ((acertos2 / 90) * 0.25)
-                            + ((acertos3 / 90) * 0.40) 
-                            + ((acertosR / 20) * 0.20);
+            if (calculateButton) {
+                calculateButton.addEventListener('click', () => {
+                    const notaCorte = parseFloat(notaCorteInput.value);
+                    const suaNota = parseFloat(suaNotaInput.value);
+                    if (isNaN(notaCorte) || isNaN(suaNota)) {
+                        comparacaoResultado.textContent = 'Por favor, insira valores numéricos válidos para as notas.';
+                        return;
+                    }
+                    if (suaNota >= notaCorte) {
+                        comparacaoResultado.textContent = 'Parabéns! Sua nota é suficiente.';
+                        comparacaoResultado.style.color = 'green';
+                    } else {
+                        comparacaoResultado.textContent = `Você precisa de mais ${ (notaCorte - suaNota).toFixed(3) } pontos.`;
+                        comparacaoResultado.style.color = 'red';
+                    }
+                });
+            }
 
-            notaReal = (notaCalculadora * 100).toFixed(3);
-            document.getElementById('result').innerHTML = `<h2>Sua nota é: ${notaReal}</h2>`;
-        });
-
-        // Exibe/oculta calculadora com animação de expansão (similar ao menu)
-        toggleCalculator.addEventListener('click', () => {
-            calculatorContainer.classList.toggle('visible');
+            // --- Inicialização ao Carregar a Página ---
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+            if (instructionPopup) {
+                 // Mostra o popup automaticamente ou baseado em alguma condição
+                 // instructionPopup.style.display = "block"; 
+            }
+            loadCategories();
+            loadDatalistOptions('institution-list', '/get_all_institutions');
+            loadDatalistOptions('course-list', '/get_all_courses');
         });
     </script>
 </body>

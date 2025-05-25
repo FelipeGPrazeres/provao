@@ -87,16 +87,16 @@
                         </select>
                     </div>
 
-                    <div class="input-group">
-                        <label for="campo3">Instituição:</label>
-                        <input type="text" id="campo3" list="institutionsList" placeholder="Digite ou selecione a Instituição" required>
-                        <datalist id="institutionsList"></datalist>
+                    <div class="form-group">
+                        <label for="instituicao">Nome da Instituição:</label>
+                        <input type="text" id="instituicao" name="instituicao" list="institution-list-form" required placeholder="Digite para filtrar...">
+                        <datalist id="institution-list-form"></datalist>
                     </div>
 
-                    <div class="input-group">
-                        <label for="campo4">Curso:</label>
-                        <input type="text" id="campo4" list="coursesList" placeholder="Digite ou selecione o Curso" required>
-                        <datalist id="coursesList"></datalist>
+                    <div class="form-group">
+                        <label for="curso">Nome do Curso:</label>
+                        <input type="text" id="curso" name="curso" list="course-list-form" required placeholder="Digite para filtrar...">
+                        <datalist id="course-list-form"></datalist>
                     </div>
 
                     <div class="input-group">
@@ -275,8 +275,8 @@
 
             const nomeCompleto = document.getElementById('campo1').value;
             const tipoCota = document.getElementById('campo2').value;
-            const instituicao = document.getElementById('campo3').value;
-            const curso = document.getElementById('campo4').value;
+            const instituicao = document.getElementById('instituicao').value;
+            const curso = document.getElementById('curso').value;
             const notaFinal = parseFloat(document.getElementById('campoUnicoNumero').value);
 
             console.log('Data collected:', { nomeCompleto, tipoCota, instituicao, curso, notaFinal });

@@ -29,6 +29,19 @@ def load_json_data():
 
 json_data_for_suggestions = load_json_data()
 
+# Carregar dados para autocomplete de instituição e curso
+SUGGESTIONS_JSON_PATH = 'suggestions_data.json'
+suggestions_data = {}
+if os.path.exists(SUGGESTIONS_JSON_PATH):
+    try:
+        with open(SUGGESTIONS_JSON_PATH, 'r', encoding='utf-8') as f:
+            suggestions_data = json.load(f)
+        print(f"Arquivo de sugestões '{SUGGESTIONS_JSON_PATH}' carregado com sucesso.")
+    except Exception as e:
+        print(f"Erro ao carregar o arquivo de sugestões '{SUGGESTIONS_JSON_PATH}': {e}")
+else:
+    print(f"AVISO: Arquivo de sugestões '{SUGGESTIONS_JSON_PATH}' não encontrado. Os campos de autocomplete podem não funcionar como esperado.")
+
 # Configuração do Cliente Supabase Python
 # É RECOMENDADO usar variáveis de ambiente para SUPABASE_URL e SUPABASE_KEY em produção
 SUPABASE_URL: str = os.environ.get("SUPABASE_URL", "https://iradczvlimgyukwbwqcl.supabase.co")
@@ -88,12 +101,25 @@ def get_json_institutions():
 @app.route('/get_json_courses')
 def get_json_courses():
     category = request.args.get('category')
+    # Se precisar de todos os cursos para autocomplete, ignorar categoria
+    # if request.args.get('all') == 'true':
+    #     return jsonify(suggestions_data.get('courses', []))
+
     if not category or category not in json_data_for_suggestions:
         return jsonify([]), 400
         
     category_data = json_data_for_suggestions[category]
     courses = sorted(list(set(item.get('Curso', '') for item in category_data if item.get('Curso'))))
     return jsonify(courses)
+
+# --- Novas rotas para autocomplete global ---
+@app.route('/get_all_institutions')
+def get_all_institutions():
+    return jsonify(suggestions_data.get('institutions', []))
+
+@app.route('/get_all_courses')
+def get_all_courses():
+    return jsonify(suggestions_data.get('courses', []))
 
 # --- Rota para BUSCAR dados do SUPABASE ---
 @app.route('/search_supabase', methods=['POST'])
