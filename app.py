@@ -4,6 +4,7 @@ from flask_cors import CORS
 import json
 import os # Para variáveis de ambiente
 from supabase import create_client, Client # Importações do Supabase
+# from unidecode import unidecode # Descomente se for usar para remover acentos
 
 app = Flask(__name__)
 CORS(app, origins=[
@@ -40,6 +41,26 @@ if SUPABASE_URL == "https://iradczvlimgyukwbwqcl.supabase.co" and "SUA_URL_SUPAB
 if SUPABASE_KEY == "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyYWRjenZsaW1neXVrd2J3cWNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgxMTQwMDcsImV4cCI6MjA2MzY5MDAwN30.CcLvcjhUaNvgSEHFunka_Er-RQ8iwMKInP5lvIrlqIY" and "SUA_CHAVE_ANON_SUPABASE" not in os.environ.get("SUPABASE_ANON_KEY", ""):
     print("INFO: Usando chave Supabase do fallback no código.")
 
+def normalize_string(s: str) -> str:
+    if not s:
+        return ""
+    s = s.lower()
+    # s = unidecode(s) # Opcional: remover acentos (requer pip install unidecode)
+    
+    abbreviations = {
+        "eng": "engenharia",
+        "comp": "computacao",
+        "adm": "administracao",
+        "sao": "são",
+        "info": "informacao",
+        # Adicione mais mapeamentos conforme necessário
+    }
+    words = s.split()
+    # Normaliza palavras inteiras e também verifica se partes de palavras são abreviações (ex: "eng.eletrica")
+    # Esta parte pode ser mais complexa dependendo da necessidade.
+    # Por simplicidade, vamos manter o split por espaço e normalizar palavras inteiras.
+    normalized_words = [abbreviations.get(word.replace('.','').replace(',',''), word) for word in words]
+    return " ".join(normalized_words)
 
 @app.route('/')
 def index_page():
@@ -79,39 +100,48 @@ def get_json_courses():
 def search_supabase():
     try:
         data = request.get_json()
-        app.logger.info(f"Payload recebido em /search_supabase: {data}") # Log aprimorado
+        app.logger.info(f"Payload recebido em /search_supabase: {data}")
 
-        selected_category = data.get('category') # tipo_cota
-        selected_institution = data.get('institution')
-        selected_course = data.get('course')
+        selected_category = data.get('category')
+        raw_institution = data.get('institution')
+        raw_course = data.get('course')
 
-        app.logger.info(f"Filtrando com: Categoria='{selected_category}', Instituição='{selected_institution}', Curso='{selected_course}'")
+        # Normalizar os termos de busca
+        normalized_institution = normalize_string(raw_institution) if raw_institution else ""
+        normalized_course = normalize_string(raw_course) if raw_course else ""
+
+        app.logger.info(f"Filtrando com: Categoria='{selected_category}', Instituição (norm)='{normalized_institution}', Curso (norm)='{normalized_course}'")
 
         if not selected_category:
             app.logger.warning("Busca abortada: Categoria (tipo_cota) não fornecida.")
             return jsonify({"error": "Categoria (tipo_cota) é obrigatória."}), 400
-        if not selected_course:
-            app.logger.warning("Busca abortada: Curso não fornecido.")
-            return jsonify({"error": "Curso é obrigatório."}), 400
+        
+        # Modificado: não exigir curso ou instituição, a busca pode ser só por categoria
+        # if not normalized_course and not normalized_institution:
+        #     app.logger.warning("Busca abortada: Nem curso nem instituição fornecidos após normalização.")
+        #     return jsonify({"error": "Pelo menos um curso ou instituição deve ser especificado."}), 400
 
         query = supabase_client.table("dados_formulario").select("instituicao, curso, numero_unico, tipo_cota", count='exact')
         
-        # Filtro para tipo_cota - usando ILIKE para correspondência de prefixo case-insensitive
-        # Ex: se selected_category for "L3", corresponderá a "L3 - Nenhuma cota"
         query = query.ilike("tipo_cota", f"{selected_category}%")
         app.logger.info(f"Filtro tipo_cota aplicado: ilike \"tipo_cota\", \"{selected_category}%\"")
 
-        # Filtro para curso - usando ILIKE para case-insensitive
-        query = query.filter("curso", "ilike", selected_course)
-        
-        if selected_institution:
-            query = query.filter("instituicao", "ilike", selected_institution) # ilike para case-insensitive
-        
-        app.logger.info(f"Query Supabase construída (antes de executar): {query}") # Log da query
+        if normalized_course:
+            course_keywords = normalized_course.split(' ')
+            for keyword in course_keywords:
+                if keyword.strip(): 
+                    query = query.ilike("curso", f"%{keyword.strip()}%")
+            app.logger.info(f"Filtro de curso (norm) aplicado com keywords: {course_keywords}")
 
-        response = query.execute()
+        if normalized_institution:
+            institution_keywords = normalized_institution.split(' ')
+            for keyword in institution_keywords:
+                 if keyword.strip():
+                    query = query.ilike("instituicao", f"%{keyword.strip()}%")
+            app.logger.info(f"Filtro de instituição (norm) aplicado com keywords: {institution_keywords}")
         
-        app.logger.info(f"Resposta da query Supabase: count={response.count}, data={response.data}") # Log detalhado da resposta
+        response = query.execute()
+        app.logger.info(f"Resposta da query Supabase: count={response.count}, data={response.data}")
 
         if hasattr(response, 'data'):
             return jsonify(response.data)
@@ -120,7 +150,7 @@ def search_supabase():
             return jsonify({"error": "Erro ao buscar dados no Supabase", "details": str(response)}), 500
 
     except Exception as e:
-        app.logger.error(f"Exceção na rota /search_supabase: {e}", exc_info=True) # Log com traceback
+        app.logger.error(f"Exceção na rota /search_supabase: {e}", exc_info=True)
         return jsonify({"error": "Erro interno do servidor", "details": str(e)}), 500
 
 if __name__ == '__main__':
