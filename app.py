@@ -79,37 +79,48 @@ def get_json_courses():
 def search_supabase():
     try:
         data = request.get_json()
-        print(f"Dados recebidos para busca no Supabase: {data}")
+        app.logger.info(f"Payload recebido em /search_supabase: {data}") # Log aprimorado
 
         selected_category = data.get('category') # tipo_cota
         selected_institution = data.get('institution')
         selected_course = data.get('course')
 
+        app.logger.info(f"Filtrando com: Categoria='{selected_category}', Instituição='{selected_institution}', Curso='{selected_course}'")
+
         if not selected_category:
+            app.logger.warning("Busca abortada: Categoria (tipo_cota) não fornecida.")
             return jsonify({"error": "Categoria (tipo_cota) é obrigatória."}), 400
         if not selected_course:
+            app.logger.warning("Busca abortada: Curso não fornecido.")
             return jsonify({"error": "Curso é obrigatório."}), 400
 
-        query = supabase_client.table("dados_formulario").select("instituicao, curso, numero_unico, tipo_cota")
+        query = supabase_client.table("dados_formulario").select("instituicao, curso, numero_unico, tipo_cota", count='exact')
         
-        query = query.eq("tipo_cota", selected_category)
-        query = query.eq("curso", selected_course) # Usando a coluna 'curso' conforme supabase.md
+        # Filtro para tipo_cota - usando ILIKE para correspondência de prefixo case-insensitive
+        # Ex: se selected_category for "L3", corresponderá a "L3 - Nenhuma cota"
+        query = query.ilike("tipo_cota", f"{selected_category}%")
+        app.logger.info(f"Filtro tipo_cota aplicado: ilike \"tipo_cota\", \"{selected_category}%\"")
+
+        # Filtro para curso - usando ILIKE para case-insensitive
+        query = query.filter("curso", "ilike", selected_course)
         
         if selected_institution:
-            query = query.eq("instituicao", selected_institution) # Usando a coluna 'instituicao'
+            query = query.filter("instituicao", "ilike", selected_institution) # ilike para case-insensitive
+        
+        app.logger.info(f"Query Supabase construída (antes de executar): {query}") # Log da query
 
         response = query.execute()
         
-        print(f"Resposta da query Supabase: {response}")
+        app.logger.info(f"Resposta da query Supabase: count={response.count}, data={response.data}") # Log detalhado da resposta
 
         if hasattr(response, 'data'):
             return jsonify(response.data)
         else:
-            print(f"Erro na resposta do Supabase: {response}")
+            app.logger.error(f"Erro estrutural na resposta do Supabase: {response}")
             return jsonify({"error": "Erro ao buscar dados no Supabase", "details": str(response)}), 500
 
     except Exception as e:
-        print(f"Exceção na rota /search_supabase: {e}")
+        app.logger.error(f"Exceção na rota /search_supabase: {e}", exc_info=True) # Log com traceback
         return jsonify({"error": "Erro interno do servidor", "details": str(e)}), 500
 
 if __name__ == '__main__':
