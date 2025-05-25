@@ -151,6 +151,43 @@
             const calculatorContainer = document.getElementById('calculatorContainer');
 
             // --- Funções de Carregamento e Utilitários ---
+            function updateResultCardsAppearance() {
+                const resultTextElement = document.getElementById('result');
+                let notaCalculada = null;
+                if (resultTextElement && resultTextElement.textContent) {
+                    const match = resultTextElement.textContent.match(/Sua nota é: (\d+\.?\d*)/);
+                    if (match && match[1]) {
+                        notaCalculada = parseFloat(match[1]);
+                    }
+                }
+
+                const resultCards = document.querySelectorAll('.result-card');
+                resultCards.forEach(card => {
+                    const indicatorBar = card.querySelector('.result-card-indicator');
+                    const notaCorteP = card.querySelector('.result-card-content p:nth-child(3)'); // Assume que a nota de corte é o 3º <p>
+                    
+                    if (!indicatorBar || !notaCorteP || !notaCorteP.textContent) return;
+
+                    const notaCorteMatch = notaCorteP.textContent.match(/Nota de Corte: (\d+\.?\d*)/);
+                    let notaCorteItem = null;
+                    if (notaCorteMatch && notaCorteMatch[1]) {
+                        notaCorteItem = parseFloat(notaCorteMatch[1]);
+                    }
+
+                    indicatorBar.classList.remove('bar-green', 'bar-red', 'bar-neutral');
+
+                    if (notaCalculada !== null && notaCorteItem !== null) {
+                        if (notaCalculada >= notaCorteItem) {
+                            indicatorBar.classList.add('bar-green');
+                        } else {
+                            indicatorBar.classList.add('bar-red');
+                        }
+                    } else {
+                        indicatorBar.classList.add('bar-neutral');
+                    }
+                });
+            }
+
             function isValidDatalistValue(inputId, datalistId) {
                 const inputElement = document.getElementById(inputId);
                 const datalist = document.getElementById(datalistId);
@@ -288,23 +325,13 @@
                     resultsDiv.style.display = 'block';
                     resultsDiv.innerHTML = ''; 
 
-                    // Pega a nota da calculadora, se disponível
-                    let notaCalculada = null;
-                    const resultTextElement = document.getElementById('result');
-                    if (resultTextElement && resultTextElement.textContent) {
-                        const match = resultTextElement.textContent.match(/Sua nota é: (\d+\.?\d*)/);
-                        if (match && match[1]) {
-                            notaCalculada = parseFloat(match[1]);
-                        }
-                    }
-
                     if (data && data.length > 0) {
                         data.forEach(item => {
                             const resultCard = document.createElement('div');
-                            resultCard.className = 'result-card'; // Classe para o card inteiro
+                            resultCard.className = 'result-card';
 
                             const indicatorBar = document.createElement('div');
-                            indicatorBar.className = 'result-card-indicator'; // Barra lateral
+                            indicatorBar.className = 'result-card-indicator'; 
 
                             const contentDiv = document.createElement('div');
                             contentDiv.className = 'result-card-content';
@@ -325,22 +352,15 @@
                             const cotaP = document.createElement('p');
                             cotaP.innerHTML = `<strong>Grupo (Cota):</strong> ${item.tipo_cota || 'N/A'}`;
                             contentDiv.appendChild(cotaP);
-
-                            // Comparação de notas e aplicação da cor na barra
-                            if (notaCalculada !== null && notaCorteItem !== null) {
-                                if (notaCalculada >= notaCorteItem) {
-                                    indicatorBar.classList.add('bar-green');
-                                } else {
-                                    indicatorBar.classList.add('bar-red');
-                                }
-                            } else {
-                                indicatorBar.classList.add('bar-neutral'); // Sem nota para comparar ou sem nota de corte
-                            }
+                            
+                            // A cor da barra será definida por updateResultCardsAppearance
+                            indicatorBar.classList.add('bar-neutral'); // Começa como neutra
 
                             resultCard.appendChild(indicatorBar);
                             resultCard.appendChild(contentDiv);
                             resultsDiv.appendChild(resultCard);
                         });
+                        updateResultCardsAppearance(); // Chama a função para definir as cores das barras
                     } else {
                         resultsDiv.innerHTML = '<p>Nenhum resultado encontrado para os critérios informados.</p>' +
                                              '<p>Isso pode ocorrer se:<ul><li>Não houver dados para essa combinação específica no banco.</li>' +
@@ -391,7 +411,8 @@
                     const notaFinalCalculada = (notaCalculadaFormula * 100).toFixed(3);
 
                     resultDiv.innerHTML = `<h2>Sua nota é: ${notaFinalCalculada}</h2>`;
-                    resultDiv.style.color = 'var(--primary-color)'; // Garante a cor padrão do resultado
+                    resultDiv.style.color = 'var(--primary-color)';
+                    updateResultCardsAppearance(); // Atualiza os cards existentes com a nova nota
                 });
             }
 
