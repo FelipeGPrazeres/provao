@@ -147,10 +147,6 @@
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const campo3Input = document.getElementById('campo3');
-        const campo4Input = document.getElementById('campo4');
-        const institutionsList = document.getElementById('institutionsList');
-        const coursesList = document.getElementById('coursesList');
         const formMessage = document.getElementById('formMessage');
         const tipoCotaSelect = document.getElementById('campo2');
 
@@ -158,10 +154,6 @@
         const calculatorContainerSubmit = document.getElementById('calculatorContainerSubmit');
         const calculateButtonSubmit = document.getElementById('calculateButtonSubmit');
         let notaRealSubmit = 0;
-
-        let allAvailableInstitutions = {};
-        let allAvailableCourses = {};
-        let currentFormCategory = null;
 
         toggleCalculatorSubmit.addEventListener('click', () => {
             calculatorContainerSubmit.classList.toggle('visible');
@@ -202,70 +194,36 @@
             }
         }
 
-        tipoCotaSelect.addEventListener('change', async () => {
-            currentFormCategory = tipoCotaSelect.value;
-            campo3Input.value = '';
-            campo4Input.value = '';
-            institutionsList.innerHTML = '';
-            coursesList.innerHTML = '';
-            allAvailableInstitutions[currentFormCategory] = [];
-            allAvailableCourses[currentFormCategory] = [];
-
-            if (currentFormCategory) {
-                try {
-                    const instResponse = await fetch(`/get_json_institutions?category=${currentFormCategory}`);
-                    if (!instResponse.ok) throw new Error(`Instituições HTTP error! ${instResponse.status}`);
-                    const institutionsFromJson = await instResponse.json();
-                    if (institutionsFromJson) {
-                        allAvailableInstitutions[currentFormCategory] = institutionsFromJson.sort();
+        function loadDatalistOptions(datalistId, endpoint) {
+            fetch(endpoint)
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    const datalist = document.getElementById(datalistId);
+                    if (!datalist) {
+                        console.error("Datalist element not found:", datalistId);
+                        return;
                     }
-
-                    const crsResponse = await fetch(`/get_json_courses?category=${currentFormCategory}`);
-                    if (!crsResponse.ok) throw new Error(`Cursos HTTP error! ${crsResponse.status}`);
-                    const coursesFromJson = await crsResponse.json();
-                    if (coursesFromJson) {
-                        allAvailableCourses[currentFormCategory] = coursesFromJson.sort();
+                    datalist.innerHTML = ''; 
+                    if (Array.isArray(data)) {
+                        data.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item;
+                            datalist.appendChild(option);
+                        });
+                    } else {
+                        console.error("Data for datalist is not an array:", data);
                     }
-                } catch (error) {
-                    console.error('Erro ao carregar sugestões para o formulário baseadas na cota:', error);
-                }
-            }
-        });
+                })
+                .catch(error => console.error(`Erro ao carregar opções para ${datalistId}:`, error));
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             loadFormCategories();
-        });
-
-        campo3Input.addEventListener('input', () => {
-            const currentInput = campo3Input.value.toLowerCase();
-            institutionsList.innerHTML = '';
-
-            if (currentFormCategory && currentInput.length >= 2 && allAvailableInstitutions[currentFormCategory]) {
-                const filteredInstitutions = allAvailableInstitutions[currentFormCategory].filter(institution =>
-                    institution.toLowerCase().includes(currentInput)
-                );
-                filteredInstitutions.forEach(institution => {
-                    let option = document.createElement('option');
-                    option.value = institution;
-                    institutionsList.appendChild(option);
-                });
-            }
-        });
-
-        campo4Input.addEventListener('input', () => {
-            const currentInput = campo4Input.value.toLowerCase();
-            coursesList.innerHTML = '';
-
-            if (currentFormCategory && currentInput.length >= 2 && allAvailableCourses[currentFormCategory]) {
-                const filteredCourses = allAvailableCourses[currentFormCategory].filter(course =>
-                    course.toLowerCase().includes(currentInput)
-                );
-                filteredCourses.forEach(course => {
-                    let option = document.createElement('option');
-                    option.value = course;
-                    coursesList.appendChild(option);
-                });
-            }
+            loadDatalistOptions('institution-list-form', '/get_all_institutions');
+            loadDatalistOptions('course-list-form', '/get_all_courses');
         });
 
         document.getElementById('dataForm').addEventListener('submit', async function(event) {
