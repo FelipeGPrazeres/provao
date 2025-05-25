@@ -86,6 +86,7 @@
         </div>
 
         <!-- Resultados -->
+        <div id="loading" style="display: none;">Carregando...</div>
         <div id="results">
             <h2>Resultados:</h2>
             <div id="peopleList"></div>
@@ -150,6 +151,27 @@
             const calculatorContainer = document.getElementById('calculatorContainer');
 
             // --- Funções de Carregamento e Utilitários ---
+            function isValidDatalistValue(inputId, datalistId) {
+                const inputElement = document.getElementById(inputId);
+                const datalist = document.getElementById(datalistId);
+                if (!inputElement || !datalist) {
+                    console.error("Input ou Datalist não encontrado para validação:", inputId, datalistId);
+                    return false; // Considera inválido se os elementos não existem
+                }
+
+                const inputValue = inputElement.value.trim();
+                // Se o campo não é obrigatório na busca e está vazio, é válido.
+                // Para a busca, os campos de curso/instituição são opcionais.
+                if (inputValue === "") return true; 
+
+                for (let i = 0; i < datalist.options.length; i++) {
+                    if (datalist.options[i].value === inputValue) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
             function loadDatalistOptions(datalistId, endpoint) {
                 fetch(endpoint)
                     .then(response => {
@@ -225,6 +247,16 @@
 
                 if (!selectedCategory) {
                     alert('Por favor, selecione uma categoria de cota.');
+                    return;
+                }
+
+                // Validação dos campos de instituição e curso
+                if (institutionInput.value.trim() !== "" && !isValidDatalistValue('institution', 'institution-list')) {
+                    alert('Por favor, selecione uma instituição válida da lista ou deixe o campo em branco.');
+                    return;
+                }
+                if (courseInput.value.trim() !== "" && !isValidDatalistValue('course', 'course-list')) {
+                    alert('Por favor, selecione um curso válido da lista ou deixe o campo em branco.');
                     return;
                 }
 

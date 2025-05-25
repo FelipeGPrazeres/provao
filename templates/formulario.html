@@ -149,6 +149,8 @@
 
         const formMessage = document.getElementById('formMessage');
         const tipoCotaSelect = document.getElementById('campo2');
+        const institutionInputForm = document.getElementById('instituicao');
+        const courseInputForm = document.getElementById('curso');
 
         const toggleCalculatorSubmit = document.getElementById('toggleCalculatorSubmit');
         const calculatorContainerSubmit = document.getElementById('calculatorContainerSubmit');
@@ -237,8 +239,6 @@
             const curso = document.getElementById('curso').value;
             const notaFinal = parseFloat(document.getElementById('campoUnicoNumero').value);
 
-            console.log('Data collected:', { nomeCompleto, tipoCota, instituicao, curso, notaFinal });
-
             if (!tipoCota) {
                 formMessage.textContent = 'Por favor, selecione uma opção para o Tipo de Cota.';
                 formMessage.style.color = 'red';
@@ -246,6 +246,19 @@
             }
             
             formMessage.textContent = ''; 
+
+            if (!isValidDatalistValue('instituicao', 'institution-list-form')) {
+                formMessage.textContent = 'Por favor, selecione uma instituição válida da lista.';
+                formMessage.style.color = 'red';
+                return;
+            }
+            if (!isValidDatalistValue('curso', 'course-list-form')) {
+                formMessage.textContent = 'Por favor, selecione um curso válido da lista.';
+                formMessage.style.color = 'red';
+                return;
+            }
+
+            console.log('Data collected:', { nomeCompleto, tipoCota, instituicao, curso, notaFinal });
 
             console.log('Attempting to send data to Supabase...');
             try {
@@ -317,6 +330,26 @@
             });
         } else {
             console.warn("Elementos do modal de informação do nome (nomeInfoTrigger, nomeInfoModal ou closeNomeInfoModal) não encontrados.");
+        }
+
+        // Função para validar se o valor do input está na datalist
+        function isValidDatalistValue(inputId, datalistId) {
+            const inputElement = document.getElementById(inputId);
+            const datalist = document.getElementById(datalistId);
+            if (!inputElement || !datalist) {
+                console.error("Input ou Datalist não encontrado para validação:", inputId, datalistId);
+                return false; 
+            }
+            const inputValue = inputElement.value.trim();
+            // Campos no formulário são obrigatórios, então não podem estar vazios.
+            if (inputValue === "") return false; 
+
+            for (let i = 0; i < datalist.options.length; i++) {
+                if (datalist.options[i].value === inputValue) {
+                    return true;
+                }
+            }
+            return false;
         }
     </script>
 </body>
