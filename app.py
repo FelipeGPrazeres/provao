@@ -62,6 +62,10 @@ def index_page():
 def formulario_page():
     return render_template('formulario.html')
 
+@app.route('/links')
+def links_page():
+    return render_template('links.html')
+
 # --- Rotas para fornecer dados do JSON para SUGESTÕES ---
 @app.route('/get_json_categories')
 def get_json_categories():

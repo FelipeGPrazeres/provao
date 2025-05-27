@@ -21,13 +21,26 @@
     <header class="top-nav">
         <div class="nav-inner">
             <div class="nav-left">
-                <h1>MEUPROVAO<span class="dot">.</span></h1>
+                <h1><a href="{{url_for('index_page')}}" style="color: white; text-decoration: none;">MEUPROVAO<span class="dot">.</span></a></h1>
             </div>
-            <div class="nav-actions">
-                <span id="notaSalvaDisplayFormulario" class="nav-button nota-salva-display" style="margin-right: 10px; font-size: 0.9em; cursor: default;"></span>
-                <button class="nav-button" id="toggleCalculatorSubmit">Minha Nota</button>
-                <a href="{{ url_for('index_page') }}" class="nav-button">Buscar Notas</a>
-                </div>
+
+            <!-- Botão Hambúrguer (visível apenas em mobile) -->
+            <button class="mobile-menu-toggle" aria-label="Abrir menu" aria-expanded="false">&#9776;</button>
+
+            <!-- Navegação para Desktop (visível apenas em desktop) -->
+            <div class="nav-actions desktop-nav">
+                <a href="{{ url_for('index_page') }}" class="nav-button">Página Inicial</a>
+                <a href="{{ url_for('links_page') }}" class="nav-button">Links Úteis</a>
+                <span id="notaSalvaDisplayFormulario" class="nav-button nota-salva-display" style="margin-right: 10px; font-size: 0.9em; cursor: default; display: none;"></span>
+                <button class="nav-button" id="toggleCalculatorSubmitDesktop">Minha Nota</button>
+            </div>
+
+            <!-- Menu Mobile (inicialmente oculto, controlado por JS e CSS) -->
+            <nav class="mobile-nav">
+                <a href="{{ url_for('index_page') }}" class="nav-button">Página Inicial</a>
+                <a href="{{ url_for('links_page') }}" class="nav-button">Links Úteis</a>
+                 <!-- O span da nota salva NÃO será incluído aqui conforme solicitado -->
+            </nav>
         </div>
     </header>
 
@@ -80,6 +93,16 @@
                         <label for="campo2">Tipo de Cota:</label>
                         <select id="campo2" required>
                             <option value="">Selecione uma opção</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="grupoInput">Grupo:</label>
+                        <select id="grupoInput" required>
+                            <option value="" disabled selected>Selecione o Grupo</option>
+                            <option value="A">Grupo A</option>
+                            <option value="B">Grupo B</option>
+                            <option value="C">Grupo C</option>
                         </select>
                     </div>
 
@@ -142,29 +165,37 @@
 
         const formMessageEl = document.getElementById('formMessage'); // Renamed variable
         const tipoCotaSelect = document.getElementById('campo2');
-        // const themeToggleButton = document.getElementById('theme-toggle'); // Keep if you re-add the button
+        
+        // --- Mobile Menu Toggle ---
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const mobileNav = document.querySelector('.mobile-nav');
 
-        const toggleCalculatorSubmit = document.getElementById('toggleCalculatorSubmit');
+        if (mobileMenuToggle && mobileNav) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileNav.classList.toggle('active');
+                const isExpanded = mobileNav.classList.contains('active');
+                mobileMenuToggle.setAttribute('aria-expanded', isExpanded);
+            });
+        }
+        // --- Fim Mobile Menu Toggle ---
+
+        const toggleCalculatorSubmitDesktop = document.getElementById('toggleCalculatorSubmitDesktop'); // Botão do header desktop
         const calculatorContainerSubmit = document.getElementById('calculatorContainerSubmit');
         const calculateButtonSubmit = document.getElementById('calculateButtonSubmit');
         
-        // --- Theme Toggle (if button is re-added) ---
-        // if (themeToggleButton) {
-        //     themeToggleButton.addEventListener('click', () => {
-        //         document.body.classList.toggle('dark-mode');
-        //         localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-        //     });
-        //     // Apply saved theme
-        //     if (localStorage.getItem('theme') === 'dark') {
-        //         document.body.classList.add('dark-mode');
-        //     }
-        // }
+        function handleToggleCalculatorSubmit() {
+            if (calculatorContainerSubmit) {
+                calculatorContainerSubmit.classList.toggle('visible');
+                // Se o menu mobile estiver aberto e a calculadora for aberta por ele (não aplicável aqui, mas para consistência)
+                if (mobileNav && mobileNav.classList.contains('active') && calculatorContainerSubmit.classList.contains('visible')) {
+                    mobileNav.classList.remove('active');
+                    if (mobileMenuToggle) mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                }
+            }
+        }
 
-
-        if (toggleCalculatorSubmit && calculatorContainerSubmit) {
-            toggleCalculatorSubmit.addEventListener('click', () => {
-                calculatorContainerSubmit.classList.toggle('visible'); //
-            });
+        if (toggleCalculatorSubmitDesktop) {
+            toggleCalculatorSubmitDesktop.addEventListener('click', handleToggleCalculatorSubmit);
         }
 
         if(calculateButtonSubmit) {
@@ -290,6 +321,7 @@
 
                     const nomeCompleto = document.getElementById('campo1').value;
                     const tipoCota = document.getElementById('campo2').value;
+                    const grupo = document.getElementById('grupoInput').value;
                     const instituicao = document.getElementById('instituicao').value;
                     const curso = document.getElementById('curso').value;
                     const notaFinal = parseFloat(document.getElementById('campoUnicoNumero').value);
@@ -321,6 +353,7 @@
                                 { 
                                     nome: nomeCompleto,
                                     tipo_cota: tipoCota,
+                                    grupo: grupo,
                                     instituicao: instituicao,
                                     curso: curso,
                                     numero_unico: notaFinal

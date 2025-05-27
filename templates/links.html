@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Links Úteis - MEUPROVAO</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header class="top-nav">
+        <div class="nav-inner">
+            <div class="nav-left">
+                <h1><a href="{{url_for('index_page')}}" style="color: white; text-decoration: none;">MEUPROVAO<span class="dot">.</span></a></h1>
+            </div>
+
+            <!-- Botão Hambúrguer (visível apenas em mobile) -->
+            <button class="mobile-menu-toggle" aria-label="Abrir menu" aria-expanded="false">&#9776;</button>
+
+            <!-- Navegação para Desktop (visível apenas em desktop) -->
+            <div class="nav-actions desktop-nav">
+                <a href="{{ url_for('index_page') }}" class="nav-button">Página Inicial</a>
+                <span id="notaSalvaDisplayLinks" class="nav-button nota-salva-display" style="margin-right: 10px; font-size: 0.9em; cursor: default; display: none;"></span>
+                <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
+            </div>
+
+            <!-- Menu Mobile (inicialmente oculto, controlado por JS e CSS) -->
+            <nav class="mobile-nav">
+                <a href="{{ url_for('index_page') }}" class="nav-button">Página Inicial</a>
+                <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
+                <!-- O span da nota salva NÃO será incluído aqui conforme solicitado -->
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="search-container card-style" style="text-align: center;">
+            <h2>Nossa Comunidade e Recursos</h2>
+            <p style="margin-bottom: 30px;">Conecte-se conosco, tire dúvidas e contribua!</p>
+        </div>
+
+        <div class="links-container">
+            <div class="link-card">
+                <h3>Discord Oficial</h3>
+                <p>Participe da nossa comunidade no Discord para interações em tempo real, grupos de estudo e mais.</p>
+                <a href="https://discord.gg/NFmkM5kNPX" target="_blank" class="link-button">Acessar Discord</a>
+            </div>
+
+            <div class="link-card">
+                <h3>WhatsApp: Chat Geral e Monitorias</h3>
+                <p>Grupo principal para dúvidas rápidas, avisos e discussões sobre as monitorias.</p>
+                <a href="https://chat.whatsapp.com/DKwd9hgYNHGKSSyKP9tJhS" target="_blank" class="link-button">Entrar no Grupo</a>
+            </div>
+
+            <div class="link-card">
+                <h3>Seja um Monitor!</h3>
+                <p>Tem interesse em ajudar outros estudantes? Inscreva-se para ser um monitor no projeto Meu Provão.</p>
+                <a href="https://forms.gle/heoRkGXLRSGtpTAW8" target="_blank" class="link-button">Formulário para Monitores</a>
+            </div>
+
+            <div class="link-card">
+                <h3>Inscreva-se nas Monitorias</h3>
+                <p>Precisa de ajuda nos estudos? Inscreva-se aqui para participar das nossas monitorias gratuitas.</p>
+                <a href="https://forms.gle/G5oHxBsNgPRox8yG7" target="_blank" class="link-button">Formulário para Alunos</a>
+            </div>
+            
+            <div class="link-card">
+                <h3>Siga-nos no Instagram</h3>
+                <p>Fique por dentro das novidades, dicas e informações importantes acompanhando nosso perfil.</p>
+                <a href="https://www.instagram.com/meuprovao" target="_blank" class="link-button">Acessar Instagram</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-section">
+                <h3>Grupo de Apoio</h3>
+                <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
+                <a class="group-link nav-button" href="https://chat.whatsapp.com/DKwd9hgYNHGKSSyKP9tJhS" target="_blank">Entrar no Grupo</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <div class="contact-container">
+                    <div class="contact-box">
+                        <p><strong>Kauan Yuri</strong></p>
+                        <p><a href="https://wa.me/5516994297281" target="_blank"><i class="icon-whatsapp"></i> 16 99429-7281</a></p>
+                        <p><a href="https://www.instagram.com/dev.kauan" target="_blank"><i class="icon-instagram"></i> @dev.kauan</a></p>
+                    </div>
+                    <div class="contact-box">
+                        <p><strong>Felipe Galvão</strong></p>
+                        <p><a href="https://wa.me/5516992145809" target="_blank"><i class="icon-whatsapp"></i> 16 99214-5809</a></p> <p><a href="https://www.instagram.com/felipe.prazeresz" target="_blank"><i class="icon-instagram"></i> @felipe.prazeresz</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MEUPROVAO. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    <script>
+        // Script para exibir nota salva, se houver (opcional nesta página, mas para consistência)
+        document.addEventListener('DOMContentLoaded', () => {
+            const notaSalva = localStorage.getItem('minhaNotaCalculada');
+            const displayElement = document.getElementById('notaSalvaDisplayLinks');
+            if (displayElement) {
+                if (notaSalva) {
+                    displayElement.textContent = `Nota: ${notaSalva}`;
+                    displayElement.style.display = 'inline-block';
+                } else {
+                    displayElement.style.display = 'none';
+                }
+            }
+
+            // --- Mobile Menu Toggle ---
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const mobileNav = document.querySelector('.mobile-nav');
+
+            if (mobileMenuToggle && mobileNav) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    mobileNav.classList.toggle('active');
+                    const isExpanded = mobileNav.classList.contains('active');
+                    mobileMenuToggle.setAttribute('aria-expanded', isExpanded);
+                });
+            }
+            // --- Fim Mobile Menu Toggle ---
+        });
+    </script>
+</body>
+</html>

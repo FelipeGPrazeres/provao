@@ -6,3 +6,4 @@ base de dados do provão paulista
 * **instituicao**: Tipo `text`.
 * **curso**: Tipo `text`.
 * **numero_unico**: Tipo `float8` 
+* **grupo**: Tipo `text`.

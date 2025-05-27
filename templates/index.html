@@ -12,13 +12,55 @@
     <header class="top-nav">
         <div class="nav-inner">
             <div class="nav-left">
-                <h1>MEUPROVAO<span class="dot">.</span></h1>
+                <h1><a href="{{url_for('index_page')}}" style="color: white; text-decoration: none;">MEUPROVAO<span class="dot">.</span></a></h1>
             </div>
-            <div class="nav-actions">
-                <span id="notaSalvaDisplayIndex" class="nav-button nota-salva-display" style="margin-right: 10px; font-size: 0.9em; cursor: default;"></span>
+
+            <!-- Botão Hambúrguer (visível apenas em mobile) -->
+            <button class="mobile-menu-toggle" aria-label="Abrir menu" aria-expanded="false">&#9776;</button>
+
+            <!-- Navegação para Desktop (visível apenas em desktop) -->
+            <div class="nav-actions desktop-nav">
+                <a href="{{ url_for('links_page') }}" class="nav-button">Links Úteis</a>
+                <span id="notaSalvaDisplayIndex" class="nav-button nota-salva-display" style="margin-right: 10px; font-size: 0.9em; cursor: default; display: none;"></span>
                 <button class="nav-button" id="toggleCalculator">Minha Nota</button>
                 <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
+            </div>
+
+            <!-- Menu Mobile (inicialmente oculto, controlado por JS e CSS) -->
+            <nav class="mobile-nav">
+                <a href="{{ url_for('links_page') }}" class="nav-button">Links Úteis</a>
+                <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
+                <!-- O span da nota salva NÃO será incluído aqui conforme solicitado -->
+                
+                <!-- Calculadora para Mobile (visível quando o menu estiver ativo, agora no final) -->
+                <div class="containerCalculadora" id="calculatorContainerMobile">
+                    <div class="calculadora">
+                        <h3>Calculadora de Nota</h3>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="acertosMobile">Acertos 2023:</label>
+                                <input type="number" id="acertosMobile" placeholder="Ex: 75">
+                            </div>
+                            <div class="input-group">
+                                <label for="acertos2Mobile">Acertos 2024:</label>
+                                <input type="number" id="acertos2Mobile" placeholder="Ex: 80">
+                            </div>
+                            <div class="input-group">
+                                <label for="acertos3Mobile">Acertos 2025:</label>
+                                <input type="number" id="acertos3Mobile" placeholder="Ex: 85">
+                            </div>
+                            <div class="input-group">
+                                <label for="acertosRMobile">Redação:</label>
+                                <input type="number" id="acertosRMobile" placeholder="Ex: 18">
+                            </div>
+                        </div>
+                        <div class="button-result-group">
+                            <button id="calculateButtonMobile" class="nav-button">Calcular</button>
+                            <div id="resultMobile" class="calculator-result"></div>
+                        </div>
+                    </div>
                 </div>
+            </nav>
         </div>
     </header>
 
@@ -69,15 +111,25 @@
                     </select>
                 </div>
 
+                <div class="form-group">
+                    <label for="groupSelect">Selecione o Grupo:</label>
+                    <select id="groupSelect">
+                        <option value="">Todos os Grupos</option>
+                        <option value="A">Grupo A</option>
+                        <option value="B">Grupo B</option>
+                        <option value="C">Grupo C</option>
+                    </select>
+                </div>
+
                 <div class="filter-group form-group">
                     <label for="institution">Instituição:</label>
-                    <input type="text" id="institution" name="institution" list="institution-list" placeholder="Digite ou selecione...">
-                    <datalist id="institution-list"></datalist>
+                    <input type="text" id="institution" name="institution" placeholder="Digite ou selecione...">
+                    <div id="institution-suggestions" class="suggestions-dropdown"></div>
                 </div>
                 <div class="filter-group form-group">
                     <label for="course">Curso:</label>
-                    <input type="text" id="course" name="course" list="course-list" placeholder="Digite ou selecione...">
-                    <datalist id="course-list"></datalist>
+                    <input type="text" id="course" name="course" placeholder="Digite ou selecione...">
+                    <div id="course-suggestions" class="suggestions-dropdown"></div>
                 </div>
 
                 <button id="searchButton" disabled>Buscar</button>
@@ -99,66 +151,410 @@
             <a href="{{ url_for('formulario_page') }}" class="collab-button nav-button">Enviar minha Nota</a>
         </div>
         
-        <footer class="footer">
-            <div class="footer-inner">
-                <div class="footer-section">
-                    <h3>Grupo de Apoio</h3>
-                    <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
-                    <a class="group-link nav-button" href="https://chat.whatsapp.com/EP0btFILC5s38znclDM3pO" target="_blank">Entrar no Grupo</a>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Contato</h3>
-                    <div class="contact-container">
-                        <div class="contact-box">
-                            <p><strong>Kauan Yuri</strong></p>
-                            <p><a href="https://wa.me/5516994297281" target="_blank"><i class="icon-whatsapp"></i> 16 99429-7281</a></p>
-                            <p><a href="https://www.instagram.com/dev.kauan" target="_blank"><i class="icon-instagram"></i> @dev.kauan</a></p>
-                        </div>
-                        <div class="contact-box">
-                            <p><strong>Felipe Galvão</strong></p>
-                            <p><a href="https://wa.me/5516992145809" target="_blank"><i class="icon-whatsapp"></i> 16 99214-5809</a></p>
-                            <p><a href="https://www.instagram.com/felipe.prazeresz" target="_blank"><i class="icon-instagram"></i> @felipe.prazeresz</a></p>
-                        </div>
-                    </div>      
-                </div>          
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 MEUPROVAO. Todos os direitos reservados.</p>
-            </div>
-        </footer>
     </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-section">
+                <h3>Grupo de Apoio</h3>
+                <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
+                <a class="group-link nav-button" href="https://chat.whatsapp.com/EP0btFILC5s38znclDM3pO" target="_blank">Entrar no Grupo</a>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <div class="contact-container">
+                    <div class="contact-box">
+                        <p><strong>Kauan Yuri</strong></p>
+                        <p><a href="https://wa.me/5516994297281" target="_blank"><i class="icon-whatsapp"></i> 16 99429-7281</a></p>
+                        <p><a href="https://www.instagram.com/dev.kauan" target="_blank"><i class="icon-instagram"></i> @dev.kauan</a></p>
+                    </div>
+                    <div class="contact-box">
+                        <p><strong>Felipe Galvão</strong></p>
+                        <p><a href="https://wa.me/5516992145809" target="_blank"><i class="icon-whatsapp"></i> 16 99214-5809</a></p>
+                        <p><a href="https://www.instagram.com/felipe.prazeresz" target="_blank"><i class="icon-instagram"></i> @felipe.prazeresz</a></p>
+                    </div>
+                </div>      
+            </div>          
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MEUPROVAO. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Elementos da UI
             const categorySelect = document.getElementById('categorySelect');
+            const groupSelect = document.getElementById('groupSelect');
             const institutionInput = document.getElementById('institution');
+            const institutionSuggestions = document.getElementById('institution-suggestions');
             const courseInput = document.getElementById('course');
-            const searchButton = document.getElementById('searchButton');
+            const courseSuggestions = document.getElementById('course-suggestions');
+            let searchButton = document.getElementById('searchButton'); // Usar let para poder substituir o nó
             const resultsSection = document.getElementById('results-section');
-            const peopleListDiv = document.getElementById('peopleList'); // Changed from resultsDiv
+            const peopleListDiv = document.getElementById('peopleList');
             const loadingDiv = document.getElementById('loading');
-            // const themeToggleButton = document.getElementById('theme-toggle'); // Keep if you re-add the button
-            const instructionPopup = document.getElementById("popup"); // Renamed for clarity
+            const instructionPopup = document.getElementById("popup");
             const closePopupButton = document.getElementById("closePopup");
-            const calculateButton = document.getElementById('calculateButton');
             const toggleCalculator = document.getElementById('toggleCalculator');
             const calculatorContainer = document.getElementById('calculatorContainer');
+            const calculateButton = document.getElementById('calculateButton');
             const clearFiltersButton = document.getElementById('clearFiltersButton');
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const mobileNav = document.querySelector('.mobile-nav');
+            const calculateButtonMobile = document.getElementById('calculateButtonMobile');
 
-            // --- Theme Toggle (if button is re-added) ---
-            // if (themeToggleButton) {
-            //     themeToggleButton.addEventListener('click', () => {
-            //         document.body.classList.toggle('dark-mode');
-            //         localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-            //     });
-            //     // Apply saved theme
-            //     if (localStorage.getItem('theme') === 'dark') {
-            //         document.body.classList.add('dark-mode');
-            //     }
-            // }
+            // Armazenamento de dados
+            let allInstitutions = [];
+            let allCourses = [];
+
+            // Configuração Supabase (exemplo, idealmente viria de um config)
+            const SUPABASE_URL = 'https://iradczvlimgyukwbwqcl.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyYWRjenZsaW1neXVrd2J3cWNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgxMTQwMDcsImV4cCI6MjA2MzY5MDAwN30.CcLvcjhUaNvgSEHFunka_Er-RQ8iwMKInP5lvIrlqIY';
+            const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+            // --- Lógica do Menu Mobile ---
+            if (mobileMenuToggle && mobileNav) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    mobileNav.classList.toggle('active');
+                    const isExpanded = mobileNav.classList.contains('active');
+                    mobileMenuToggle.setAttribute('aria-expanded', isExpanded);
+                });
+            }
+
+            // --- Lógica da Calculadora (Desktop e Mobile) ---
+            function calcularNota(acertosVal, acertos2Val, acertos3Val, acertosRVal) {
+                let acertos = Number(acertosVal);
+                let acertos2 = Number(acertos2Val);
+                let acertos3 = Number(acertos3Val);
+                let acertosR = Number(acertosRVal);
+                let notaCalculadora = ((acertos / 90) * 0.15) + ((acertos2 / 90) * 0.25) + ((acertos3 / 90) * 0.40) + ((acertosR / 20) * 0.20);
+                return (notaCalculadora * 100).toFixed(3);
+            }
+
+            if (toggleCalculator && calculatorContainer) {
+                toggleCalculator.addEventListener('click', () => {
+                    calculatorContainer.classList.toggle('visible');
+                });
+            }
+
+            if (calculateButton) {
+                calculateButton.addEventListener('click', () => {
+                    const acertosInput = document.getElementById('acertos');
+                    const acertos2Input = document.getElementById('acertos2');
+                    const acertos3Input = document.getElementById('acertos3');
+                    const acertosRInput = document.getElementById('acertosR');
+                    const resultDisplay = document.getElementById('result');
+
+                    if (!acertosInput.value || !acertos2Input.value || !acertos3Input.value || !acertosRInput.value) {
+                        resultDisplay.innerHTML = '<strong class="calculator-error-message">Preencha todos os campos.</strong>';
+                        return;
+                    }
+                    const notaReal = calcularNota(acertosInput.value, acertos2Input.value, acertos3Input.value, acertosRInput.value);
+                    resultDisplay.innerHTML = `Sua nota é: <strong>${notaReal}</strong>`;
+                    salvarNotaCalculada(notaReal);
+                    updateResultCardsAppearance();
+                });
+            }
+
+            if (calculateButtonMobile) {
+                calculateButtonMobile.addEventListener('click', () => {
+                    const acertosInput = document.getElementById('acertosMobile');
+                    const acertos2Input = document.getElementById('acertos2Mobile');
+                    const acertos3Input = document.getElementById('acertos3Mobile');
+                    const acertosRInput = document.getElementById('acertosRMobile');
+                    const resultDisplay = document.getElementById('resultMobile');
+
+                    if (!acertosInput.value || !acertos2Input.value || !acertos3Input.value || !acertosRInput.value) {
+                        resultDisplay.innerHTML = '<strong class="calculator-error-message">Preencha todos os campos.</strong>';
+                        return;
+                    }
+                    const notaReal = calcularNota(acertosInput.value, acertos2Input.value, acertos3Input.value, acertosRInput.value);
+                    resultDisplay.innerHTML = `Sua nota é: <strong>${notaReal}</strong>`;
+                    salvarNotaCalculada(notaReal);
+                     // Se o menu mobile estiver aberto, pode fechá-lo ou atualizar a nota salva em outros lugares se necessário.
+                });
+            }
+            
+            // --- Funções de Nota Salva ---
+            function salvarNotaCalculada(nota) {
+                localStorage.setItem('minhaNotaCalculada', nota);
+                exibirNotaSalvaIndex();
+            }
+
+            function exibirNotaSalvaIndex() {
+                const notaSalva = localStorage.getItem('minhaNotaCalculada');
+                const displayElement = document.getElementById('notaSalvaDisplayIndex');
+                if (displayElement) {
+                    if (notaSalva) {
+                        displayElement.textContent = `Nota: ${notaSalva}`;
+                        displayElement.style.display = 'inline-block';
+                    } else {
+                        displayElement.style.display = 'none';
+                    }
+                }
+            }
+
+            // --- Lógica de Autocomplete e Busca ---
+            function loadCategories() {
+                fetch('/get_json_categories')
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
+                        return response.json();
+                    })
+                    .then(categoriesFromJson => {
+                        categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
+                        if (categoriesFromJson && categoriesFromJson.length > 0) {
+                            categoriesFromJson.sort().forEach(categoryValue => {
+                                let option = document.createElement('option');
+                                option.value = categoryValue;
+                                option.textContent = categoryValue;
+                                categorySelect.appendChild(option);
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Erro ao carregar categorias:', error));
+            }
+
+            function loadSuggestionData(identifier, endpoint) {
+                return new Promise((resolve, reject) => {
+                    fetch(endpoint)
+                        .then(response => {
+                            if (!response.ok) throw new Error(`HTTP error! status: ${response.status} para ${identifier}`);
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (Array.isArray(data)) {
+                                const uniqueSortedData = [...new Set(data.map(item => item ? String(item).trim() : '').filter(item => item))].sort();
+                                if (identifier === 'institution') {
+                                    allInstitutions = uniqueSortedData;
+                                    console.log('Instituições carregadas no array:', allInstitutions.length > 0);
+                                } else if (identifier === 'course') {
+                                    allCourses = uniqueSortedData;
+                                    console.log('Cursos carregados no array:', allCourses.length > 0);
+                                }
+                                resolve();
+                            } else {
+                                console.error("Os dados para sugestões não são um array:", data, "para", identifier);
+                                reject("Formato de dados inválido");
+                            }
+                        })
+                        .catch(error => {
+                            console.error(`Erro ao carregar dados de sugestão para ${identifier}:`, error);
+                            reject(error);
+                        });
+                });
+            }
+
+            function displaySuggestions(inputValue, suggestionsContainer, sourceArray, inputElement) {
+                console.log(`displaySuggestions chamada para: ${inputElement.id}, valor: ${inputValue}, sourceArray tem ${sourceArray.length} itens`);
+                suggestionsContainer.innerHTML = '';
+                const valueToFilter = inputValue.toLowerCase();
+                let filteredSuggestions = [];
+                if (inputValue.length === 0 && document.activeElement === inputElement) {
+                    if (sourceArray && sourceArray.length > 0) {
+                        filteredSuggestions = sourceArray.slice(0, 10);
+                        console.log('Input vazio e focado, mostrando primeiras N sugestões:', filteredSuggestions);
+                    } else {
+                        console.log('Input vazio e focado, MAS sourceArray está vazio ou não definido.');
+                    }
+                } else if (inputValue.length > 0) {
+                    if (sourceArray && sourceArray.length > 0) {
+                        filteredSuggestions = sourceArray.filter(item => item.toLowerCase().includes(valueToFilter));
+                    } else {
+                         console.log('Input com valor, MAS sourceArray está vazio ou não definido.');
+                    }
+                }
+                console.log('Sugestões filtradas/para mostrar:', filteredSuggestions);
+                if (filteredSuggestions.length > 0) {
+                    console.log('Mostrando sugestões...');
+                    filteredSuggestions.forEach(suggestion => {
+                        const div = document.createElement('div');
+                        div.textContent = suggestion;
+                        div.addEventListener('mousedown', (e) => {
+                            e.preventDefault();
+                            inputElement.value = suggestion;
+                            suggestionsContainer.style.display = 'none';
+                            validateInputsAndToggleButton();
+                        });
+                        suggestionsContainer.appendChild(div);
+                    });
+                    suggestionsContainer.style.display = 'block';
+                } else {
+                    console.log('Ocultando sugestões (sem resultados, ou sourceArray não populado, ou input vazio e não focado).');
+                    suggestionsContainer.style.display = 'none';
+                }
+            }
+
+            function setupInputListeners() {
+                console.log("Configurando listeners para inputs AGORA que os dados devem estar carregados.");
+                function setupSingleInput(inputEl, suggestionsEl, dataArray) {
+                     if (inputEl && suggestionsEl) {
+                        inputEl.addEventListener('input', () => {
+                            console.log(`Input event em ${inputEl.id}, valor: ${inputEl.value}`);
+                            displaySuggestions(inputEl.value, suggestionsEl, dataArray, inputEl);
+                            validateInputsAndToggleButton(); 
+                        });
+                        inputEl.addEventListener('focus', () => {
+                            console.log(`Focus event em ${inputEl.id}`);
+                            displaySuggestions(inputEl.value, suggestionsEl, dataArray, inputEl);
+                        });
+                        inputEl.addEventListener('blur', () => {
+                            setTimeout(() => {
+                                if (!suggestionsEl.contains(document.activeElement) && !suggestionsEl.matches(':hover')) {
+                                   suggestionsEl.style.display = 'none';
+                                }
+                                validateInputsAndToggleButton(); 
+                            }, 150);
+                        });
+                    }
+                }
+                setupSingleInput(institutionInput, institutionSuggestions, allInstitutions);
+                setupSingleInput(courseInput, courseSuggestions, allCourses);
+            }
+            
+            function isValidSuggestion(inputElement, sourceArray) {
+                const value = inputElement.value.trim();
+                if (value === "") return true; // Campo vazio é "válido" no sentido de não impedir a busca
+                return sourceArray.includes(value);
+            }
+
+            function validateInputsAndToggleButton() {
+                const categorySelected = categorySelect.value !== "";
+                const groupSelected = groupSelect.value !== "";
+                const institutionValue = institutionInput.value.trim();
+                const courseValue = courseInput.value.trim();
+
+                let canEnableButton = false;
+                const primaryFilterSelected = categorySelected || groupSelected;
+
+                if (primaryFilterSelected) {
+                    const instValidOrEmpty = institutionValue === "" || allInstitutions.includes(institutionValue);
+                    const courseValidOrEmpty = courseValue === "" || allCourses.includes(courseValue);
+                    
+                    if (instValidOrEmpty && courseValidOrEmpty) {
+                         canEnableButton = true;
+                    }
+                } else {
+                     const instFilledAndValid = institutionValue !== "" && allInstitutions.includes(institutionValue);
+                     const courseFilledAndValid = courseValue !== "" && allCourses.includes(courseValue);
+                     if ((instFilledAndValid && courseValue === "") || 
+                         (courseFilledAndValid && institutionValue === "") || 
+                         (instFilledAndValid && courseFilledAndValid)) {
+                         canEnableButton = true;
+                     }
+                }
+                if (!categorySelected && !groupSelected && institutionValue === "" && courseValue === "") {
+                    canEnableButton = false;
+                }
+                searchButton.disabled = !canEnableButton;
+            }
 
 
+            function performSearch() {
+                const selectedCategory = categorySelect.value;
+                const selectedGroup = groupSelect.value;
+                const selectedInstitution = institutionInput.value.trim();
+                const selectedCourse = courseInput.value.trim();
+
+                if (!selectedCategory && !selectedGroup && !selectedInstitution && !selectedCourse) {
+                    alert("Por favor, selecione ou preencha pelo menos um campo para buscar.");
+                    return;
+                }
+                if (selectedInstitution !== "" && !allInstitutions.includes(selectedInstitution)) {
+                    alert("Instituição inválida. Por favor, selecione uma da lista ou limpe o campo.");
+                    institutionInput.focus();
+                    return;
+                }
+                if (selectedCourse !== "" && !allCourses.includes(selectedCourse)) {
+                    alert("Curso inválido. Por favor, selecione um da lista ou limpe o campo.");
+                    courseInput.focus();
+                    return;
+                }
+
+                resultsSection.style.display = 'block';
+                peopleListDiv.innerHTML = '';
+                loadingDiv.style.display = 'flex'; // Usar flex para centralizar spinner
+                searchButton.disabled = true; // Desabilitar durante a busca
+
+                supabaseClient
+                    .from('dados_formulario')
+                    .select('*')
+                    .then(response => {
+                        loadingDiv.style.display = 'none';
+                        searchButton.disabled = false; // Reabilitar após a busca
+                        const { data, error } = response;
+
+                        if (error) {
+                            console.error('Erro na busca Supabase:', error);
+                            peopleListDiv.innerHTML = '<p class="error-message">Erro ao buscar dados. Tente novamente.</p>';
+                            return;
+                        }
+
+                        let filteredData = data;
+                        if (selectedCategory) {
+                            filteredData = filteredData.filter(person => person.tipo_cota === selectedCategory);
+                        }
+                        if (selectedGroup) {
+                            filteredData = filteredData.filter(person => person.grupo === selectedGroup);
+                        }
+                        if (selectedInstitution) {
+                            filteredData = filteredData.filter(person => person.instituicao === selectedInstitution);
+                        }
+                        if (selectedCourse) {
+                            filteredData = filteredData.filter(person => person.curso === selectedCourse);
+                        }
+                        
+                        displayResults(filteredData);
+                    })
+                    .catch(error => { // Catch para erros de rede ou outros não tratados pelo Supabase
+                        loadingDiv.style.display = 'none';
+                        searchButton.disabled = false;
+                        peopleListDiv.innerHTML = `<p class="error-message">Erro crítico ao buscar dados: ${error.message}</p>`;
+                        console.error('Erro crítico na busca:', error);
+                    });
+            }
+
+            function displayResults(results) {
+                peopleListDiv.innerHTML = ''; // Limpar resultados anteriores
+                if (results && results.length > 0) {
+                    results.sort((a, b) => { // Ordenar por nota decrescente
+                        const notaA = parseFloat(a.numero_unico) || 0;
+                        const notaB = parseFloat(b.numero_unico) || 0;
+                        return notaB - notaA;
+                    });
+
+                    results.forEach(item => {
+                        const resultCard = document.createElement('div');
+                        resultCard.className = 'result-card';
+
+                        const indicatorBar = document.createElement('div');
+                        indicatorBar.className = 'result-card-indicator';
+
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'result-card-content';
+
+                        contentDiv.innerHTML = `
+                            <p><strong>Instituição:</strong> ${item.instituicao || 'N/A'}</p>
+                            <p><strong>Curso:</strong> ${item.curso || 'N/A'}</p>
+                            <p><strong>Nota de Corte:</strong> ${item.numero_unico !== null ? parseFloat(item.numero_unico).toFixed(3) : 'N/A'}</p>
+                            <p><strong>Grupo (Cota):</strong> ${item.tipo_cota || 'N/A'}</p>
+                        `;
+                        
+                        resultCard.appendChild(indicatorBar);
+                        resultCard.appendChild(contentDiv);
+                        peopleListDiv.appendChild(resultCard);
+                    });
+                    updateResultCardsAppearance();
+                } else {
+                    peopleListDiv.innerHTML = '<p class="no-results">Nenhum resultado encontrado para os critérios informados.</p>' +
+                                            '<p class="no-results-info">Isso pode ocorrer se:<ul><li>Não houver dados para essa combinação específica.</li>' +
+                                            '<li>A instituição ou curso não correspondem exatamente aos dados armazenados.</li>' +
+                                            '<li>A categoria de cota não possui entradas para o curso/instituição.</li></ul></p>';
+                }
+            }
+            
             function updateResultCardsAppearance() {
                 const notaSalva = localStorage.getItem('minhaNotaCalculada');
                 let notaCalculada = null;
@@ -169,7 +565,7 @@
                 const resultCards = document.querySelectorAll('.result-card');
                 resultCards.forEach(card => {
                     const indicatorBar = card.querySelector('.result-card-indicator');
-                    const notaCorteP = card.querySelector('.result-card-content p:nth-child(3)'); 
+                    const notaCorteP = card.querySelector('.result-card-content p:nth-child(3)'); // Assume que é o 3º <p>
                     
                     if (!indicatorBar || !notaCorteP || !notaCorteP.textContent) return;
 
@@ -193,375 +589,73 @@
                 });
             }
 
-            function isValidDatalistValue(inputId, datalistId) {
-                const inputElement = document.getElementById(inputId);
-                const datalist = document.getElementById(datalistId);
-                if (!inputElement || !datalist) {
-                    console.error("Input ou Datalist não encontrado para validação:", inputId, datalistId);
-                    return false; 
-                }
+            // --- Inicialização e Event Listeners Gerais ---
+            if (categorySelect) categorySelect.addEventListener('change', validateInputsAndToggleButton);
+            if (groupSelect) groupSelect.addEventListener('change', validateInputsAndToggleButton);
+            // Listeners de 'input' para institutionInput e courseInput são configurados em setupInputListeners
 
-                const inputValue = inputElement.value.trim();
-                if (inputValue === "") return true; 
-
-                for (let i = 0; i < datalist.options.length; i++) {
-                    if (datalist.options[i].value === inputValue) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            function loadDatalistOptions(datalistId, endpoint) {
-                fetch(endpoint)
-                    .then(response => {
-                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                        return response.json();
-                    })
-                    .then(data => {
-                        const datalist = document.getElementById(datalistId);
-                        if (!datalist) {
-                            console.error("Datalist element not found:", datalistId);
-                            return;
-                        }
-                        datalist.innerHTML = ''; 
-                        if (Array.isArray(data)) {
-                            data.forEach(item => {
-                                const option = document.createElement('option');
-                                option.value = item;
-                                datalist.appendChild(option);
-                            });
-                        } else {
-                            console.error("Data for datalist is not an array:", data);
-                        }
-                    })
-                    .catch(error => console.error(`Erro ao carregar opções para ${datalistId}:`, error));
-            }
-
-            function loadCategories() {
-                fetch('/get_json_categories')
-                    .then(response => {
-                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                        return response.json();
-                    })
-                    .then(data => {
-                        categorySelect.innerHTML = '<option value="">Selecione a Categoria de Cota</option>';
-                        if (Array.isArray(data)) {
-                            data.sort().forEach(category => {
-                                const option = document.createElement('option');
-                                option.value = category;
-                                option.textContent = category;
-                                categorySelect.appendChild(option);
-                            });
-                        } else {
-                             console.error("Data for categories is not an array:", data);
-                        }
-                        categorySelect.disabled = false;
-                    })
-                    .catch(error => {
-                        console.error('Erro ao carregar categorias:', error);
-                        categorySelect.innerHTML = '<option value="">Erro ao carregar categorias</option>';
-                    });
-            }
-
-            // --- Event Listeners ---
-            if (closePopupButton && instructionPopup) { //
-                closePopupButton.addEventListener('click', () => instructionPopup.classList.remove('visible')); //
-                 // Show popup if needed, for example, on first visit
-                // if (!localStorage.getItem('popupShown')) {
-                //    instructionPopup.classList.add('visible');
-                //    localStorage.setItem('popupShown', 'true');
-                // }
-            }
-
-
-            if (categorySelect) {
-                categorySelect.addEventListener('change', () => {
-                    searchButton.disabled = !categorySelect.value;
-                });
-            }
-
+            // Substituir o listener do botão de busca para evitar duplicatas e usar a nova função performSearch
             if (searchButton) {
-                searchButton.addEventListener('click', () => {
-                    const selectedCategory = categorySelect.value;
-                    const selectedCourse = courseInput.value.trim();
-                    const selectedInstitution = institutionInput.value.trim();
-
-                    if (!selectedCategory) {
-                        alert('Por favor, selecione uma categoria de cota.');
-                        return;
-                    }
-
-                    if (institutionInput.value.trim() !== "" && !isValidDatalistValue('institution', 'institution-list')) {
-                        alert('Por favor, selecione uma instituição válida da lista ou deixe o campo em branco.');
-                        return;
-                    }
-                    if (courseInput.value.trim() !== "" && !isValidDatalistValue('course', 'course-list')) {
-                        alert('Por favor, selecione um curso válido da lista ou deixe o campo em branco.');
-                        return;
-                    }
-
-                    loadingDiv.style.display = 'flex'; // Changed to flex for spinner centering
-                    peopleListDiv.innerHTML = '';
-                    resultsSection.style.display = 'block'; // Show results section
-
-                    fetch('/search_supabase', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            category: selectedCategory, 
-                            course: selectedCourse, 
-                            institution: selectedInstitution 
-                        })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            return response.json().then(err => { 
-                                throw new Error(err.error || `Erro ${response.status} ao buscar dados.`); 
-                            });
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        loadingDiv.style.display = 'none';
-                        peopleListDiv.innerHTML = ''; 
-
-                        if (data && data.length > 0) {
-                            data.forEach(item => {
-                                const resultCard = document.createElement('div');
-                                resultCard.className = 'result-card';
-
-                                const indicatorBar = document.createElement('div');
-                                indicatorBar.className = 'result-card-indicator'; 
-
-                                const contentDiv = document.createElement('div');
-                                contentDiv.className = 'result-card-content';
-
-                                const instituicaoP = document.createElement('p');
-                                instituicaoP.innerHTML = `<strong>Instituição:</strong> ${item.instituicao || 'N/A'}`;
-                                contentDiv.appendChild(instituicaoP);
-
-                                const cursoP = document.createElement('p');
-                                cursoP.innerHTML = `<strong>Curso:</strong> ${item.curso || 'N/A'}`;
-                                contentDiv.appendChild(cursoP);
-
-                                const notaP = document.createElement('p');
-                                const notaCorteItem = item.numero_unico !== null ? parseFloat(item.numero_unico) : null;
-                                notaP.innerHTML = `<strong>Nota de Corte:</strong> ${notaCorteItem !== null ? notaCorteItem.toFixed(3) : 'N/A'}`;
-                                contentDiv.appendChild(notaP);
-
-                                const cotaP = document.createElement('p');
-                                cotaP.innerHTML = `<strong>Grupo (Cota):</strong> ${item.tipo_cota || 'N/A'}`;
-                                contentDiv.appendChild(cotaP);
-                                
-                                indicatorBar.classList.add('bar-neutral'); 
-
-                                resultCard.appendChild(indicatorBar);
-                                resultCard.appendChild(contentDiv);
-                                peopleListDiv.appendChild(resultCard);
-                            });
-                            updateResultCardsAppearance(); 
-                        } else {
-                            peopleListDiv.innerHTML = '<p class="no-results">Nenhum resultado encontrado para os critérios informados.</p>' +
-                                                    '<p class="no-results-info">Isso pode ocorrer se:<ul><li>Não houver dados para essa combinação específica.</li>' +
-                                                    '<li>A instituição ou curso digitado não corresponde exatamente.</li>' +
-                                                    '<li>A categoria de cota não possui entradas para o curso/instituição.</li></ul></p>';
-                        }
-                    })
-                    .catch(error => {
-                        loadingDiv.style.display = 'none';
-                        peopleListDiv.innerHTML = `<p class="error-message">Erro ao buscar dados: ${error.message}</p>`;
-                        console.error('Erro na busca:', error);
-                    });
-                });
-            }
-            
-            if (toggleCalculator && calculatorContainer) {
-                toggleCalculator.addEventListener('click', () => {
-                    calculatorContainer.classList.toggle('visible'); //
-                });
-            }
-
-            if (calculateButton) {
-                calculateButton.addEventListener('click', () => {
-                    const acertosInput = document.getElementById('acertos');
-                    const acertos2Input = document.getElementById('acertos2');
-                    const acertos3Input = document.getElementById('acertos3');
-                    const acertosRInput = document.getElementById('acertosR');
-                    const resultDisplay = document.getElementById('result');
-
-                    // Validação dos campos
-                    if (acertosInput.value === '' || acertos2Input.value === '' || acertos3Input.value === '' || acertosRInput.value === '') {
-                        resultDisplay.innerHTML = '<strong style="color: red;">Preencha todos os campos da calculadora.</strong>';
-                        return;
-                    }
-
-                    let acertos = Number(acertosInput.value);
-                    let acertos2 = Number(acertos2Input.value);
-                    let acertos3 = Number(acertos3Input.value);
-                    let acertosR = Number(acertosRInput.value);
-
-                    let notaCalculadora = ((acertos / 90) * 0.15) 
-                                            + ((acertos2 / 90) * 0.25)
-                                            + ((acertos3 / 90) * 0.40) 
-                                            + ((acertosR / 20) * 0.20);
-
-                    let notaReal = (notaCalculadora * 100).toFixed(3);
-                    document.getElementById('result').innerHTML = `Sua nota é: <strong>${notaReal}</strong>`;
-                    salvarNotaCalculada(notaReal); // Salva e atualiza a exibição
-                    updateResultCardsAppearance(); 
-                });
-            }
-
-            // --- Funções para nota salva ---
-            function exibirNotaSalvaIndex() {
-                const notaSalva = localStorage.getItem('minhaNotaCalculada');
-                const displayElement = document.getElementById('notaSalvaDisplayIndex');
-                if (displayElement) {
-                    if (notaSalva) {
-                        displayElement.textContent = `Nota: ${notaSalva}`;
-                        displayElement.style.display = 'inline-block'; // Garante visibilidade
-                    } else {
-                        displayElement.textContent = '';
-                        displayElement.style.display = 'none'; // Oculta se não houver nota
-                    }
-                }
-            }
-
-            function salvarNotaCalculada(nota) {
-                localStorage.setItem('minhaNotaCalculada', nota);
-                exibirNotaSalvaIndex();
-            }
-
-            // --- Initializations ---
-            // Apply saved theme (if theme toggle is used)
-            // if (localStorage.getItem('theme') === 'dark') {
-            //     document.body.classList.add('dark-mode');
-            // }
-
-            // Auto-show instruction popup on first visit example:
-            if (instructionPopup && !localStorage.getItem('meuprovao_popup_shown')) {
-                 instructionPopup.classList.add('visible');
-                 localStorage.setItem('meuprovao_popup_shown', 'true');
-            }
-
-            loadCategories();
-            loadDatalistOptions('institution-list', '/get_all_institutions');
-            loadDatalistOptions('course-list', '/get_all_courses');
-            exibirNotaSalvaIndex(); // Exibe a nota salva e preenche o campo de comparação ao carregar
-
-            function performSearch() {
-                const selectedCategory = categorySelect.value;
-                const selectedInstitution = institutionInput.value.trim();
-                const selectedCourse = courseInput.value.trim();
-
-                if (!selectedCategory) {
-                    alert("Por favor, selecione uma categoria.");
-                    searchButton.disabled = false;
-                    return;
-                }
-
-                if (!isValidDatalistValue('institution', 'institution-list') && selectedInstitution !== "") {
-                    alert("Por favor, selecione uma instituição válida da lista ou deixe o campo em branco.");
-                    searchButton.disabled = false;
-                    return;
-                }
-                if (!isValidDatalistValue('course', 'course-list') && selectedCourse !== "") {
-                    alert("Por favor, selecione um curso válido da lista ou deixe o campo em branco.");
-                    searchButton.disabled = false;
-                    return;
-                }
-
-                loadingDiv.style.display = 'block';
-                peopleListDiv.innerHTML = '';
-                resultsSection.style.display = 'block';
-                searchButton.disabled = true;
-
-
-                fetch('/search_supabase', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                        category: selectedCategory,
-                        institution: selectedInstitution,
-                        course: selectedCourse
-                    }),
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(err => { throw new Error(err.error || 'Erro na busca'); });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    peopleListDiv.innerHTML = '';
-                    let resultados = data;
-
-                    if (resultados.length > 0) {
-                        // Ordena os resultados por numero_unico em ordem decrescente
-                        resultados.sort((a, b) => {
-                            const notaA = parseFloat(a.numero_unico) || 0;
-                            const notaB = parseFloat(b.numero_unico) || 0;
-                            return notaB - notaA;
-                        });
-
-                        resultados.forEach(person => {
-                            const personDiv = document.createElement('div');
-                            personDiv.classList.add('result-card');
-
-                            const indicatorBar = document.createElement('div');
-                            indicatorBar.classList.add('result-card-indicator');
-                            personDiv.appendChild(indicatorBar);
-
-                            const contentDiv = document.createElement('div');
-                            contentDiv.classList.add('result-card-content');
-                            contentDiv.innerHTML = `
-                                <p><strong>Instituição:</strong> ${person.instituicao || 'N/A'}</p>
-                                <p><strong>Curso:</strong> ${person.curso || 'N/A'}</p>
-                                <p><strong>Nota de Corte:</strong> ${person.numero_unico !== null ? parseFloat(person.numero_unico).toFixed(3) : 'N/A'}</p>
-                                <p><strong>Tipo de Cota:</strong> ${person.tipo_cota || 'N/A'}</p>
-                            `;
-                            personDiv.appendChild(contentDiv);
-                            peopleListDiv.appendChild(personDiv);
-                        });
-                    } else {
-                        peopleListDiv.innerHTML = '<p>Nenhum resultado encontrado para os filtros aplicados.</p>';
-                    }
-                    updateResultCardsAppearance();
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    peopleListDiv.innerHTML = `<p>Erro ao buscar dados: ${error.message}</p>`;
-                })
-                .finally(() => {
-                    loadingDiv.style.display = 'none';
-                    searchButton.disabled = false;
-                });
-            }
-
-            function clearFilters() {
-                categorySelect.value = '';
-                institutionInput.value = '';
-                courseInput.value = '';
-                peopleListDiv.innerHTML = '';
-                resultsSection.style.display = 'none';
-                searchButton.disabled = true; 
-                checkIfSearchCanBeEnabled();
-                updateResultCardsAppearance();
-                exibirNotaSalvaIndex();
+                const newSearchButton = searchButton.cloneNode(true);
+                searchButton.parentNode.replaceChild(newSearchButton, searchButton);
+                searchButton = newSearchButton; // Atualiza a referência
+                searchButton.addEventListener('click', performSearch);
             }
             
             if (clearFiltersButton) {
-                clearFiltersButton.addEventListener('click', clearFilters);
+                clearFiltersButton.addEventListener('click', () => {
+                    categorySelect.value = '';
+                    groupSelect.value = '';
+                    institutionInput.value = '';
+                    courseInput.value = '';
+                    institutionSuggestions.style.display = 'none';
+                    courseSuggestions.style.display = 'none';
+                    peopleListDiv.innerHTML = '';
+                    resultsSection.style.display = 'none';
+                    searchButton.disabled = true;
+                    exibirNotaSalvaIndex(); // Re-exibir nota, pode ter sido limpa
+                    updateResultCardsAppearance(); // Limpar indicadores de comparação
+                });
             }
 
-            // Enable search button only when category is selected
-            if (searchButton) {
-                searchButton.addEventListener('click', performSearch);
+            if (closePopupButton && instructionPopup) {
+                closePopupButton.addEventListener('click', () => instructionPopup.classList.remove('visible'));
+                if (!localStorage.getItem('meuprovao_popup_shown')) {
+                    instructionPopup.classList.add('visible');
+                    localStorage.setItem('meuprovao_popup_shown', 'true');
+                }
             }
+
+            // Carregamento inicial de dados e configuração dos listeners dependentes
+            loadCategories();
+            exibirNotaSalvaIndex(); // Pode ser chamada antes, não depende dos dados de sugestão
+            validateInputsAndToggleButton(); // Estado inicial do botão de busca
+
+            Promise.all([
+                loadSuggestionData('institution', '/get_all_institutions'),
+                loadSuggestionData('course', '/get_all_courses')
+            ]).then(() => {
+                console.log("TODOS os dados de sugestão carregados. Configurando listeners de input AGORA.");
+                setupInputListeners(); // Configura os listeners de autocomplete APÓS os dados estarem prontos
+                // Chamar validateInputsAndToggleButton novamente aqui pode ser útil se o estado inicial do botão depender dos dados carregados
+                validateInputsAndToggleButton(); 
+            }).catch(error => {
+                console.error("Erro ao carregar um ou mais conjuntos de dados de sugestão:", error);
+                // Lidar com o erro, talvez desabilitar campos de autocomplete ou mostrar mensagem ao usuário
+            });
+
+            // Ocultar sugestões ao clicar fora (pode permanecer aqui)
+            document.addEventListener('click', (event) => {
+                if (institutionSuggestions && !institutionInput.contains(event.target) && !institutionSuggestions.contains(event.target)) {
+                    institutionSuggestions.style.display = 'none';
+                }
+                if (courseSuggestions && !courseInput.contains(event.target) && !courseSuggestions.contains(event.target)) {
+                    courseSuggestions.style.display = 'none';
+                }
+            });
+
         });
     </script>
 </body>
+</html>
 </html>
