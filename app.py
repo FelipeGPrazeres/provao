@@ -156,4 +156,7 @@ if __name__ == '__main__':
 
     # As variáveis de ambiente SUPABASE_URL e SUPABASE_KEY devem ser configuradas 
     # no seu ambiente de produção (ex: Render, Heroku).
-    app.run(debug=True, host='0.0.0.0', port=10000)
+    # Define a porta a partir da variável de ambiente PORT, com fallback para 10000
+    port = int(os.environ.get("PORT", 10000))
+    # O host '0.0.0.0' permite acesso externo (necessário para a nuvem) e local.
+    app.run(debug=True, host='0.0.0.0', port=port)

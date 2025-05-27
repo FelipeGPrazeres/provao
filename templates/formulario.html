@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enviar Dados</title>
+    <title>Formulário de notas - MEUPROVAO</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <!-- Popup de Instruções (Oculto por padrão, exibido via JS) -->
-    <div id="formPopup" class="popup" style="display: none;">
-        <div id="formPopupContent" class="popup-content">
+    <div id="formPopup" class="popup"> <div id="formPopupContent" class="popup-content">
             <h2>Atenção!</h2>
             <p>Caso não saiba sua nota, aperte em "Minha Nota" e use nossa calculadora para descobrir.</p>
-            <p style="font-size: 1.1em;">Apresente apenas sua primeira opção e tenha certeza dos dados que está colocando, pois são de <strong style="color: red;">envio único</strong>.</p>
-            <button id="closeFormPopup">Entendi</button>
+            <p>Após isso, volte aqui e preencha o formulário.</p>
+            <p class="highlight-text">Apresente apenas sua primeira opção e tenha certeza dos dados que está colocando.</p>
+            <button id="closeFormPopup" class="popup-button">Entendi</button>
         </div>
     </div>
 
@@ -23,64 +22,61 @@
         <div class="nav-inner">
             <div class="nav-left">
                 <h1>MEUPROVAO<span class="dot">.</span></h1>
+            </div>
+            <div class="nav-actions">
+                <span id="notaSalvaDisplayFormulario" class="nav-button nota-salva-display" style="margin-right: 10px; font-size: 0.9em; cursor: default;"></span>
                 <button class="nav-button" id="toggleCalculatorSubmit">Minha Nota</button>
-            </div>
-            <div class="nav-right">
                 <a href="{{ url_for('index_page') }}" class="nav-button">Buscar Notas</a>
-            </div>
+                </div>
         </div>
     </header>
 
     <div class="main-container">
         <div class="containerCalculadora" id="calculatorContainerSubmit">
             <div class="calculadora">
+                <h3>Calculadora de Nota</h3>
                 <div class="input-row">
                     <div class="input-group">
                         <label for="acertosSubmit">Acertos 2023:</label>
-                        <input type="number" id="acertosSubmit" placeholder="Acertos 2023">
+                        <input type="number" id="acertosSubmit" placeholder="Ex: 75">
                     </div>
                     <div class="input-group">
                         <label for="acertos2Submit">Acertos 2024:</label>
-                        <input type="number" id="acertos2Submit" placeholder="Acertos 2024">
+                        <input type="number" id="acertos2Submit" placeholder="Ex: 80">
                     </div>
                     <div class="input-group">
                         <label for="acertos3Submit">Acertos 2025:</label>
-                        <input type="number" id="acertos3Submit" placeholder="Acertos 2025">
+                        <input type="number" id="acertos3Submit" placeholder="Ex: 85">
                     </div>
                     <div class="input-group">
                         <label for="acertosRSubmit">Redação:</label>
-                        <input type="number" id="acertosRSubmit" placeholder="Nota Redação">
+                        <input type="number" id="acertosRSubmit" placeholder="Ex: 18">
                     </div>
-
-                    <div class="button-result-group">
-                        <button id="calculateButtonSubmit">Calcular</button>
-                        <div id="resultSubmit"></div>
-                    </div>
+                </div>
+                <div class="button-result-group">
+                    <button id="calculateButtonSubmit">Calcular</button>
+                    <div id="resultSubmit" class="calculator-result"></div>
                 </div>
             </div>
         </div>
 
-        <div class="search-container">
-            <div class="search-fields">
-                <h2>Enviar Novos Dados</h2>
+        <div class="search-container card-style data-form-container"> <div class="search-fields"> <h2>Enviar Sua Nota</h2>
                 <form id="dataForm">
-                    <div class="input-group">
+                    <div class="form-group">
                         <label for="campo1">Nome: 
-                            <span id="nomeInfoTrigger" style="cursor: pointer; font-weight: bold; color: blue; margin-left: 5px;" title="Informações sobre o campo Nome">(?)</span>
+                            <span id="nomeInfoTrigger" class="info-trigger" title="Informações sobre o campo Nome">(?)</span>
                         </label>
                         <input type="text" id="campo1" placeholder="Digite seu nome completo" required>
                     </div>
 
-                    <!-- Modal/Tooltip para Informação do Nome (Oculto por padrão) -->
-                    <div id="nomeInfoModal" class="popup" style="display: none; z-index: 1001; position: fixed; /* Para centralizar melhor */ top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 500px;">
-                        <div class="popup-content" style="text-align: center;">
+                    <div id="nomeInfoModal" class="popup"> <div class="popup-content">
                             <h2>Informação sobre o Nome</h2>
-                            <p style="text-align: left;">Nome apenas para verificação de unicidade dos dados, não será disponibilizado nas buscas. Caso alguém com o nome EXATAMENTE igual ao seu já tenha feito uma submissão, mande para nós por email.</p>
-                            <button id="closeNomeInfoModal" style="margin-top: 15px;">Fechar</button>
+                            <p class="modal-text">Nome apenas para verificação da procedência dos dados, não será disponibilizado nas buscas. Caso alguém com o nome EXATAMENTE igual ao seu já tenha feito uma submissão, mande para nós por email.</p>
+                            <button id="closeNomeInfoModal" class="popup-button">Fechar</button>
                         </div>
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
                         <label for="campo2">Tipo de Cota:</label>
                         <select id="campo2" required>
                             <option value="">Selecione uma opção</option>
@@ -89,54 +85,51 @@
 
                     <div class="form-group">
                         <label for="instituicao">Nome da Instituição:</label>
-                        <input type="text" id="instituicao" name="instituicao" list="institution-list-form" required placeholder="Digite para filtrar...">
+                        <input type="text" id="instituicao" name="instituicao" list="institution-list-form" required placeholder="Digite ou selecione...">
                         <datalist id="institution-list-form"></datalist>
                     </div>
 
                     <div class="form-group">
                         <label for="curso">Nome do Curso:</label>
-                        <input type="text" id="curso" name="curso" list="course-list-form" required placeholder="Digite para filtrar...">
+                        <input type="text" id="curso" name="curso" list="course-list-form" required placeholder="Digite ou selecione...">
                         <datalist id="course-list-form"></datalist>
                     </div>
 
-                    <div class="input-group">
+                    <div class="form-group">
                         <label for="campoUnicoNumero">Sua nota final:</label>
-                        <input type="number" id="campoUnicoNumero" placeholder="Digite sua nota" step="any" required>
+                        <input type="number" id="campoUnicoNumero" placeholder="Digite sua nota (Ex: 75.123)" step="any" required>
                     </div>
                     
-                    <button type="submit" class="nav-button">Enviar Dados</button>
+                    <button type="submit" class="nav-button submit-button" style="margin-top: 20px;">Enviar Dados</button>
                 </form>
-                <p id="formMessage"></p>
-            </div>
+                <p id="formMessage" class="form-message-area"></p> </div>
         </div>
     </div>
 
     <footer class="footer">
         <div class="footer-inner">
-            <h3>Grupo de Apoio para Vestibulandos 2025</h3>
-            <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
-            <a class="group-link" href="https://chat.whatsapp.com/EP0btFILC5s38znclDM3pO" target="_blank">Entrar no Grupo</a>
-            <h3>Contato</h3>
-            <div class="contact-container">
-                <div class="contact-box">
-                    <p><strong>Kauan Yuri</strong></p>
-                    <p>WhatsApp:
-                        <a href="https://wa.me/5516994297281" target="_blank">16 99429-7281</a>
-                    </p>
-                    <p>Instagram:
-                        <a href="https://www.instagram.com/dev.kauan" target="_blank">@dev.kauan</a>
-                    </p>
-                </div>
-                <div class="contact-box">
-                    <p><strong>Felipe Galvão</strong></p>
-                    <p>WhatsApp:
-                        <a href="https://wa.instagram.com/felipe.prazeresz" target="_blank">16 99214-5809</a>
-                    </p>
-                    <p>Instagram:
-                        <a href="https://www.instagram.com/felipe.prazeresz" target="_blank">@felipe.prazeresz</a>
-                    </p>
+            <div class="footer-section">
+                <h3>Grupo de Apoio</h3>
+                <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
+                <a class="group-link nav-button" href="https://chat.whatsapp.com/EP0btFILC5s38znclDM3pO" target="_blank">Entrar no Grupo</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <div class="contact-container">
+                    <div class="contact-box">
+                        <p><strong>Kauan Yuri</strong></p>
+                        <p><a href="https://wa.me/5516994297281" target="_blank"><i class="icon-whatsapp"></i> 16 99429-7281</a></p>
+                        <p><a href="https://www.instagram.com/dev.kauan" target="_blank"><i class="icon-instagram"></i> @dev.kauan</a></p>
+                    </div>
+                    <div class="contact-box">
+                        <p><strong>Felipe Galvão</strong></p>
+                        <p><a href="https://wa.me/5516992145809" target="_blank"><i class="icon-whatsapp"></i> 16 99214-5809</a></p> <p><a href="https://www.instagram.com/felipe.prazeresz" target="_blank"><i class="icon-instagram"></i> @felipe.prazeresz</a></p>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MEUPROVAO. Todos os direitos reservados.</p>
         </div>
     </footer>
 
@@ -147,34 +140,77 @@
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const formMessage = document.getElementById('formMessage');
+        const formMessageEl = document.getElementById('formMessage'); // Renamed variable
         const tipoCotaSelect = document.getElementById('campo2');
-        const institutionInputForm = document.getElementById('instituicao');
-        const courseInputForm = document.getElementById('curso');
+        // const themeToggleButton = document.getElementById('theme-toggle'); // Keep if you re-add the button
 
         const toggleCalculatorSubmit = document.getElementById('toggleCalculatorSubmit');
         const calculatorContainerSubmit = document.getElementById('calculatorContainerSubmit');
         const calculateButtonSubmit = document.getElementById('calculateButtonSubmit');
-        let notaRealSubmit = 0;
+        
+        // --- Theme Toggle (if button is re-added) ---
+        // if (themeToggleButton) {
+        //     themeToggleButton.addEventListener('click', () => {
+        //         document.body.classList.toggle('dark-mode');
+        //         localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        //     });
+        //     // Apply saved theme
+        //     if (localStorage.getItem('theme') === 'dark') {
+        //         document.body.classList.add('dark-mode');
+        //     }
+        // }
 
-        toggleCalculatorSubmit.addEventListener('click', () => {
-            calculatorContainerSubmit.classList.toggle('visible');
-        });
 
-        calculateButtonSubmit.addEventListener('click', () => {
-            let acertos = Number(document.getElementById('acertosSubmit').value);
-            let acertos2 = Number(document.getElementById('acertos2Submit').value);
-            let acertos3 = Number(document.getElementById('acertos3Submit').value);
-            let acertosR = Number(document.getElementById('acertosRSubmit').value);
+        if (toggleCalculatorSubmit && calculatorContainerSubmit) {
+            toggleCalculatorSubmit.addEventListener('click', () => {
+                calculatorContainerSubmit.classList.toggle('visible'); //
+            });
+        }
 
-            let notaCalculadoraSubmit = ((acertos / 90) * 0.15) 
-                                    + ((acertos2 / 90) * 0.25)
-                                    + ((acertos3 / 90) * 0.40) 
-                                    + ((acertosR / 20) * 0.20);
+        if(calculateButtonSubmit) {
+            calculateButtonSubmit.addEventListener('click', () => {
+                const acertosInput = document.getElementById('acertosSubmit');
+                const acertos2Input = document.getElementById('acertos2Submit');
+                const acertos3Input = document.getElementById('acertos3Submit');
+                const acertosRInput = document.getElementById('acertosRSubmit');
+                const resultDisplay = document.getElementById('resultSubmit');
 
-            notaRealSubmit = (notaCalculadoraSubmit * 100).toFixed(3);
-            document.getElementById('resultSubmit').innerHTML = `<h2>Sua nota é: ${notaRealSubmit}</h2>`;
-        });
+                // Validação dos campos
+                if (acertosInput.value === '' || acertos2Input.value === '' || acertos3Input.value === '' || acertosRInput.value === '') {
+                    resultDisplay.innerHTML = '<strong style="color: red;">Preencha todos os campos da calculadora.</strong>';
+                    return;
+                }
+
+                let acertos = Number(acertosInput.value);
+                let acertos2 = Number(acertos2Input.value);
+                let acertos3 = Number(acertos3Input.value);
+                let acertosR = Number(acertosRInput.value);
+
+                let notaCalculadoraSubmit = ((acertos / 90) * 0.15) 
+                                        + ((acertos2 / 90) * 0.25)
+                                        + ((acertos3 / 90) * 0.40) 
+                                        + ((acertosR / 20) * 0.20);
+
+                let notaRealSubmit = (notaCalculadoraSubmit * 100).toFixed(3);
+                resultDisplay.innerHTML = `Sua nota é: <strong>${notaRealSubmit}</strong>`;
+                localStorage.setItem('minhaNotaCalculada', notaRealSubmit);
+                exibirNotaSalvaFormulario(); // Atualiza a exibição da nota salva
+            });
+        }
+
+        function exibirNotaSalvaFormulario() {
+            const notaSalva = localStorage.getItem('minhaNotaCalculada');
+            const displayElement = document.getElementById('notaSalvaDisplayFormulario');
+            if (displayElement) {
+                if (notaSalva) {
+                    displayElement.textContent = `Nota: ${notaSalva}`;
+                    displayElement.style.display = 'inline-block'; // Garante visibilidade
+                } else {
+                    displayElement.textContent = '';
+                    displayElement.style.display = 'none'; // Oculta se não houver nota
+                }
+            }
+        }
 
         async function loadFormCategories() {
             try {
@@ -221,118 +257,7 @@
                 })
                 .catch(error => console.error(`Erro ao carregar opções para ${datalistId}:`, error));
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadFormCategories();
-            loadDatalistOptions('institution-list-form', '/get_all_institutions');
-            loadDatalistOptions('course-list-form', '/get_all_courses');
-        });
-
-        document.getElementById('dataForm').addEventListener('submit', async function(event) {
-            console.log('Form submission initiated.');
-            event.preventDefault(); 
-            console.log('Default form submission prevented.');
-
-            const nomeCompleto = document.getElementById('campo1').value;
-            const tipoCota = document.getElementById('campo2').value;
-            const instituicao = document.getElementById('instituicao').value;
-            const curso = document.getElementById('curso').value;
-            const notaFinal = parseFloat(document.getElementById('campoUnicoNumero').value);
-
-            if (!tipoCota) {
-                formMessage.textContent = 'Por favor, selecione uma opção para o Tipo de Cota.';
-                formMessage.style.color = 'red';
-                return;
-            }
-            
-            formMessage.textContent = ''; 
-
-            if (!isValidDatalistValue('instituicao', 'institution-list-form')) {
-                formMessage.textContent = 'Por favor, selecione uma instituição válida da lista.';
-                formMessage.style.color = 'red';
-                return;
-            }
-            if (!isValidDatalistValue('curso', 'course-list-form')) {
-                formMessage.textContent = 'Por favor, selecione um curso válido da lista.';
-                formMessage.style.color = 'red';
-                return;
-            }
-
-            console.log('Data collected:', { nomeCompleto, tipoCota, instituicao, curso, notaFinal });
-
-            console.log('Attempting to send data to Supabase...');
-            try {
-                const { data, error } = await supabaseClient
-                    .from('dados_formulario') 
-                    .insert([
-                        { 
-                            nome: nomeCompleto,
-                            tipo_cota: tipoCota,
-                            instituicao: instituicao,
-                            curso: curso,
-                            numero_unico: notaFinal
-                        }
-                    ]);
-
-                if (error) {
-                    console.error('Erro ao enviar dados para o Supabase:', error);
-                    formMessage.textContent = 'Erro ao enviar dados: ' + error.message;
-                    formMessage.style.color = 'red';
-                } else {
-                    console.log('Dados enviados com sucesso para o Supabase:', data);
-                    formMessage.textContent = 'Dados enviados com sucesso!';
-                    formMessage.style.color = 'green';
-                    document.getElementById('dataForm').reset();
-                }
-            } catch (err) {
-                console.error('Erro inesperado durante a submissão:', err);
-                formMessage.textContent = 'Ocorreu um erro inesperado. Tente novamente.';
-                formMessage.style.color = 'red';
-            }
-        });
-
-        // Popup de Instruções do Formulário
-        const formPopup = document.getElementById('formPopup');
-        const closeFormPopup = document.getElementById('closeFormPopup');
-
-        if (formPopup && closeFormPopup) { // Verifica se os elementos existem
-            window.addEventListener('DOMContentLoaded', () => {
-                formPopup.style.display = "block"; // Exibe o popup ao carregar
-            });
-
-            closeFormPopup.addEventListener("click", () => {
-                formPopup.style.display = "none";
-            });
-        } else {
-            console.warn("Elementos do popup inicial do formulário (formPopup ou closeFormPopup) não encontrados.");
-        }
-
-        // Modal de Informação do Campo Nome
-        const nomeInfoTrigger = document.getElementById('nomeInfoTrigger');
-        const nomeInfoModal = document.getElementById('nomeInfoModal');
-        const closeNomeInfoModal = document.getElementById('closeNomeInfoModal');
-
-        if (nomeInfoTrigger && nomeInfoModal && closeNomeInfoModal) { // Verifica se os elementos existem
-            nomeInfoTrigger.addEventListener('click', (event) => {
-                event.stopPropagation(); // Impede que o clique no trigger feche o modal imediatamente se o modal já estiver aberto e for clicado (no caso do listener global)
-                nomeInfoModal.style.display = 'block';
-            });
-
-            closeNomeInfoModal.addEventListener('click', () => {
-                nomeInfoModal.style.display = 'none';
-            });
-
-            // Fechar o modal de informação do nome se clicar fora do seu conteúdo
-            window.addEventListener('click', (event) => {
-                if (event.target == nomeInfoModal) { // Se o clique foi no fundo (overlay) do modal
-                    nomeInfoModal.style.display = 'none';
-                }
-            });
-        } else {
-            console.warn("Elementos do modal de informação do nome (nomeInfoTrigger, nomeInfoModal ou closeNomeInfoModal) não encontrados.");
-        }
-
-        // Função para validar se o valor do input está na datalist
+        
         function isValidDatalistValue(inputId, datalistId) {
             const inputElement = document.getElementById(inputId);
             const datalist = document.getElementById(datalistId);
@@ -341,7 +266,6 @@
                 return false; 
             }
             const inputValue = inputElement.value.trim();
-            // Campos no formulário são obrigatórios, então não podem estar vazios.
             if (inputValue === "") return false; 
 
             for (let i = 0; i < datalist.options.length; i++) {
@@ -351,6 +275,115 @@
             }
             return false;
         }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFormCategories();
+            loadDatalistOptions('institution-list-form', '/get_all_institutions');
+            loadDatalistOptions('course-list-form', '/get_all_courses');
+            exibirNotaSalvaFormulario(); // Exibe a nota salva ao carregar a página
+
+            const dataForm = document.getElementById('dataForm');
+            if (dataForm) {
+                dataForm.addEventListener('submit', async function(event) {
+                    event.preventDefault(); 
+
+                    const nomeCompleto = document.getElementById('campo1').value;
+                    const tipoCota = document.getElementById('campo2').value;
+                    const instituicao = document.getElementById('instituicao').value;
+                    const curso = document.getElementById('curso').value;
+                    const notaFinal = parseFloat(document.getElementById('campoUnicoNumero').value);
+
+                    formMessageEl.textContent = '';
+                    formMessageEl.className = 'form-message-area'; // Reset classes
+
+                    if (!tipoCota) {
+                        formMessageEl.textContent = 'Por favor, selecione uma opção para o Tipo de Cota.';
+                        formMessageEl.classList.add('error'); //
+                        return;
+                    }
+                    
+                    if (!isValidDatalistValue('instituicao', 'institution-list-form')) {
+                        formMessageEl.textContent = 'Por favor, selecione uma instituição válida da lista.';
+                        formMessageEl.classList.add('error'); //
+                        return;
+                    }
+                    if (!isValidDatalistValue('curso', 'course-list-form')) {
+                        formMessageEl.textContent = 'Por favor, selecione um curso válido da lista.';
+                        formMessageEl.classList.add('error'); //
+                        return;
+                    }
+
+                    try {
+                        const { data, error } = await supabaseClient
+                            .from('dados_formulario') 
+                            .insert([
+                                { 
+                                    nome: nomeCompleto,
+                                    tipo_cota: tipoCota,
+                                    instituicao: instituicao,
+                                    curso: curso,
+                                    numero_unico: notaFinal
+                                }
+                            ]);
+
+                        if (error) {
+                            console.error('Erro ao enviar dados para o Supabase:', error);
+                            formMessageEl.textContent = 'Erro ao enviar dados: ' + error.message;
+                            formMessageEl.classList.add('error'); //
+                        } else {
+                            console.log('Dados enviados com sucesso para o Supabase:', data);
+                            formMessageEl.textContent = 'Dados enviados com sucesso!';
+                            formMessageEl.classList.add('success'); //
+                            document.getElementById('dataForm').reset();
+                        }
+                    } catch (err) {
+                        console.error('Erro inesperado durante a submissão:', err);
+                        formMessageEl.textContent = 'Ocorreu um erro inesperado. Tente novamente.';
+                        formMessageEl.classList.add('error'); //
+                    }
+                });
+            }
+
+            // Popup de Instruções do Formulário
+            const formPopup = document.getElementById('formPopup');
+            const closeFormPopup = document.getElementById('closeFormPopup');
+
+            if (formPopup && closeFormPopup) { 
+                // Show popup automatically on load for this page
+                formPopup.classList.add('visible'); //
+
+                closeFormPopup.addEventListener("click", () => {
+                    formPopup.classList.remove('visible'); //
+                });
+            } else {
+                console.warn("Elementos do popup inicial do formulário (formPopup ou closeFormPopup) não encontrados.");
+            }
+
+            // Modal de Informação do Campo Nome
+            const nomeInfoTrigger = document.getElementById('nomeInfoTrigger');
+            const nomeInfoModal = document.getElementById('nomeInfoModal');
+            const closeNomeInfoModal = document.getElementById('closeNomeInfoModal');
+
+            if (nomeInfoTrigger && nomeInfoModal && closeNomeInfoModal) { 
+                nomeInfoTrigger.addEventListener('click', (event) => {
+                    event.stopPropagation(); 
+                    nomeInfoModal.classList.add('visible'); //
+                });
+
+                closeNomeInfoModal.addEventListener('click', () => {
+                    nomeInfoModal.classList.remove('visible'); //
+                });
+
+                window.addEventListener('click', (event) => {
+                    if (event.target == nomeInfoModal) { 
+                        nomeInfoModal.classList.remove('visible'); //
+                    }
+                });
+            } else {
+                console.warn("Elementos do modal de informação do nome não encontrados.");
+            }
+        });
     </script>
 </body>
 </html>

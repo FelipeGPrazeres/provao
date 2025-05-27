@@ -13,121 +13,118 @@
         <div class="nav-inner">
             <div class="nav-left">
                 <h1>MEUPROVAO<span class="dot">.</span></h1>
+            </div>
+            <div class="nav-actions">
+                <span id="notaSalvaDisplayIndex" class="nav-button nota-salva-display" style="margin-right: 10px; font-size: 0.9em; cursor: default;"></span>
                 <button class="nav-button" id="toggleCalculator">Minha Nota</button>
                 <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
-            </div>
+                </div>
         </div>
     </header>
 
-    <!-- Container principal -->
     <div class="main-container">
 
-        <!-- Popup (Oculto por padrão) -->
-        <div id="popup" class="popup">
-            <div id="popupContent">
+        <div id="popup" class="popup"> <div id="popupContent" class="popup-content">
                 <h2>Observação</h2>
                 <p>As notas exibidas são baseadas nos dados disponíveis e podem não representar o corte exato para aprovação. No futuro, teremos dados mais completos.</p>
-                <p>O site está no início do desenvolvimento!</p>
-                <button id="closePopup">Entendi</button>
+                <button id="closePopup" class="popup-button">Entendi</button>
             </div>
         </div>
 
-        <!-- Seção da Calculadora (expansão via max-height) -->
         <div class="containerCalculadora" id="calculatorContainer">
             <div class="calculadora">
+                <h3>Calculadora de Nota</h3>
                 <div class="input-row">
                     <div class="input-group">
                         <label for="acertos">Acertos 2023:</label>
-                        <input type="number" id="acertos" placeholder="Acertos 2023">
+                        <input type="number" id="acertos" placeholder="Ex: 75">
                     </div>
                     <div class="input-group">
                         <label for="acertos2">Acertos 2024:</label>
-                        <input type="number" id="acertos2" placeholder="Acertos 2024">
+                        <input type="number" id="acertos2" placeholder="Ex: 80">
                     </div>
                     <div class="input-group">
                         <label for="acertos3">Acertos 2025:</label>
-                        <input type="number" id="acertos3" placeholder="Acertos 2025">
+                        <input type="number" id="acertos3" placeholder="Ex: 85">
                     </div>
                     <div class="input-group">
                         <label for="acertosR">Redação:</label>
-                        <input type="number" id="acertosR" placeholder="Nota Redação">
+                        <input type="number" id="acertosR" placeholder="Ex: 18">
                     </div>
-
-                    <div class="button-result-group">
-                        <button id="calculateButton">Calcular</button>
-                        <div id="result"></div>
-                    </div>
+                </div>
+                <div class="button-result-group">
+                    <button id="calculateButton">Calcular</button>
+                    <div id="result" class="calculator-result"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Formulário de Busca -->
-        <div class="search-container">
+        <div class="search-container card-style">
             <div class="search-fields">
                 <h2>Busque pelas suas preferências:</h2>
-                <label for="categorySelect">Selecione a Categoria:</label>
-                <select id="categorySelect">
-                    <option value="">Selecione uma categoria</option>
-                </select>
+                <div class="form-group">
+                    <label for="categorySelect">Selecione a Categoria:</label>
+                    <select id="categorySelect">
+                        <option value="">Selecione uma categoria</option>
+                    </select>
+                </div>
 
-                <div class="filter-group">
+                <div class="filter-group form-group">
                     <label for="institution">Instituição:</label>
-                    <input type="text" id="institution" name="institution" list="institution-list" placeholder="Digite para filtrar...">
+                    <input type="text" id="institution" name="institution" list="institution-list" placeholder="Digite ou selecione...">
                     <datalist id="institution-list"></datalist>
                 </div>
-                <div class="filter-group">
+                <div class="filter-group form-group">
                     <label for="course">Curso:</label>
-                    <input type="text" id="course" name="course" list="course-list" placeholder="Digite para filtrar...">
+                    <input type="text" id="course" name="course" list="course-list" placeholder="Digite ou selecione...">
                     <datalist id="course-list"></datalist>
                 </div>
 
                 <button id="searchButton" disabled>Buscar</button>
+                <button type="button" id="clearFiltersButton" class="nav-button" style="margin-left: 10px;">Limpar Filtros</button>
             </div>
         </div>
 
-        <!-- Resultados -->
-        <div id="loading" style="display: none;">Carregando...</div>
-        <div id="results">
-            <h2>Resultados:</h2>
-            <div id="peopleList"></div>
-        </div>
+        <div id="results-section" class="card-style" style="display: none;"> <h2>Resultados:</h2>
+            <div id="loading" style="display: none;">
+                <div class="spinner"></div>
+                Carregando...
+            </div>
+            <div id="peopleList"></div> </div>
 
-        <!-- Seção de colaboração -->
-        <div class="collab-section">
+
+        <div class="collab-section card-style">
             <h2>Já foi aprovado?</h2>
-            <p>Compartilhe sua nota para ajudar futuros candidatos:</p>
-            <a href="{{ url_for('formulario_page') }}" class="collab-button">Enviar minha Nota</a>
+            <p>Compartilhe sua nota para ajudar futuros candidatos e fortalecer nossa comunidade!</p>
+            <a href="{{ url_for('formulario_page') }}" class="collab-button nav-button">Enviar minha Nota</a>
         </div>
         
-        <!-- Footer -->
         <footer class="footer">
-            <!-- Container interno para melhor controle de largura -->
             <div class="footer-inner">
-                <h3>Grupo de Apoio para Vestibulandos 2025</h3>
-                <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
-                <a class="group-link" href="https://chat.whatsapp.com/EP0btFILC5s38znclDM3pO" target="_blank">Entrar no Grupo</a>
+                <div class="footer-section">
+                    <h3>Grupo de Apoio</h3>
+                    <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
+                    <a class="group-link nav-button" href="https://chat.whatsapp.com/EP0btFILC5s38znclDM3pO" target="_blank">Entrar no Grupo</a>
+                </div>
                 
-                <h3>Contato</h3>
-                <div class="contact-container">
-                    <div class="contact-box">
-                        <p><strong>Kauan Yuri</strong></p>
-                        <p>WhatsApp:
-                            <a href="https://wa.me/5516994297281" target="_blank">16 99429-7281</a>
-                        </p>
-                        <p>Instagram:
-                            <a href="https://www.instagram.com/dev.kauan" target="_blank">@dev.kauan</a>
-                        </p>
-                    </div>
-                    <div class="contact-box">
-                        <p><strong>Felipe Galvão</strong></p>
-                        <p>WhatsApp:
-                            <a href="https://wa.me/5516992145809" target="_blank">16 99214-5809</a>
-                        </p>
-                        <p>Instagram:
-                            <a href="https://www.instagram.com/felipe.prazeresz" target="_blank">@felipe.prazeresz</a>
-                        </p>
-                    </div>
-                </div>                
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <div class="contact-container">
+                        <div class="contact-box">
+                            <p><strong>Kauan Yuri</strong></p>
+                            <p><a href="https://wa.me/5516994297281" target="_blank"><i class="icon-whatsapp"></i> 16 99429-7281</a></p>
+                            <p><a href="https://www.instagram.com/dev.kauan" target="_blank"><i class="icon-instagram"></i> @dev.kauan</a></p>
+                        </div>
+                        <div class="contact-box">
+                            <p><strong>Felipe Galvão</strong></p>
+                            <p><a href="https://wa.me/5516992145809" target="_blank"><i class="icon-whatsapp"></i> 16 99214-5809</a></p>
+                            <p><a href="https://www.instagram.com/felipe.prazeresz" target="_blank"><i class="icon-instagram"></i> @felipe.prazeresz</a></p>
+                        </div>
+                    </div>      
+                </div>          
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 MEUPROVAO. Todos os direitos reservados.</p>
             </div>
         </footer>
     </div>
@@ -138,33 +135,41 @@
             const institutionInput = document.getElementById('institution');
             const courseInput = document.getElementById('course');
             const searchButton = document.getElementById('searchButton');
-            const resultsDiv = document.getElementById('results');
+            const resultsSection = document.getElementById('results-section');
+            const peopleListDiv = document.getElementById('peopleList'); // Changed from resultsDiv
             const loadingDiv = document.getElementById('loading');
-            const themeToggleButton = document.getElementById('theme-toggle');
-            const instructionPopup = document.getElementById("instructionPopup");
+            // const themeToggleButton = document.getElementById('theme-toggle'); // Keep if you re-add the button
+            const instructionPopup = document.getElementById("popup"); // Renamed for clarity
             const closePopupButton = document.getElementById("closePopup");
             const calculateButton = document.getElementById('calculateButton');
-            const notaCorteInput = document.getElementById('notaCorte');
-            const suaNotaInput = document.getElementById('suaNota');
-            const comparacaoResultado = document.getElementById('comparacaoResultado');
             const toggleCalculator = document.getElementById('toggleCalculator');
             const calculatorContainer = document.getElementById('calculatorContainer');
+            const clearFiltersButton = document.getElementById('clearFiltersButton');
 
-            // --- Funções de Carregamento e Utilitários ---
+            // --- Theme Toggle (if button is re-added) ---
+            // if (themeToggleButton) {
+            //     themeToggleButton.addEventListener('click', () => {
+            //         document.body.classList.toggle('dark-mode');
+            //         localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+            //     });
+            //     // Apply saved theme
+            //     if (localStorage.getItem('theme') === 'dark') {
+            //         document.body.classList.add('dark-mode');
+            //     }
+            // }
+
+
             function updateResultCardsAppearance() {
-                const resultTextElement = document.getElementById('result');
+                const notaSalva = localStorage.getItem('minhaNotaCalculada');
                 let notaCalculada = null;
-                if (resultTextElement && resultTextElement.textContent) {
-                    const match = resultTextElement.textContent.match(/Sua nota é: (\d+\.?\d*)/);
-                    if (match && match[1]) {
-                        notaCalculada = parseFloat(match[1]);
-                    }
+                if (notaSalva) {
+                    notaCalculada = parseFloat(notaSalva);
                 }
 
                 const resultCards = document.querySelectorAll('.result-card');
                 resultCards.forEach(card => {
                     const indicatorBar = card.querySelector('.result-card-indicator');
-                    const notaCorteP = card.querySelector('.result-card-content p:nth-child(3)'); // Assume que a nota de corte é o 3º <p>
+                    const notaCorteP = card.querySelector('.result-card-content p:nth-child(3)'); 
                     
                     if (!indicatorBar || !notaCorteP || !notaCorteP.textContent) return;
 
@@ -193,12 +198,10 @@
                 const datalist = document.getElementById(datalistId);
                 if (!inputElement || !datalist) {
                     console.error("Input ou Datalist não encontrado para validação:", inputId, datalistId);
-                    return false; // Considera inválido se os elementos não existem
+                    return false; 
                 }
 
                 const inputValue = inputElement.value.trim();
-                // Se o campo não é obrigatório na busca e está vazio, é válido.
-                // Para a busca, os campos de curso/instituição são opcionais.
                 if (inputValue === "") return true; 
 
                 for (let i = 0; i < datalist.options.length; i++) {
@@ -221,7 +224,7 @@
                             console.error("Datalist element not found:", datalistId);
                             return;
                         }
-                        datalist.innerHTML = ''; // Limpa opções anteriores
+                        datalist.innerHTML = ''; 
                         if (Array.isArray(data)) {
                             data.forEach(item => {
                                 const option = document.createElement('option');
@@ -261,124 +264,121 @@
                     });
             }
 
-            // --- Lógica de Eventos ---
-            if (themeToggleButton) {
-                themeToggleButton.addEventListener('click', () => {
-                    document.body.classList.toggle('dark-mode');
-                    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+            // --- Event Listeners ---
+            if (closePopupButton && instructionPopup) { //
+                closePopupButton.addEventListener('click', () => instructionPopup.classList.remove('visible')); //
+                 // Show popup if needed, for example, on first visit
+                // if (!localStorage.getItem('popupShown')) {
+                //    instructionPopup.classList.add('visible');
+                //    localStorage.setItem('popupShown', 'true');
+                // }
+            }
+
+
+            if (categorySelect) {
+                categorySelect.addEventListener('change', () => {
+                    searchButton.disabled = !categorySelect.value;
                 });
             }
 
-            if (closePopupButton) {
-                closePopupButton.addEventListener('click', () => instructionPopup.style.display = "none");
-            }
+            if (searchButton) {
+                searchButton.addEventListener('click', () => {
+                    const selectedCategory = categorySelect.value;
+                    const selectedCourse = courseInput.value.trim();
+                    const selectedInstitution = institutionInput.value.trim();
 
-            categorySelect.addEventListener('change', () => {
-                searchButton.disabled = !categorySelect.value;
-            });
+                    if (!selectedCategory) {
+                        alert('Por favor, selecione uma categoria de cota.');
+                        return;
+                    }
 
-            searchButton.addEventListener('click', () => {
-                const selectedCategory = categorySelect.value;
-                const selectedCourse = courseInput.value.trim();
-                const selectedInstitution = institutionInput.value.trim();
+                    if (institutionInput.value.trim() !== "" && !isValidDatalistValue('institution', 'institution-list')) {
+                        alert('Por favor, selecione uma instituição válida da lista ou deixe o campo em branco.');
+                        return;
+                    }
+                    if (courseInput.value.trim() !== "" && !isValidDatalistValue('course', 'course-list')) {
+                        alert('Por favor, selecione um curso válido da lista ou deixe o campo em branco.');
+                        return;
+                    }
 
-                if (!selectedCategory) {
-                    alert('Por favor, selecione uma categoria de cota.');
-                    return;
-                }
+                    loadingDiv.style.display = 'flex'; // Changed to flex for spinner centering
+                    peopleListDiv.innerHTML = '';
+                    resultsSection.style.display = 'block'; // Show results section
 
-                // Validação dos campos de instituição e curso
-                if (institutionInput.value.trim() !== "" && !isValidDatalistValue('institution', 'institution-list')) {
-                    alert('Por favor, selecione uma instituição válida da lista ou deixe o campo em branco.');
-                    return;
-                }
-                if (courseInput.value.trim() !== "" && !isValidDatalistValue('course', 'course-list')) {
-                    alert('Por favor, selecione um curso válido da lista ou deixe o campo em branco.');
-                    return;
-                }
-
-                loadingDiv.style.display = 'block';
-                resultsDiv.innerHTML = '';
-                resultsDiv.style.display = 'none';
-
-                fetch('/search_supabase', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        category: selectedCategory, 
-                        course: selectedCourse, 
-                        institution: selectedInstitution 
+                    fetch('/search_supabase', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            category: selectedCategory, 
+                            course: selectedCourse, 
+                            institution: selectedInstitution 
+                        })
                     })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(err => { 
-                            throw new Error(err.error || `Erro ${response.status} ao buscar dados.`); 
-                        });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    loadingDiv.style.display = 'none';
-                    resultsDiv.style.display = 'block';
-                    resultsDiv.innerHTML = ''; 
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(err => { 
+                                throw new Error(err.error || `Erro ${response.status} ao buscar dados.`); 
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        loadingDiv.style.display = 'none';
+                        peopleListDiv.innerHTML = ''; 
 
-                    if (data && data.length > 0) {
-                        data.forEach(item => {
-                            const resultCard = document.createElement('div');
-                            resultCard.className = 'result-card';
+                        if (data && data.length > 0) {
+                            data.forEach(item => {
+                                const resultCard = document.createElement('div');
+                                resultCard.className = 'result-card';
 
-                            const indicatorBar = document.createElement('div');
-                            indicatorBar.className = 'result-card-indicator'; 
+                                const indicatorBar = document.createElement('div');
+                                indicatorBar.className = 'result-card-indicator'; 
 
-                            const contentDiv = document.createElement('div');
-                            contentDiv.className = 'result-card-content';
+                                const contentDiv = document.createElement('div');
+                                contentDiv.className = 'result-card-content';
 
-                            const instituicaoP = document.createElement('p');
-                            instituicaoP.innerHTML = `<strong>Instituição:</strong> ${item.instituicao || 'N/A'}`;
-                            contentDiv.appendChild(instituicaoP);
+                                const instituicaoP = document.createElement('p');
+                                instituicaoP.innerHTML = `<strong>Instituição:</strong> ${item.instituicao || 'N/A'}`;
+                                contentDiv.appendChild(instituicaoP);
 
-                            const cursoP = document.createElement('p');
-                            cursoP.innerHTML = `<strong>Curso:</strong> ${item.curso || 'N/A'}`;
-                            contentDiv.appendChild(cursoP);
+                                const cursoP = document.createElement('p');
+                                cursoP.innerHTML = `<strong>Curso:</strong> ${item.curso || 'N/A'}`;
+                                contentDiv.appendChild(cursoP);
 
-                            const notaP = document.createElement('p');
-                            const notaCorteItem = item.numero_unico !== null ? parseFloat(item.numero_unico) : null;
-                            notaP.innerHTML = `<strong>Nota de Corte:</strong> ${notaCorteItem !== null ? notaCorteItem.toFixed(3) : 'N/A'}`;
-                            contentDiv.appendChild(notaP);
+                                const notaP = document.createElement('p');
+                                const notaCorteItem = item.numero_unico !== null ? parseFloat(item.numero_unico) : null;
+                                notaP.innerHTML = `<strong>Nota de Corte:</strong> ${notaCorteItem !== null ? notaCorteItem.toFixed(3) : 'N/A'}`;
+                                contentDiv.appendChild(notaP);
 
-                            const cotaP = document.createElement('p');
-                            cotaP.innerHTML = `<strong>Grupo (Cota):</strong> ${item.tipo_cota || 'N/A'}`;
-                            contentDiv.appendChild(cotaP);
-                            
-                            // A cor da barra será definida por updateResultCardsAppearance
-                            indicatorBar.classList.add('bar-neutral'); // Começa como neutra
+                                const cotaP = document.createElement('p');
+                                cotaP.innerHTML = `<strong>Grupo (Cota):</strong> ${item.tipo_cota || 'N/A'}`;
+                                contentDiv.appendChild(cotaP);
+                                
+                                indicatorBar.classList.add('bar-neutral'); 
 
-                            resultCard.appendChild(indicatorBar);
-                            resultCard.appendChild(contentDiv);
-                            resultsDiv.appendChild(resultCard);
-                        });
-                        updateResultCardsAppearance(); // Chama a função para definir as cores das barras
-                    } else {
-                        resultsDiv.innerHTML = '<p>Nenhum resultado encontrado para os critérios informados.</p>' +
-                                             '<p>Isso pode ocorrer se:<ul><li>Não houver dados para essa combinação específica no banco.</li>' +
-                                             '<li>Você digitou um nome de instituição ou curso que não corresponde exatamente (tente usar termos mais genéricos ou apenas parte do nome).</li>' +
-                                             '<li>A categoria de cota selecionada não possui entradas para o curso/instituição buscados.</li></ul></p>';
-                    }
-                })
-                .catch(error => {
-                    loadingDiv.style.display = 'none';
-                    resultsDiv.style.display = 'block';
-                    resultsDiv.innerHTML = `<p>Erro ao buscar dados: ${error.message}</p>`;
-                    console.error('Erro na busca:', error);
+                                resultCard.appendChild(indicatorBar);
+                                resultCard.appendChild(contentDiv);
+                                peopleListDiv.appendChild(resultCard);
+                            });
+                            updateResultCardsAppearance(); 
+                        } else {
+                            peopleListDiv.innerHTML = '<p class="no-results">Nenhum resultado encontrado para os critérios informados.</p>' +
+                                                    '<p class="no-results-info">Isso pode ocorrer se:<ul><li>Não houver dados para essa combinação específica.</li>' +
+                                                    '<li>A instituição ou curso digitado não corresponde exatamente.</li>' +
+                                                    '<li>A categoria de cota não possui entradas para o curso/instituição.</li></ul></p>';
+                        }
+                    })
+                    .catch(error => {
+                        loadingDiv.style.display = 'none';
+                        peopleListDiv.innerHTML = `<p class="error-message">Erro ao buscar dados: ${error.message}</p>`;
+                        console.error('Erro na busca:', error);
+                    });
                 });
-            });
+            }
             
-            if (toggleCalculator) {
+            if (toggleCalculator && calculatorContainer) {
                 toggleCalculator.addEventListener('click', () => {
-                    calculatorContainer.classList.toggle('visible');
+                    calculatorContainer.classList.toggle('visible'); //
                 });
             }
 
@@ -388,45 +388,179 @@
                     const acertos2Input = document.getElementById('acertos2');
                     const acertos3Input = document.getElementById('acertos3');
                     const acertosRInput = document.getElementById('acertosR');
-                    const resultDiv = document.getElementById('result');
+                    const resultDisplay = document.getElementById('result');
 
-                    if (!acertosInput || !acertos2Input || !acertos3Input || !acertosRInput || !resultDiv) {
-                        console.error("Elementos da calculadora não encontrados!");
-                        if(resultDiv) resultDiv.innerHTML = '<p style="color: red;">Erro nos elementos.</p>';
+                    // Validação dos campos
+                    if (acertosInput.value === '' || acertos2Input.value === '' || acertos3Input.value === '' || acertosRInput.value === '') {
+                        resultDisplay.innerHTML = '<strong style="color: red;">Preencha todos os campos da calculadora.</strong>';
                         return;
                     }
 
-                    const acertos = parseFloat(acertosInput.value) || 0;
-                    const acertos2 = parseFloat(acertos2Input.value) || 0;
-                    const acertos3 = parseFloat(acertos3Input.value) || 0;
-                    const acertosR = parseFloat(acertosRInput.value) || 0;
+                    let acertos = Number(acertosInput.value);
+                    let acertos2 = Number(acertos2Input.value);
+                    let acertos3 = Number(acertos3Input.value);
+                    let acertosR = Number(acertosRInput.value);
 
-                    // Fórmula da calculadora (ajuste conforme a original se necessário)
-                    const notaCalculadaFormula = 
-                        ((acertos / 90) * 0.15) + 
-                        ((acertos2 / 90) * 0.25) + 
-                        ((acertos3 / 90) * 0.40) + 
-                        ((acertosR / 20) * 0.20); // Supõe que a nota da redação é sobre 20 para o peso
-                    
-                    const notaFinalCalculada = (notaCalculadaFormula * 100).toFixed(3);
+                    let notaCalculadora = ((acertos / 90) * 0.15) 
+                                            + ((acertos2 / 90) * 0.25)
+                                            + ((acertos3 / 90) * 0.40) 
+                                            + ((acertosR / 20) * 0.20);
 
-                    resultDiv.innerHTML = `<h2>Sua nota é: ${notaFinalCalculada}</h2>`;
-                    resultDiv.style.color = 'var(--primary-color)';
-                    updateResultCardsAppearance(); // Atualiza os cards existentes com a nova nota
+                    let notaReal = (notaCalculadora * 100).toFixed(3);
+                    document.getElementById('result').innerHTML = `Sua nota é: <strong>${notaReal}</strong>`;
+                    salvarNotaCalculada(notaReal); // Salva e atualiza a exibição
+                    updateResultCardsAppearance(); 
                 });
             }
 
-            // --- Inicialização ao Carregar a Página ---
-            if (localStorage.getItem('theme') === 'dark') {
-                document.body.classList.add('dark-mode');
+            // --- Funções para nota salva ---
+            function exibirNotaSalvaIndex() {
+                const notaSalva = localStorage.getItem('minhaNotaCalculada');
+                const displayElement = document.getElementById('notaSalvaDisplayIndex');
+                if (displayElement) {
+                    if (notaSalva) {
+                        displayElement.textContent = `Nota: ${notaSalva}`;
+                        displayElement.style.display = 'inline-block'; // Garante visibilidade
+                    } else {
+                        displayElement.textContent = '';
+                        displayElement.style.display = 'none'; // Oculta se não houver nota
+                    }
+                }
             }
-            if (instructionPopup) {
-                 // Mostra o popup automaticamente ou baseado em alguma condição
-                 // instructionPopup.style.display = "block"; 
+
+            function salvarNotaCalculada(nota) {
+                localStorage.setItem('minhaNotaCalculada', nota);
+                exibirNotaSalvaIndex();
             }
+
+            // --- Initializations ---
+            // Apply saved theme (if theme toggle is used)
+            // if (localStorage.getItem('theme') === 'dark') {
+            //     document.body.classList.add('dark-mode');
+            // }
+
+            // Auto-show instruction popup on first visit example:
+            if (instructionPopup && !localStorage.getItem('meuprovao_popup_shown')) {
+                 instructionPopup.classList.add('visible');
+                 localStorage.setItem('meuprovao_popup_shown', 'true');
+            }
+
             loadCategories();
             loadDatalistOptions('institution-list', '/get_all_institutions');
             loadDatalistOptions('course-list', '/get_all_courses');
+            exibirNotaSalvaIndex(); // Exibe a nota salva e preenche o campo de comparação ao carregar
+
+            function performSearch() {
+                const selectedCategory = categorySelect.value;
+                const selectedInstitution = institutionInput.value.trim();
+                const selectedCourse = courseInput.value.trim();
+
+                if (!selectedCategory) {
+                    alert("Por favor, selecione uma categoria.");
+                    searchButton.disabled = false;
+                    return;
+                }
+
+                if (!isValidDatalistValue('institution', 'institution-list') && selectedInstitution !== "") {
+                    alert("Por favor, selecione uma instituição válida da lista ou deixe o campo em branco.");
+                    searchButton.disabled = false;
+                    return;
+                }
+                if (!isValidDatalistValue('course', 'course-list') && selectedCourse !== "") {
+                    alert("Por favor, selecione um curso válido da lista ou deixe o campo em branco.");
+                    searchButton.disabled = false;
+                    return;
+                }
+
+                loadingDiv.style.display = 'block';
+                peopleListDiv.innerHTML = '';
+                resultsSection.style.display = 'block';
+                searchButton.disabled = true;
+
+
+                fetch('/search_supabase', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        category: selectedCategory,
+                        institution: selectedInstitution,
+                        course: selectedCourse
+                    }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw new Error(err.error || 'Erro na busca'); });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    peopleListDiv.innerHTML = '';
+                    let resultados = data;
+
+                    if (resultados.length > 0) {
+                        // Ordena os resultados por numero_unico em ordem decrescente
+                        resultados.sort((a, b) => {
+                            const notaA = parseFloat(a.numero_unico) || 0;
+                            const notaB = parseFloat(b.numero_unico) || 0;
+                            return notaB - notaA;
+                        });
+
+                        resultados.forEach(person => {
+                            const personDiv = document.createElement('div');
+                            personDiv.classList.add('result-card');
+
+                            const indicatorBar = document.createElement('div');
+                            indicatorBar.classList.add('result-card-indicator');
+                            personDiv.appendChild(indicatorBar);
+
+                            const contentDiv = document.createElement('div');
+                            contentDiv.classList.add('result-card-content');
+                            contentDiv.innerHTML = `
+                                <p><strong>Instituição:</strong> ${person.instituicao || 'N/A'}</p>
+                                <p><strong>Curso:</strong> ${person.curso || 'N/A'}</p>
+                                <p><strong>Nota de Corte:</strong> ${person.numero_unico !== null ? parseFloat(person.numero_unico).toFixed(3) : 'N/A'}</p>
+                                <p><strong>Tipo de Cota:</strong> ${person.tipo_cota || 'N/A'}</p>
+                            `;
+                            personDiv.appendChild(contentDiv);
+                            peopleListDiv.appendChild(personDiv);
+                        });
+                    } else {
+                        peopleListDiv.innerHTML = '<p>Nenhum resultado encontrado para os filtros aplicados.</p>';
+                    }
+                    updateResultCardsAppearance();
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    peopleListDiv.innerHTML = `<p>Erro ao buscar dados: ${error.message}</p>`;
+                })
+                .finally(() => {
+                    loadingDiv.style.display = 'none';
+                    searchButton.disabled = false;
+                });
+            }
+
+            function clearFilters() {
+                categorySelect.value = '';
+                institutionInput.value = '';
+                courseInput.value = '';
+                peopleListDiv.innerHTML = '';
+                resultsSection.style.display = 'none';
+                searchButton.disabled = true; 
+                checkIfSearchCanBeEnabled();
+                updateResultCardsAppearance();
+                exibirNotaSalvaIndex();
+            }
+            
+            if (clearFiltersButton) {
+                clearFiltersButton.addEventListener('click', clearFilters);
+            }
+
+            // Enable search button only when category is selected
+            if (searchButton) {
+                searchButton.addEventListener('click', performSearch);
+            }
         });
     </script>
 </body>
