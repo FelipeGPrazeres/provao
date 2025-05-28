@@ -263,30 +263,33 @@
             }
         }
 
-        function loadDatalistOptions(datalistId, endpoint) {
-            fetch(endpoint)
-                .then(response => {
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    return response.json();
-                })
-                .then(data => {
-                    const datalist = document.getElementById(datalistId);
-                    if (!datalist) {
-                        console.error("Datalist element not found:", datalistId);
-                        return;
-                    }
-                    datalist.innerHTML = ''; 
-                    if (Array.isArray(data)) {
-                        data.forEach(item => {
-                            const option = document.createElement('option');
-                            option.value = item;
-                            datalist.appendChild(option);
-                        });
-                    } else {
-                        console.error("Data for datalist is not an array:", data);
-                    }
-                })
-                .catch(error => console.error(`Erro ao carregar opções para ${datalistId}:`, error));
+        async function loadSuggestionsData() {
+            try {
+                const response = await fetch("{{ url_for('static', filename='suggestions_data.json') }}");
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                console.error('Erro ao carregar suggestions_data.json:', error);
+                return { institutions: [], courses: [] }; // Retorna vazio em caso de erro
+            }
+        }
+
+        function populateDatalist(datalistId, items) {
+            const datalist = document.getElementById(datalistId);
+            if (!datalist) {
+                console.error("Datalist element not found:", datalistId);
+                return;
+            }
+            datalist.innerHTML = ''; 
+            if (Array.isArray(items)) {
+                items.sort().forEach(item => { // Ordena alfabeticamente
+                    const option = document.createElement('option');
+                    option.value = item;
+                    datalist.appendChild(option);
+                });
+            } else {
+                console.error("Data for datalist is not an array:", items);
+            }
         }
         
         function isValidDatalistValue(inputId, datalistId) {
@@ -308,10 +311,11 @@
         }
 
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             loadFormCategories();
-            loadDatalistOptions('institution-list-form', '/get_all_institutions');
-            loadDatalistOptions('course-list-form', '/get_all_courses');
+            const suggestions = await loadSuggestionsData(); // Carrega os dados primeiro
+            populateDatalist('institution-list-form', suggestions.institutions);
+            populateDatalist('course-list-form', suggestions.courses);
             exibirNotaSalvaFormulario(); // Exibe a nota salva ao carregar a página
 
             const dataForm = document.getElementById('dataForm');
