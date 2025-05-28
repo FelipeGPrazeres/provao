@@ -223,25 +223,6 @@
                 });
             }
 
-            // --- Função para carregar os dados de sugestões (instituições e cursos) ---
-            async function loadSuggestionsData() {
-                try {
-                    const response = await fetch("{{ url_for('static', filename='suggestions_data.json') }}");
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    const data = await response.json();
-                    allInstitutions = data.institutions || [];
-                    allCourses = data.courses || [];
-                    // Após carregar, podemos configurar os listeners que dependem desses dados
-                    setupInputListeners(institutionInput, institutionSuggestions, allInstitutions);
-                    setupInputListeners(courseInput, courseSuggestions, allCourses);
-                } catch (error) {
-                    console.error('Erro ao carregar suggestions_data.json:', error);
-                    // Mantém as listas vazias e os listeners tentarão funcionar com elas (ou não exibirão sugestões)
-                    setupInputListeners(institutionInput, institutionSuggestions, []); // Inicializa mesmo em caso de erro
-                    setupInputListeners(courseInput, courseSuggestions, []);      // Inicializa mesmo em caso de erro
-                }
-            }
-
             // --- Lógica da Calculadora (Desktop e Mobile) ---
             function calcularNota(acertosVal, acertos2Val, acertos3Val, acertosRVal) {
                 let acertos = Number(acertosVal);
@@ -315,98 +296,163 @@
                 }
             }
 
-            // Função para popular categorias
-            function populateCategories() {
+            // --- Lógica de Autocomplete e Busca ---
+            function loadCategories() {
                 fetch('/get_json_categories')
                     .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Falha ao buscar categorias');
-                        }
+                        if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
                         return response.json();
                     })
-                    .then(categories => {
-                        categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>'; // Reset
-                        categories.sort().forEach(category => {
-                            let option = document.createElement('option');
-                            option.value = category;
-                            option.textContent = category;
-                            categorySelect.appendChild(option);
-                        });
-                        searchButton.disabled = false; // Habilita o botão após carregar categorias
+                    .then(categoriesFromJson => {
+                        categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
+                        if (categoriesFromJson && categoriesFromJson.length > 0) {
+                            categoriesFromJson.sort().forEach(categoryValue => {
+                                let option = document.createElement('option');
+                                option.value = categoryValue;
+                                option.textContent = categoryValue;
+                                categorySelect.appendChild(option);
+                            });
+                        }
                     })
-                    .catch(error => {
-                        console.error("Erro ao carregar categorias:", error);
-                        categorySelect.innerHTML = '<option value="">Erro ao carregar categorias</option>';
-                        searchButton.disabled = true;
+                    .catch(error => console.error('Erro ao carregar categorias:', error));
+            }
+
+            function loadSuggestionData(identifier, endpoint) {
+                return new Promise((resolve, reject) => {
+                    fetch(endpoint)
+                        .then(response => {
+                            if (!response.ok) throw new Error(`HTTP error! status: ${response.status} para ${identifier}`);
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (Array.isArray(data)) {
+                                const uniqueSortedData = [...new Set(data.map(item => item ? String(item).trim() : '').filter(item => item))].sort();
+                                if (identifier === 'institution') {
+                                    allInstitutions = uniqueSortedData;
+                                    console.log('Instituições carregadas no array:', allInstitutions.length > 0);
+                                } else if (identifier === 'course') {
+                                    allCourses = uniqueSortedData;
+                                    console.log('Cursos carregados no array:', allCourses.length > 0);
+                                }
+                                resolve();
+                            } else {
+                                console.error("Os dados para sugestões não são um array:", data, "para", identifier);
+                                reject("Formato de dados inválido");
+                            }
+                        })
+                        .catch(error => {
+                            console.error(`Erro ao carregar dados de sugestão para ${identifier}:`, error);
+                            reject(error);
+                        });
+                });
+            }
+
+            function displaySuggestions(inputValue, suggestionsContainer, sourceArray, inputElement) {
+                console.log(`displaySuggestions chamada para: ${inputElement.id}, valor: ${inputValue}, sourceArray tem ${sourceArray.length} itens`);
+                suggestionsContainer.innerHTML = '';
+                const valueToFilter = inputValue.toLowerCase();
+                let filteredSuggestions = [];
+                if (inputValue.length === 0 && document.activeElement === inputElement) {
+                    if (sourceArray && sourceArray.length > 0) {
+                        filteredSuggestions = sourceArray.slice(0, 10);
+                        console.log('Input vazio e focado, mostrando primeiras N sugestões:', filteredSuggestions);
+                    } else {
+                        console.log('Input vazio e focado, MAS sourceArray está vazio ou não definido.');
+                    }
+                } else if (inputValue.length > 0) {
+                    if (sourceArray && sourceArray.length > 0) {
+                        filteredSuggestions = sourceArray.filter(item => item.toLowerCase().includes(valueToFilter));
+                    } else {
+                         console.log('Input com valor, MAS sourceArray está vazio ou não definido.');
+                    }
+                }
+                console.log('Sugestões filtradas/para mostrar:', filteredSuggestions);
+                if (filteredSuggestions.length > 0) {
+                    console.log('Mostrando sugestões...');
+                    filteredSuggestions.forEach(suggestion => {
+                        const div = document.createElement('div');
+                        div.classList.add('suggestion-item');
+                        div.textContent = suggestion;
+                        div.addEventListener('mousedown', (e) => {
+                            e.preventDefault();
+                            inputElement.value = suggestion;
+                            suggestionsContainer.style.display = 'none';
+                            validateInputsAndToggleButton();
+                        });
+                        suggestionsContainer.appendChild(div);
                     });
+                    suggestionsContainer.style.display = 'block';
+                } else {
+                    console.log('Ocultando sugestões (sem resultados, ou sourceArray não populado, ou input vazio e não focado).');
+                    suggestionsContainer.style.display = 'none';
+                }
             }
 
-            // Função para popular dropdowns de sugestão (genérica)
-            function populateDropdown(inputElement, suggestionsDiv, items) {
-                suggestionsDiv.innerHTML = '';
-                items.forEach(item => {
-                    const div = document.createElement('div');
-                    div.textContent = item;
-                    div.className = 'suggestion-item';
-                    div.addEventListener('mousedown', () => {
-                        inputElement.value = item;
-                        suggestionsDiv.style.display = 'none';
-                    });
-                    suggestionsDiv.appendChild(div);
-                });
+            function setupInputListeners() {
+                console.log("Configurando listeners para inputs AGORA que os dados devem estar carregados.");
+                function setupSingleInput(inputEl, suggestionsEl, dataArray) {
+                     if (inputEl && suggestionsEl) {
+                        inputEl.addEventListener('input', () => {
+                            console.log(`Input event em ${inputEl.id}, valor: ${inputEl.value}`);
+                            displaySuggestions(inputEl.value, suggestionsEl, dataArray, inputEl);
+                            validateInputsAndToggleButton(); 
+                        });
+                        inputEl.addEventListener('focus', () => {
+                            console.log(`Focus event em ${inputEl.id}`);
+                            displaySuggestions(inputEl.value, suggestionsEl, dataArray, inputEl);
+                        });
+                        inputEl.addEventListener('blur', () => {
+                            setTimeout(() => {
+                                if (!suggestionsEl.contains(document.activeElement) && !suggestionsEl.matches(':hover')) {
+                                   suggestionsEl.style.display = 'none';
+                                }
+                                validateInputsAndToggleButton(); 
+                            }, 150);
+                        });
+                    }
+                }
+                setupSingleInput(institutionInput, institutionSuggestions, allInstitutions);
+                setupSingleInput(courseInput, courseSuggestions, allCourses);
+            }
+            
+            function isValidSuggestion(inputElement, sourceArray) {
+                const value = inputElement.value.trim();
+                if (value === "") return true; // Campo vazio é "válido" no sentido de não impedir a busca
+                return sourceArray.includes(value);
             }
 
-            // Configura listeners para os inputs de instituição e curso
-            function setupInputListeners(inputElement, suggestionsDiv, itemList) {
-                inputElement.addEventListener('input', () => {
-                    const query = inputElement.value.toLowerCase();
-                    suggestionsDiv.innerHTML = '';
-                    if (query.length > 0) { // Só mostra sugestões se algo for digitado
-                        const filteredItems = itemList.filter(item => item.toLowerCase().includes(query));
-                        populateDropdown(inputElement, suggestionsDiv, filteredItems);
-                    }
-                    suggestionsDiv.style.display = query.length > 0 && suggestionsDiv.children.length > 0 ? 'block' : 'none';
-                });
+            function validateInputsAndToggleButton() {
+                const categorySelected = categorySelect.value !== "";
+                const groupSelected = groupSelect.value !== "";
+                const institutionValue = institutionInput.value.trim();
+                const courseValue = courseInput.value.trim();
 
-                // Ocultar dropdown ao clicar fora
-                document.addEventListener('click', (e) => {
-                    if (!inputElement.contains(e.target) && !suggestionsDiv.contains(e.target)) {
-                        suggestionsDiv.style.display = 'none';
-                    }
-                });
+                let canEnableButton = false;
+                const primaryFilterSelected = categorySelected || groupSelected;
 
-                 // Adicionado para permitir seleção por Enter
-                inputElement.addEventListener('keydown', function(e) {
-                    const activeSuggestion = suggestionsDiv.querySelector('.suggestion-item.active');
-                    if (e.key === 'ArrowDown') {
-                        e.preventDefault();
-                        let next = activeSuggestion ? activeSuggestion.nextElementSibling : suggestionsDiv.firstElementChild;
-                        if (next) {
-                            if(activeSuggestion) activeSuggestion.classList.remove('active');
-                            next.classList.add('active');
-                            next.scrollIntoView({ block: 'nearest' });
-                        }
-                    } else if (e.key === 'ArrowUp') {
-                        e.preventDefault();
-                        let prev = activeSuggestion ? activeSuggestion.previousElementSibling : suggestionsDiv.lastElementChild;
-                        if (prev) {
-                             if(activeSuggestion) activeSuggestion.classList.remove('active');
-                            prev.classList.add('active');
-                            prev.scrollIntoView({ block: 'nearest' });
-                        }
-                    } else if (e.key === 'Enter' && activeSuggestion) {
-                        e.preventDefault();
-                        inputElement.value = activeSuggestion.textContent;
-                        suggestionsDiv.style.display = 'none';
-                        suggestionsDiv.innerHTML = ''; // Limpa sugestões
-                    } else if (e.key === 'Escape') {
-                        suggestionsDiv.style.display = 'none';
-                        suggestionsDiv.innerHTML = '';
+                if (primaryFilterSelected) {
+                    const instValidOrEmpty = institutionValue === "" || allInstitutions.includes(institutionValue);
+                    const courseValidOrEmpty = courseValue === "" || allCourses.includes(courseValue);
+                    
+                    if (instValidOrEmpty && courseValidOrEmpty) {
+                         canEnableButton = true;
                     }
-                });
+                } else {
+                     const instFilledAndValid = institutionValue !== "" && allInstitutions.includes(institutionValue);
+                     const courseFilledAndValid = courseValue !== "" && allCourses.includes(courseValue);
+                     if ((instFilledAndValid && courseValue === "") || 
+                         (courseFilledAndValid && institutionValue === "") || 
+                         (instFilledAndValid && courseFilledAndValid)) {
+                         canEnableButton = true;
+                     }
+                }
+                if (!categorySelected && !groupSelected && institutionValue === "" && courseValue === "") {
+                    canEnableButton = false;
+                }
+                searchButton.disabled = !canEnableButton;
             }
 
-            // --- Lógica de Busca e Exibição de Resultados ---
+
             function performSearch() {
                 const selectedCategory = categorySelect.value;
                 const selectedGroup = groupSelect.value;
@@ -582,31 +628,32 @@
             }
 
             // Carregamento inicial de dados e configuração dos listeners dependentes
-            populateCategories();
+            loadCategories();
             exibirNotaSalvaIndex(); // Pode ser chamada antes, não depende dos dados de sugestão
             validateInputsAndToggleButton(); // Estado inicial do botão de busca
 
-            // Inicialização
-            function initializePage() {
-                // Carrega as categorias primeiro
-                populateCategories(); 
+            Promise.all([
+                loadSuggestionData('institution', '/get_all_institutions'),
+                loadSuggestionData('course', '/get_all_courses')
+            ]).then(() => {
+                console.log("TODOS os dados de sugestão carregados. Configurando listeners de input AGORA.");
+                setupInputListeners(); // Configura os listeners de autocomplete APÓS os dados estarem prontos
+                // Chamar validateInputsAndToggleButton novamente aqui pode ser útil se o estado inicial do botão depender dos dados carregados
+                validateInputsAndToggleButton(); 
+            }).catch(error => {
+                console.error("Erro ao carregar um ou mais conjuntos de dados de sugestão:", error);
+                // Lidar com o erro, talvez desabilitar campos de autocomplete ou mostrar mensagem ao usuário
+            });
 
-                // Carrega os dados de sugestões de instituições e cursos
-                // As chamadas para setupInputListeners foram movidas para dentro de loadSuggestionsData
-                // para garantir que allInstitutions e allCourses estejam populados.
-                loadSuggestionsData();
-
-                // Popup de instrução inicial
-                if (instructionPopup && closePopupButton) {
-                    if (!localStorage.getItem('meuprovao_popup_shown')) {
-                        instructionPopup.classList.add('visible');
-                        localStorage.setItem('meuprovao_popup_shown', 'true');
-                    }
+            // Ocultar sugestões ao clicar fora (pode permanecer aqui)
+            document.addEventListener('click', (event) => {
+                if (institutionSuggestions && !institutionInput.contains(event.target) && !institutionSuggestions.contains(event.target)) {
+                    institutionSuggestions.style.display = 'none';
                 }
-            }
-
-            // Inicia a página
-            initializePage();
+                if (courseSuggestions && !courseInput.contains(event.target) && !courseSuggestions.contains(event.target)) {
+                    courseSuggestions.style.display = 'none';
+                }
+            });
 
         });
     </script>

@@ -108,14 +108,14 @@
 
                     <div class="form-group">
                         <label for="instituicao">Nome da Instituição:</label>
-                        <input type="text" id="instituicao" name="instituicao" list="institution-list-form" required placeholder="Digite ou selecione...">
-                        <datalist id="institution-list-form"></datalist>
+                        <input type="text" id="instituicao" name="instituicao" required placeholder="Digite ou selecione...">
+                        <div id="institution-suggestions-form" class="suggestions-dropdown"></div>
                     </div>
 
                     <div class="form-group">
                         <label for="curso">Nome do Curso:</label>
-                        <input type="text" id="curso" name="curso" list="course-list-form" required placeholder="Digite ou selecione...">
-                        <datalist id="course-list-form"></datalist>
+                        <input type="text" id="curso" name="curso" required placeholder="Digite ou selecione...">
+                        <div id="course-suggestions-form" class="suggestions-dropdown"></div>
                     </div>
 
                     <div class="form-group">
@@ -243,6 +243,75 @@
             }
         }
 
+        // Variáveis globais para armazenar sugestões do formulário
+        let allInstitutionsForm = [];
+        let allCoursesForm = [];
+
+        async function loadAndStoreSuggestions() {
+            try {
+                const response = await fetch("{{ url_for('static', filename='suggestions_data.json') }}");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status} ao buscar suggestions_data.json`);
+                }
+                const allData = await response.json();
+                console.log('Tipo de allData:', typeof allData);
+                console.log('Conteúdo de allData:', allData); 
+
+                allInstitutionsForm = [...new Set(allData.institutions.filter(Boolean))].sort();
+                allCoursesForm = [...new Set(allData.courses.filter(Boolean))].sort();
+                
+            } catch (error) {
+                console.error('Erro ao carregar e armazenar sugestões do suggestions_data.json:', error);
+                formMessageEl.textContent = 'Erro ao carregar sugestões para instituições/cursos. Tente recarregar a página.';
+                formMessageEl.classList.add('error');
+            }
+        }
+
+        // Nova função displaySuggestionsForm baseada na do index.html
+        function displaySuggestionsForm(inputValue, suggestionsContainer, sourceArray, inputElement) {
+            console.log(`Formulario: displaySuggestionsForm chamada para: ${inputElement.id}, valor: ${inputValue}, sourceArray tem ${sourceArray ? sourceArray.length : 'UNDEFINED'} itens`); 
+            suggestionsContainer.innerHTML = ''; 
+            const valueToFilter = inputValue.toLowerCase();
+            let filteredSuggestions = [];
+
+            // Detalhando a lógica de sugestões iniciais
+            if (inputValue.length === 0 && document.activeElement === inputElement) {
+                console.log(`Formulario: Condição para sugestões iniciais MET (input vazio e focado): ${inputElement.id}`);
+                if (sourceArray && sourceArray.length > 0) {
+                    filteredSuggestions = sourceArray.slice(0, 10);
+                    console.log(`Formulario: Primeiras 10 sugestões para ${inputElement.id} (total ${sourceArray.length}):`, filteredSuggestions);
+                } else {
+                    console.log(`Formulario: sourceArray vazio ou indefinido para ${inputElement.id} nas sugestões iniciais.`);
+                }
+            } else if (inputValue.length > 0) {
+                console.log(`Formulario: Input ${inputElement.id} tem valor: "${inputValue}". Filtrando sugestões.`);
+                if (sourceArray && sourceArray.length > 0) {
+                    filteredSuggestions = sourceArray.filter(item => item.toLowerCase().includes(valueToFilter));
+                    console.log(`Formulario: Sugestões filtradas para ${inputElement.id} (${filteredSuggestions.length}):`, filteredSuggestions);
+                }
+            }
+
+            if (filteredSuggestions.length > 0) {
+                console.log(`Formulario: ${filteredSuggestions.length} sugestões para MOSTRAR para ${inputElement.id}. Adicionando ao DOM.`);
+                filteredSuggestions.forEach(suggestion => {
+                    const div = document.createElement('div');
+                    div.classList.add('suggestion-item'); 
+                    div.textContent = suggestion;
+                    div.addEventListener('mousedown', (e) => {
+                        e.preventDefault(); 
+                        inputElement.value = suggestion;
+                        suggestionsContainer.style.display = 'none';
+                    });
+                    suggestionsContainer.appendChild(div);
+                });
+                suggestionsContainer.style.display = 'block';
+                console.log(`Formulario: suggestionsContainer (${suggestionsContainer.id}) display set to 'block'. OffsetHeight: ${suggestionsContainer.offsetHeight}, OffsetWidth: ${suggestionsContainer.offsetWidth}`);
+            } else {
+                console.log(`Formulario: Nenhuma sugestão para mostrar para ${inputElement.id} (filteredSuggestions está vazio). Escondendo suggestionsContainer (${suggestionsContainer.id}).`);
+                suggestionsContainer.style.display = 'none';
+            }
+        }
+
         async function loadFormCategories() {
             try {
                 const response = await fetch('/get_json_categories');
@@ -263,60 +332,71 @@
             }
         }
 
-        async function loadSuggestionsData() {
-            try {
-                const response = await fetch("{{ url_for('static', filename='suggestions_data.json') }}");
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                return await response.json();
-            } catch (error) {
-                console.error('Erro ao carregar suggestions_data.json:', error);
-                return { institutions: [], courses: [] }; // Retorna vazio em caso de erro
-            }
-        }
-
-        function populateDatalist(datalistId, items) {
-            const datalist = document.getElementById(datalistId);
-            if (!datalist) {
-                console.error("Datalist element not found:", datalistId);
-                return;
-            }
-            datalist.innerHTML = ''; 
-            if (Array.isArray(items)) {
-                items.sort().forEach(item => { // Ordena alfabeticamente
-                    const option = document.createElement('option');
-                    option.value = item;
-                    datalist.appendChild(option);
+        // Nova lógica de setup de listeners baseada na do index.html
+        function setupSingleFormInput(inputEl, suggestionsEl, dataArray) {
+            console.log(`Formulario: Dentro de setupSingleFormInput para ${inputEl ? inputEl.id : 'UNKNOWN_INPUT'}. dataArray recebido tem ${dataArray ? dataArray.length : 'UNDEFINED'} itens.`); // Log adicionado
+            if (inputEl && suggestionsEl) {
+                inputEl.addEventListener('input', () => {
+                    console.log(`Formulario: Input event em ${inputEl.id}, valor: ${inputEl.value}`); // Log adicionado
+                    displaySuggestionsForm(inputEl.value, suggestionsEl, dataArray, inputEl);
+                });
+                inputEl.addEventListener('focus', () => {
+                    console.log(`Formulario: Focus event em ${inputEl.id}`); // Log adicionado
+                    displaySuggestionsForm(inputEl.value, suggestionsEl, dataArray, inputEl);
+                });
+                inputEl.addEventListener('blur', () => {
+                    // Delay para permitir que o 'mousedown' na sugestão seja processado
+                    setTimeout(() => {
+                        // Esconde se o foco não foi para a lista de sugestões e o mouse não está sobre ela
+                        if (!suggestionsEl.contains(document.activeElement) && !suggestionsEl.matches(':hover')) {
+                           suggestionsEl.style.display = 'none';
+                        }
+                    }, 150); 
                 });
             } else {
-                console.error("Data for datalist is not an array:", items);
+                console.error(`Formulario: setupSingleFormInput - inputEl ou suggestionsEl não encontrado para ${inputEl ? inputEl.id : 'UNKNOWN_INPUT'}`); // Log adicionado
             }
         }
-        
-        function isValidDatalistValue(inputId, datalistId) {
-            const inputElement = document.getElementById(inputId);
-            const datalist = document.getElementById(datalistId);
-            if (!inputElement || !datalist) {
-                console.error("Input ou Datalist não encontrado para validação:", inputId, datalistId);
-                return false; 
-            }
-            const inputValue = inputElement.value.trim();
-            if (inputValue === "") return false; 
 
-            for (let i = 0; i < datalist.options.length; i++) {
-                if (datalist.options[i].value === inputValue) {
-                    return true;
-                }
-            }
-            return false;
+        function setupFormInputListeners() {
+            console.log("Formulario: Dentro de setupFormInputListeners - Iniciando"); // Log adicionado
+            const institutionInputForm = document.getElementById('instituicao');
+            const institutionSuggestionsForm = document.getElementById('institution-suggestions-form');
+            const courseInputForm = document.getElementById('curso');
+            const courseSuggestionsForm = document.getElementById('course-suggestions-form');
+
+            console.log("Formulario: Chamando setupSingleFormInput para instituição. allInstitutionsForm count:", allInstitutionsForm.length); // Log adicionado
+            setupSingleFormInput(institutionInputForm, institutionSuggestionsForm, allInstitutionsForm);
+            console.log("Formulario: Chamando setupSingleFormInput para curso. allCoursesForm count:", allCoursesForm.length); // Log adicionado
+            setupSingleFormInput(courseInputForm, courseSuggestionsForm, allCoursesForm);
+            console.log("Formulario: Dentro de setupFormInputListeners - Finalizando"); // Log adicionado
         }
 
-
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', async () => { 
+            console.log("Formulario DOMContentLoaded: Iniciando"); // Log adicionado
             loadFormCategories();
-            const suggestions = await loadSuggestionsData(); // Carrega os dados primeiro
-            populateDatalist('institution-list-form', suggestions.institutions);
-            populateDatalist('course-list-form', suggestions.courses);
-            exibirNotaSalvaFormulario(); // Exibe a nota salva ao carregar a página
+            console.log("Formulario DOMContentLoaded: Após loadFormCategories"); // Log adicionado
+            await loadAndStoreSuggestions(); // Espera carregar as sugestões
+            console.log("Formulario DOMContentLoaded: Após await loadAndStoreSuggestions. allInstitutionsForm count:", allInstitutionsForm.length, "allCoursesForm count:", allCoursesForm.length); // Log adicionado
+            setupFormInputListeners();    // Configura listeners APÓS os dados estarem prontos
+            console.log("Formulario DOMContentLoaded: Após setupFormInputListeners"); // Log adicionado
+            exibirNotaSalvaFormulario(); 
+            console.log("Formulario DOMContentLoaded: Após exibirNotaSalvaFormulario"); // Log adicionado
+
+            // Adicionando o listener de clique global, similar ao index.html
+            const institutionInputFormGlobal = document.getElementById('instituicao'); // Renomeado para evitar conflito no mesmo escopo DOMContentLoaded
+            const institutionSuggestionsFormGlobal = document.getElementById('institution-suggestions-form');
+            const courseInputFormGlobal = document.getElementById('curso');
+            const courseSuggestionsFormGlobal = document.getElementById('course-suggestions-form'); // Renomeado
+
+            document.addEventListener('click', (event) => {
+                if (institutionSuggestionsFormGlobal && institutionInputFormGlobal && !institutionInputFormGlobal.contains(event.target) && !institutionSuggestionsFormGlobal.contains(event.target)) {
+                    institutionSuggestionsFormGlobal.style.display = 'none';
+                }
+                if (courseSuggestionsFormGlobal && courseInputFormGlobal && !courseInputFormGlobal.contains(event.target) && !courseSuggestionsFormGlobal.contains(event.target)) {
+                    courseSuggestionsFormGlobal.style.display = 'none';
+                }
+            });
 
             const dataForm = document.getElementById('dataForm');
             if (dataForm) {
@@ -335,18 +415,23 @@
 
                     if (!tipoCota) {
                         formMessageEl.textContent = 'Por favor, selecione uma opção para o Tipo de Cota.';
-                        formMessageEl.classList.add('error'); //
+                        formMessageEl.classList.add('error');
                         return;
                     }
                     
-                    if (!isValidDatalistValue('instituicao', 'institution-list-form')) {
-                        formMessageEl.textContent = 'Por favor, selecione uma instituição válida da lista.';
-                        formMessageEl.classList.add('error'); //
+                    // Validação para instituição e curso (com .trim() e focus())
+                    const instituicaoValue = instituicao.trim();
+                    if (!allInstitutionsForm.includes(instituicaoValue)) {
+                        formMessageEl.textContent = 'Por favor, selecione uma instituição válida da lista de sugestões.';
+                        formMessageEl.classList.add('error');
+                        document.getElementById('instituicao').focus(); // Adicionado focus
                         return;
                     }
-                    if (!isValidDatalistValue('curso', 'course-list-form')) {
-                        formMessageEl.textContent = 'Por favor, selecione um curso válido da lista.';
-                        formMessageEl.classList.add('error'); //
+                    const cursoValue = curso.trim();
+                    if (!allCoursesForm.includes(cursoValue)) {
+                        formMessageEl.textContent = 'Por favor, selecione um curso válido da lista de sugestões.';
+                        formMessageEl.classList.add('error');
+                        document.getElementById('curso').focus(); // Adicionado focus
                         return;
                     }
 
@@ -358,8 +443,8 @@
                                     nome: nomeCompleto,
                                     tipo_cota: tipoCota,
                                     grupo: grupo,
-                                    instituicao: instituicao,
-                                    curso: curso,
+                                    instituicao: instituicaoValue, // Usar valor trimado
+                                    curso: cursoValue,             // Usar valor trimado
                                     numero_unico: notaFinal
                                 }
                             ]);
@@ -367,7 +452,7 @@
                         if (error) {
                             console.error('Erro ao enviar dados para o Supabase:', error);
                             formMessageEl.textContent = 'Erro ao enviar dados: ' + error.message;
-                            formMessageEl.classList.add('error'); //
+                            formMessageEl.classList.add('error'); 
                         } else {
                             console.log('Dados enviados com sucesso para o Supabase:', data);
                             formMessageEl.textContent = 'Dados enviados com sucesso!';

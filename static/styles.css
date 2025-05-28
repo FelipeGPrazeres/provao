@@ -334,6 +334,7 @@ body.dark-mode .popup p { color: var(--text-color-dark); }
     display: flex;
     flex-direction: column;
     margin-bottom: 20px; /* Aumentado para espaçamento vertical uniforme entre os grupos */
+    position: relative; /* ADICIONADO PARA O POSICIONAMENTO DOS DROPDOWNS DE SUGESTÃO */
 }
 
 .input-group label, .form-group label {
@@ -993,19 +994,19 @@ body.dark-mode .link-card p {
     /* width: 100%;  Pode ser substituído por left:0; right:0; */
     max-height: 200px; /* Altura máxima com scroll */
     overflow-y: auto;
-    z-index: 10; /* Para ficar sobre outros elementos */
+    z-index: 1001; /* AUMENTADO para ficar sobre outros elementos como nav e popups */
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     border-radius: 0 0 var(--border-radius-md) var(--border-radius-md); /* Cantos arredondados apenas embaixo */
     box-sizing: border-box; /* Adicionado para melhor controle de largura se width for usado */
 }
 
-.suggestions-dropdown div {
+.suggestion-item { /* ALTERADO DE .suggestions-dropdown div */
     padding: 10px;
     cursor: pointer;
     font-size: 0.9em;
 }
 
-.suggestions-dropdown div:hover {
+.suggestion-item:hover { /* ALTERADO DE .suggestions-dropdown div:hover */
     background-color: #f0f0f0;
 }
 
