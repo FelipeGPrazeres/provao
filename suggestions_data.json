@@ -117,7 +117,11 @@
         "USP SANTOS",
         "USP SÃO CARLOS",
         "USP SÃO PAULO (BUTANTÃ)",
-        "USP SÃO PAULO (LESTE)"
+        "USP SÃO PAULO (LESTE)",
+        "USP SÃO PAULO (SANFRAN)",
+        "USP SÃO PAULO (TATUAPÉ)",
+        "USP SÃO PAULO (ZONA SUL)",
+        "USP SÃO PAULO (PINHEIROS)"
     ],
     "courses": [
         "ADMINISTRAÇÃO DE ORGANIZAÇÕES",
@@ -147,6 +151,7 @@
         "BIOCCOMBUSTÍVEIS",
         "BIOENGENHARIA",
         "BIOLOGIA ANIMAL",
+        "BIOMEDICINA",
         "CIÊNCIAS BIOLÓGICAS - INTEGRAL",
         "CIÊNCIAS BIOLÓGICAS - LICENCIATURA",
         "CIÊNCIAS BIOLÓGICAS - NOTURNO",

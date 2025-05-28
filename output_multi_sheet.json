@@ -1,43 +1,43 @@
 {
     "L1 - Renda": [
         {
-            "Curso": "CIÊNCIAS DA COMPUTAÇÃO",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
             "Instituição": "USP SÃO CARLOS",
             "Nota": 93.778,
             "Grupo": "C"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 83.0,
             "Grupo": "B"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 82.0,
             "Grupo": "A"
         },
         {
             "Curso": "CIÊNCIAS ECONÔMICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 80.88,
             "Grupo": "A"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 80.44,
             "Grupo": "B"
         },
         {
             "Curso": "CIÊNCIAS ECONÔMICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 78.89,
             "Grupo": "B"
         },
         {
-            "Curso": "CIÊNCIA DA COMPUTAÇÃO",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
             "Instituição": "USP SÃO CARLOS",
             "Nota": 78.67,
             "Grupo": "A"
@@ -50,31 +50,31 @@
         },
         {
             "Curso": "CIÊNCIAS ECONÔMICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 77.667,
             "Grupo": "A"
         },
         {
-            "Curso": "ENGENHARIA DA COMPUTAÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Curso": "ENGENHARIA DE COMPUTAÇÃO",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 77.33,
             "Grupo": "B"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 76.666,
             "Grupo": "C"
         },
         {
             "Curso": "ARQUITETURA E URBANISMO",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 75.4,
             "Grupo": "C"
         },
         {
             "Curso": "ARQUITETURA E URBANISMO",
-            "Instituição": "UNESP PRESIDENTE",
+            "Instituição": "UNESP PRESIDENTE PRUDENTE",
             "Nota": 74.889,
             "Grupo": "C"
         },
@@ -86,43 +86,43 @@
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 74.34,
             "Grupo": "A"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 73.227,
             "Grupo": "A"
         },
         {
             "Curso": "ODONTOLOGIA",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 73.0,
             "Grupo": "C"
         },
         {
-            "Curso": "CIÊNCIA DA COMPUTAÇÃO",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
             "Instituição": "USP SÃO CARLOS",
             "Nota": 72.4,
             "Grupo": "C"
         },
         {
-            "Curso": "ENG. DE BIOPROCESSOS E BIOTECNOLOGIA",
+            "Curso": "ENGENHARIA DE BIOPROCESSOS E BIOTECNOLOGIA",
             "Instituição": "UNESP BOTUCATU",
             "Nota": 72.0,
             "Grupo": "C"
         },
         {
-            "Curso": "CIÊNCIA DA COMPUTAÇÃO",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
             "Instituição": "USP SÃO CARLOS",
             "Nota": 71.51,
             "Grupo": "A"
         },
         {
-            "Curso": "MATEMÁTICA (LICENCIATURA)",
-            "Instituição": "USP BUTANTÃ",
+            "Curso": "LICENCIATURA EM MATEMÁTICA",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 71.0,
             "Grupo": "A"
         },
@@ -140,18 +140,18 @@
         },
         {
             "Curso": "PSICOLOGIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 69.66,
             "Grupo": "A"
         },
         {
             "Curso": "GEOGRAFIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 69.0,
             "Grupo": "A"
         },
         {
-            "Curso": "SISTEMAS DA INFORMAÇÃO",
+            "Curso": "SISTEMAS DE INFORMAÇÃO",
             "Instituição": "USP LESTE",
             "Nota": 69.0,
             "Grupo": "C"
@@ -170,121 +170,121 @@
         },
         {
             "Curso": "FONOAUDIOLOGIA",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 67.889,
             "Grupo": "A"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 67.7,
             "Grupo": "B"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 67.22,
             "Grupo": "B"
         },
         {
-            "Curso": "ENGENHARIA MECATRONICA",
+            "Curso": "ENGENHARIA MECATRÔNICA",
             "Instituição": "USP SÃO CARLOS",
             "Nota": 67.0,
             "Grupo": "A"
         },
         {
             "Curso": "CIÊNCIAS ECONÔMICAS",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 66.77,
             "Grupo": "A"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 66.66,
             "Grupo": "A"
         },
         {
-            "Curso": "ESTATISTICA",
+            "Curso": "ESTATÍSTICA",
             "Instituição": "USP SÃO CARLOS",
             "Nota": 66.66,
             "Grupo": "A"
         },
         {
-            "Curso": "FÍSICA (LICENCIATURA INTEGRAL)",
-            "Instituição": "USP BUTANTÃ",
+            "Curso": "LICENCIATURA EM FÍSICA",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 66.66,
             "Grupo": "A"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 66.44,
             "Grupo": "A"
         },
         {
             "Curso": "ADMINISTRAÇÃO",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 66.4,
             "Grupo": "C"
         },
         {
             "Curso": "JORNALISMO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 66.22,
             "Grupo": "A"
         },
         {
             "Curso": "CIÊNCIAS ECONÔMICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 65.33,
             "Grupo": "A"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 65.33,
             "Grupo": "B"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 64.77,
             "Grupo": "A"
         },
         {
             "Curso": "CIÊNCIAS CONTÁBEIS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 64.444,
             "Grupo": "C"
         },
         {
             "Curso": "ASTRONOMIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 64.2,
             "Grupo": "A"
         },
         {
             "Curso": "FARMÁCIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 64.0,
             "Grupo": "A"
         },
         {
             "Curso": "AUDIOVISUAL",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 63.889,
             "Grupo": "A"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 63.77,
             "Grupo": "C"
         },
         {
             "Curso": "PEDAGOGIA",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 63.667,
             "Grupo": "A"
         },
@@ -296,13 +296,13 @@
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 63.12,
             "Grupo": "A"
         },
         {
             "Curso": "CIÊNCIAS ECONÔMICAS",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 63.0,
             "Grupo": "B"
         },
@@ -314,55 +314,55 @@
         },
         {
             "Curso": "PSICOLOGIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 63.0,
             "Grupo": "A"
         },
         {
-            "Curso": "CIÊNCIA DA COMPUTAÇÃO",
-            "Instituição": "UNICAMP",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 62.0,
             "Grupo": "A"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 62.0,
             "Grupo": "C"
         },
         {
             "Curso": "DESIGN",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 61.66,
             "Grupo": "A"
         },
         {
             "Curso": "ADMINISTRAÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 61.44,
             "Grupo": "A"
         },
         {
             "Curso": "CIÊNCIAS CONTÁBEIS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 61.44,
             "Grupo": "A"
         },
         {
             "Curso": "ARQUITETURA E URBANISMO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 61.334,
             "Grupo": "C"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 61.223,
             "Grupo": "C"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 61.11,
             "Grupo": "C"
         },
@@ -374,13 +374,13 @@
         },
         {
             "Curso": "ARQUITETURA E URBANISMO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 60.33,
             "Grupo": "A"
         },
         {
             "Curso": "CIÊNCIAS SOCIAIS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 60.0,
             "Grupo": "A"
         },
@@ -392,25 +392,25 @@
         },
         {
             "Curso": "ENGENHARIA ELÉTRICA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 59.66,
             "Grupo": "A"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 59.561,
             "Grupo": "A"
         },
         {
             "Curso": "EDUCAÇÃO FÍSICA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 59.11,
             "Grupo": "B"
         },
         {
-            "Curso": "BIOMED",
-            "Instituição": "USP BUTANTÃ",
+            "Curso": "BIOMEDICINA",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 59.0,
             "Grupo": "C"
         },
@@ -422,61 +422,61 @@
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 58.44,
             "Grupo": "A"
         },
         {
             "Curso": "RELAÇÕES PÚBLICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 58.0,
             "Grupo": "A"
         },
         {
             "Curso": "JORNALISMO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 57.99,
             "Grupo": "C"
         },
         {
             "Curso": "CIÊNCIAS ATUARIAIS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 57.0,
             "Grupo": "B"
         },
         {
             "Curso": "LETRAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 56.6,
             "Grupo": "A"
         },
         {
-            "Curso": "BIOMED",
-            "Instituição": "USP BUTANTÃ",
+            "Curso": "BIOMEDICINA",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 56.0,
             "Grupo": "A"
         },
         {
             "Curso": "CIÊNCIAS ECONÔMICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 55.88,
             "Grupo": "A"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 55.88,
             "Grupo": "A"
         },
         {
-            "Curso": "CIÊNCIAS DA COMPUTAÇÃO",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
             "Instituição": "USP SÃO CARLOS",
             "Nota": 55.666,
             "Grupo": "A"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 55.44,
             "Grupo": "A"
         },
@@ -494,19 +494,19 @@
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 54.33,
             "Grupo": null
         },
         {
             "Curso": "FILOSOFIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 53.55,
             "Grupo": "A"
         },
         {
             "Curso": "PSICOLOGIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 52.889,
             "Grupo": "A"
         },
@@ -518,7 +518,7 @@
         },
         {
             "Curso": "HISTÓRIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 52.778,
             "Grupo": null
         },
@@ -542,81 +542,75 @@
         },
         {
             "Curso": "FILOSOFIA",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 51.774,
             "Grupo": "A"
         },
         {
             "Curso": "QUÍMICA",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 50.777,
             "Grupo": "A"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 50.44,
             "Grupo": "A"
         },
         {
             "Curso": "MEDICINA VETERINÁRIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 48.223,
             "Grupo": "A"
         },
         {
             "Curso": "ENGENHARIA ELÉTRICA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 48.11,
             "Grupo": "A"
         },
         {
             "Curso": "CIÊNCIAS ECONÔMICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 45.55,
             "Grupo": "A"
-        },
-        {
-            "Curso": "CURSO",
-            "Instituição": "INSTITUIÇÃO",
-            "Nota": null,
-            "Grupo": "GRUPO"
         }
     ],
     "L2 - Renda + PPI": [
         {
             "Curso": "QUÍMICA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 86.11,
             "Grupo": "C"
         },
         {
             "Curso": "PSICOLOGIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 78.444,
             "Grupo": "C"
         },
         {
             "Curso": "ADMINISTRAÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 75.111,
             "Grupo": "C"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP PINHEIROS",
+            "Instituição": "USP SÃO PAULO (PINHEIROS)",
             "Nota": 70.677,
             "Grupo": "A"
         },
         {
             "Curso": "QUÍMICA",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 68.88,
             "Grupo": "B"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 67.33,
             "Grupo": "B"
         },
@@ -627,32 +621,32 @@
             "Grupo": "A"
         },
         {
-            "Curso": "ENGENHARIA DA COMPUTAÇÃO",
-            "Instituição": "UNICAMP",
+            "Curso": "ENGENHARIA DE COMPUTAÇÃO",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 65.0,
             "Grupo": "B"
         },
         {
             "Curso": "LINGUÍSTICA",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 63.111,
             "Grupo": "A"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 62.77,
             "Grupo": "A"
         },
         {
             "Curso": "ENFERMAGEM",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 62.0,
             "Grupo": "C"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 61.88,
             "Grupo": "A"
         },
@@ -664,13 +658,13 @@
         },
         {
             "Curso": "RELAÇÕES INTERNACIONAIS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 58.996,
             "Grupo": "C"
         },
         {
             "Curso": "CIÊNCIAS BIOLÓGICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 58.56,
             "Grupo": "A"
         },
@@ -688,31 +682,31 @@
         },
         {
             "Curso": "PSICOLOGIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 57.0,
             "Grupo": "C"
         },
         {
             "Curso": "LETRAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 56.6,
             "Grupo": "A"
         },
         {
             "Curso": "PUBLICIDADE E PROPAGANDA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 56.334,
             "Grupo": "C"
         },
         {
             "Curso": "NUTRIÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 56.333,
             "Grupo": "C"
         },
         {
             "Curso": "CIÊNCIAS SOCIAIS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 55.56,
             "Grupo": "A"
         },
@@ -724,13 +718,13 @@
         },
         {
             "Curso": "PSICOLOGIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 54.222,
             "Grupo": "A"
         },
         {
             "Curso": "ENNGENHARIA QUÍMICA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 53.0,
             "Grupo": "A"
         },
@@ -742,87 +736,81 @@
         },
         {
             "Curso": "ARQUITETURA E URBANISMO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 51.0,
             "Grupo": "C"
         },
         {
             "Curso": "PEDAGOGIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 50.0,
             "Grupo": "A"
         },
         {
             "Curso": "LETRAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 49.89,
             "Grupo": "A"
         },
         {
             "Curso": "NUTRIÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 46.667,
             "Grupo": "A"
-        },
-        {
-            "Curso": "CURSO",
-            "Instituição": "INSTITUIÇÃO",
-            "Nota": null,
-            "Grupo": "GRUPO"
         }
     ],
     "L3 - Nenhuma cota": [
         {
-            "Curso": "ENGENHARIA DA COMPUTAÇÃO",
-            "Instituição": "UNICAMP",
+            "Curso": "ENGENHARIA DE COMPUTAÇÃO",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 87.44,
             "Grupo": "B"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 84.552,
             "Grupo": "B"
         },
         {
-            "Curso": "ENGENHARIA DA COMPUTAÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Curso": "ENGENHARIA DE COMPUTAÇÃO",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 82.58,
             "Grupo": "B"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 81.778,
             "Grupo": "B"
         },
         {
             "Curso": "ENGENHARIA ELÉTRICA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 81.2,
             "Grupo": "C"
         },
         {
             "Curso": "CIÊNCIAS ECONÔMICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 79.6,
             "Grupo": "A"
         },
         {
-            "Curso": "CIÊNCIAS DA COMPUTAÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 79.33,
             "Grupo": "A"
         },
         {
             "Curso": "ENGENHARIA CIVIL",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 79.0,
             "Grupo": "B"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 78.89,
             "Grupo": "C"
         },
@@ -834,7 +822,7 @@
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 78.33,
             "Grupo": "B"
         },
@@ -852,31 +840,31 @@
         },
         {
             "Curso": "ENGENHARIA ELÉTRICA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 77.66,
             "Grupo": "C"
         },
         {
             "Curso": "MATEMÁTICA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 77.2,
             "Grupo": "C"
         },
         {
-            "Curso": "CIÊNCIA DA COMPUTAÇÃO",
-            "Instituição": "UNICAMP",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 77.0,
             "Grupo": "A"
         },
         {
-            "Curso": "ENGENHARIA DA COMPUTAÇÃO",
-            "Instituição": "UNICAMP",
+            "Curso": "ENGENHARIA DE COMPUTAÇÃO",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 76.44,
             "Grupo": "C"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 76.111,
             "Grupo": "C"
         },
@@ -888,30 +876,30 @@
         },
         {
             "Curso": "ANÁLISE E DESENVOLVIMENTO DE SISTEMAS",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 74.9,
             "Grupo": "C"
         },
         {
             "Curso": "ARQUITETURA E URBANISMO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 74.85,
             "Grupo": "C"
         },
         {
             "Curso": "CIÊNCIAS BIOLÓGICAS",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 74.66,
             "Grupo": "A"
         },
         {
             "Curso": "CIÊNCIAS ECONÔMICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 74.11,
             "Grupo": "C"
         },
         {
-            "Curso": "CIÊNCIA DA COMPUTAÇÃO",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
             "Instituição": "UNESP RIO PRETO",
             "Nota": 74.1,
             "Grupo": "A"
@@ -924,31 +912,31 @@
         },
         {
             "Curso": "ASTRONOMIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 73.44,
             "Grupo": "A"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 72.9,
             "Grupo": "B"
         },
         {
             "Curso": "CIENCIAS ECONÔMICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 72.5,
             "Grupo": "A"
         },
         {
-            "Curso": "CIÊNCIA DA COMPUTAÇÃO",
-            "Instituição": "UNICAMP",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 72.4,
             "Grupo": "C"
         },
         {
             "Curso": "LETRAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 72.4,
             "Grupo": "A"
         },
@@ -960,79 +948,79 @@
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 71.2,
             "Grupo": "A"
         },
         {
             "Curso": "PSICOLOGIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 71.0,
             "Grupo": "A"
         },
         {
             "Curso": "ARQUITETURA E URBANISMO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 70.56,
             "Grupo": "B"
         },
         {
-            "Curso": "CIENCIAS DA COMPUTAÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 70.444,
             "Grupo": "A"
         },
         {
             "Curso": "FARMÁCIA",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 70.11,
             "Grupo": "C"
         },
         {
             "Curso": "HISTÓRIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 69.997,
             "Grupo": "B"
         },
         {
             "Curso": "CIÊNCIAS ECONÔMICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 69.89,
             "Grupo": "C"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP PINHEIROS",
+            "Instituição": "USP SÃO PAULO (PINHEIROS)",
             "Nota": 69.444,
             "Grupo": "A"
         },
         {
-            "Curso": "ESTATÍSTICA E CIÊNCIA DE DADOS",
+            "Curso": "ESTATÍSTICA",
             "Instituição": "USP SÃO CARLOS",
             "Nota": 67.0,
             "Grupo": "A"
         },
         {
             "Curso": "FARMÁCIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 66.88,
             "Grupo": "C"
         },
         {
             "Curso": "CIÊNCIAS BIOLÓGICAS",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 66.111,
             "Grupo": "A"
         },
         {
             "Curso": "ENGENHARIA CIVIL",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 66.0,
             "Grupo": "A"
         },
         {
-            "Curso": "QUÍMICA (NOT)",
-            "Instituição": "USP RP",
+            "Curso": "QUÍMICA",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 65.89,
             "Grupo": "A"
         },
@@ -1044,61 +1032,61 @@
         },
         {
             "Curso": "GEOGRAFIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 65.56,
             "Grupo": "A"
         },
         {
-            "Curso": "ENGENHARIA DA COMPUTAÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Curso": "ENGENHARIA DE COMPUTAÇÃO",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 65.0,
             "Grupo": "A"
         },
         {
             "Curso": "JORNALISMO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 64.889,
             "Grupo": "A"
         },
         {
             "Curso": "FARMÁCIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 64.21,
             "Grupo": "B"
         },
         {
             "Curso": "DIREITO",
-            "Instituição": "USP SANFRAN",
+            "Instituição": "USP SÃO PAULO (SANFRAN)",
             "Nota": 64.11,
             "Grupo": "A"
         },
         {
             "Curso": "FONOAUDIOLOGIA",
-            "Instituição": "USP PINHEIROS",
+            "Instituição": "USP SÃO PAULO (PINHEIROS)",
             "Nota": 64.1,
             "Grupo": "C"
         },
         {
             "Curso": "RELAÇÕES INTERNACIONAIS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 63.88,
             "Grupo": "A"
         },
         {
             "Curso": "DIREITO E MED PINHEIROS",
-            "Instituição": "USP SANFRAN / PINHEIROS",
+            "Instituição": "USP SÃO PAULO (SANFRAN) / PINHEIROS",
             "Nota": 62.2,
             "Grupo": "A"
         },
         {
             "Curso": "ANÁLISE E DESENVOLVIMENTO DE SISTEMAS",
-            "Instituição": "FATEC RP",
+            "Instituição": "FATEC RIBEIRÃO PRETO",
             "Nota": 61.99,
             "Grupo": "B"
         },
         {
             "Curso": "FARMÁCIA",
-            "Instituição": "USP RP",
+            "Instituição": "USP RIBEIRÃO PRETO",
             "Nota": 61.99,
             "Grupo": "B"
         },
@@ -1109,20 +1097,20 @@
             "Grupo": "A"
         },
         {
-            "Curso": "ENGENHARIA DA COMPUTAÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Curso": "ENGENHARIA DE COMPUTAÇÃO",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 61.0,
             "Grupo": "A"
         },
         {
             "Curso": "HISTÓRIA",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 60.778,
             "Grupo": "A"
         },
         {
             "Curso": "LETRAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 60.33,
             "Grupo": "A"
         },
@@ -1134,7 +1122,7 @@
         },
         {
             "Curso": "CIÊNCIAS CONTÁBEIS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 59.66,
             "Grupo": "C"
         },
@@ -1146,25 +1134,25 @@
         },
         {
             "Curso": "CIÊNCIAS CONTÁBEIS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 58.88,
             "Grupo": "A"
         },
         {
             "Curso": "LETRAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 58.56,
             "Grupo": "A"
         },
         {
             "Curso": "ADMINISTRAÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 58.5,
             "Grupo": "A"
         },
         {
             "Curso": "MATEMÁTICA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 58.5,
             "Grupo": "A"
         },
@@ -1182,19 +1170,19 @@
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP PINHEIROS",
+            "Instituição": "USP SÃO PAULO (PINHEIROS)",
             "Nota": 57.334,
             "Grupo": "A"
         },
         {
             "Curso": "FILOSOFIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 57.0,
             "Grupo": "B"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 56.4,
             "Grupo": "A"
         },
@@ -1206,7 +1194,7 @@
         },
         {
             "Curso": "SISTEMAS DE INFORMAÇÃO",
-            "Instituição": "USP LESTE",
+            "Instituição": "USP SÃO PAULO (LESTE)",
             "Nota": 55.0,
             "Grupo": "A"
         },
@@ -1218,97 +1206,97 @@
         },
         {
             "Curso": "LETRAS/PEDAGOGIA",
-            "Instituição": "USP/UNICAMP",
+            "Instituição": "USP/UNICAMP CAMPINAS",
             "Nota": 53.7,
             "Grupo": "A"
         },
         {
             "Curso": "ARQUITETURA E URBANISMO",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 53.556,
             "Grupo": "C"
         },
         {
             "Curso": "EDUCAÇÃO FÍSICA",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 52.22,
             "Grupo": "A"
         },
         {
             "Curso": "HISTÓRIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 52.11,
             "Grupo": "A"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP PINHEIROS",
+            "Instituição": "USP SÃO PAULO (PINHEIROS)",
             "Nota": 52.0,
             "Grupo": "A"
         },
         {
             "Curso": "PSICOLOGIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 51.9,
             "Grupo": "B"
         },
         {
             "Curso": "COMUNICAÇÃO SOCIAL - EDITORAÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 51.8,
             "Grupo": "A"
         },
         {
             "Curso": "DESIGN",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 51.8,
             "Grupo": "A"
         },
         {
             "Curso": "DESIGN",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 51.4,
             "Grupo": "B"
         },
         {
             "Curso": "GEOLOGIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 50.111,
             "Grupo": "C"
         },
         {
             "Curso": "ENGENHARIA DE PRODUÇÃO",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 50.0,
             "Grupo": "C"
         },
         {
             "Curso": "CIÊNCIAS SOCIAIS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 49.449,
             "Grupo": "A"
         },
         {
             "Curso": "LETRAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 48.0,
             "Grupo": "A"
         },
         {
             "Curso": "MEDICINA VETERINÁRIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 46.667,
             "Grupo": "A"
         },
         {
             "Curso": "ADMINISTRAÇÃO",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 46.333,
             "Grupo": "A"
         },
         {
             "Curso": "LETRAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 45.0,
             "Grupo": "C"
         },
@@ -1317,102 +1305,96 @@
             "Instituição": "UNESP FRANCA",
             "Nota": 43.88,
             "Grupo": "A"
-        },
-        {
-            "Curso": "CURSO",
-            "Instituição": "INSTITUIÇÃO",
-            "Nota": null,
-            "Grupo": "GRUPO"
         }
     ],
     "L4 - Apenas PPI": [
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP PINHEIROS",
+            "Instituição": "USP SÃO PAULO (PINHEIROS)",
             "Nota": 77.66,
             "Grupo": "C"
         },
         {
             "Curso": "ENGENHARIA CIVIL",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 76.88,
             "Grupo": "C"
         },
         {
             "Curso": "MATEMÁTICA",
-            "Instituição": "UNESP RC",
+            "Instituição": "UNESP RIO CLARO",
             "Nota": 76.4,
             "Grupo": "B"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 75.33,
             "Grupo": "C"
         },
         {
             "Curso": "CIÊNCIAS ECONÔMICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 74.555,
             "Grupo": "C"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP",
+            "Instituição": "USP SÃO PAULO (PINHEIROS)",
             "Nota": 73.56,
             "Grupo": "B"
         },
         {
             "Curso": "ADMINISTRAÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 71.667,
             "Grupo": "C"
         },
         {
-            "Curso": "MATEMÁTICA (LICENCIATURA)",
-            "Instituição": "USP BUTANTÃ",
+            "Curso": "LICENCIATURA EM MATEMÁTICA",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 71.66,
             "Grupo": "A"
         },
         {
-            "Curso": "ESTATÍSTICA E CIÊNCIAS DE DADOS",
+            "Curso": "ESTATÍSTICA",
             "Instituição": "USP SÃO CARLOS",
             "Nota": 71.333,
             "Grupo": "A"
         },
         {
-            "Curso": "CIÊNCIA DA COMPUTAÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 68.44,
             "Grupo": "C"
         },
         {
             "Curso": "CIÊNCIAS ECONÔMICAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 67.55,
             "Grupo": "A"
         },
         {
-            "Curso": "CIÊNCIAS DA COMPUTAÇÃO",
-            "Instituição": "UNICAMP",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 66.89,
             "Grupo": "C"
         },
         {
             "Curso": "MEDICINA",
-            "Instituição": "USP PINHEIROS",
+            "Instituição": "USP SÃO PAULO (PINHEIROS)",
             "Nota": 66.444,
             "Grupo": "A"
         },
         {
-            "Curso": "CIÊNCIA DA COMPUTAÇÃO",
-            "Instituição": "USP BUTANTÃ",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 64.0,
             "Grupo": "A"
         },
         {
             "Curso": "ENGENHARIA ELÉTRICA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 62.886,
             "Grupo": "C"
         },
@@ -1436,7 +1418,7 @@
         },
         {
             "Curso": "RELAÇÕES INTERNACIONAIS",
-            "Instituição": "USP BUTANTÃ )",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ) )",
             "Nota": 59.444,
             "Grupo": "A"
         },
@@ -1447,32 +1429,32 @@
             "Grupo": "A"
         },
         {
-            "Curso": "CIÊNCIA DA COMPUTAÇÃO",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
             "Instituição": "UNESP",
             "Nota": 57.333,
             "Grupo": "A"
         },
         {
             "Curso": "LETRAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 55.89,
             "Grupo": "A"
         },
         {
             "Curso": "FONOAUDIOLOGIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 55.78,
             "Grupo": "C"
         },
         {
             "Curso": "FARMÁCIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 55.66,
             "Grupo": "C"
         },
         {
             "Curso": "CIÊNCIAS SOCIAIS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 55.44,
             "Grupo": "A"
         },
@@ -1484,39 +1466,33 @@
         },
         {
             "Curso": "CIÊNCIAS SOCIAIS",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 52.33,
             "Grupo": "A"
         },
         {
             "Curso": "GEOCIÊNCIAS",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 51.88,
             "Grupo": "C"
         },
         {
-            "Curso": "CIÊNCIA DA COMPUTAÇÃO",
+            "Curso": "BACHARELADO EM CIÊNCIAS DA COMPUTAÇÃO",
             "Instituição": "UNESP",
             "Nota": 51.556,
             "Grupo": "A"
         },
         {
             "Curso": "CIÊNCIAS SOCIAIS",
-            "Instituição": "UNICAMP",
+            "Instituição": "UNICAMP CAMPINAS",
             "Nota": 50.66,
             "Grupo": "A"
         },
         {
             "Curso": "MEDICINA VETERINÁRIA",
-            "Instituição": "USP BUTANTÃ",
+            "Instituição": "USP SÃO PAULO (BUTANTÃ)",
             "Nota": 44.445,
             "Grupo": "A"
-        },
-        {
-            "Curso": "CURSO",
-            "Instituição": "INSTITUIÇÃO",
-            "Nota": null,
-            "Grupo": "GRUPO"
         }
     ]
 }
