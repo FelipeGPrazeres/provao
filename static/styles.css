@@ -127,6 +127,13 @@ body.dark-mode .contact-box { background: rgba(255,255,255,0.05); }
     font-weight: 700;
 }
 
+.header-logo {
+    height: 90px; /* Aumentado de 60px para 90px */
+    margin-right: 10px;
+    vertical-align: middle;
+    transition: height 0.3s ease; /* Adicionado para transição suave */
+}
+
 .dot {
     color: var(--accent-color); /* */
     font-weight: bold;
@@ -670,6 +677,10 @@ body.dark-mode .info-trigger { color: var(--accent-color); border-color: var(--a
     }
     .nav-left h1 { font-size: 1.8em; } 
 
+    .header-logo {
+        height: 75px; /* Ajustado para mobile (50px * 1.5) */
+    }
+
     .desktop-nav { 
         display: none;
     }
@@ -867,6 +878,9 @@ body.dark-mode .info-trigger { color: var(--accent-color); border-color: var(--a
 
 @media (max-width: 480px) {
     .nav-left h1 { font-size: 1.5em; } /* */
+    .header-logo {
+        height: 60px; /* Ajustado para telas menores ainda (40px * 1.5) */
+    }
     .nav-button, .popup-button, #calculateButton, #calculateButtonSubmit, #searchButton, .collab-button, .submit-button {
         padding: 8px 12px; /* Padding de botões ligeiramente reduzido */
         font-size: 0.9em; /* Tamanho da fonte de botões ligeiramente reduzido */
@@ -1018,4 +1032,14 @@ body.dark-mode .suggestions-dropdown {
 
 body.dark-mode .suggestions-dropdown div:hover {
     background-color: #3a3a3a; /* Um pouco mais claro que o fundo do card escuro */
+}
+
+.link-logo {
+    width: 70px;  /* You can adjust this value */
+    height: 70px; /* You can adjust this value */
+    object-fit: contain; /* This ensures the image fits well within the dimensions, maintaining aspect ratio */
+    display: block; /* Helps with centering if you add margin: auto */
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px; /* Adds some space below the logo */
 }

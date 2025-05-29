@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário de notas - MEUPROVAO</title>
+    <link rel="icon" href="{{ url_for('static', filename='logo2.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -21,7 +22,7 @@
     <header class="top-nav">
         <div class="nav-inner">
             <div class="nav-left">
-                <h1><a href="{{url_for('index_page')}}" style="color: white; text-decoration: none;">MEUPROVAO<span class="dot">.</span></a></h1>
+                <a href="{{url_for('index_page')}}"><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo MEUPROVAO" class="header-logo"></a>
             </div>
 
             <!-- Botão Hambúrguer (visível apenas em mobile) -->
@@ -397,6 +398,73 @@
                     courseSuggestionsFormGlobal.style.display = 'none';
                 }
             });
+
+            // --- Logic to add calculator to mobile menu ---
+            const mainCalculatorForMobile = document.getElementById('calculatorContainerSubmit'); 
+            const mobileNavMenu = document.querySelector('.mobile-nav');
+
+            if (mobileNavMenu && mainCalculatorForMobile) {
+                const calculatorMobileClone = mainCalculatorForMobile.cloneNode(true);
+                calculatorMobileClone.id = 'calculatorContainerMobile';
+                
+                // Remove inline display style from the clone, visibility will be handled by mobile menu CSS
+                calculatorMobileClone.style.display = ''; 
+
+                const idsToUpdateInClone = {
+                    'acertosSubmit': 'acertosSubmitMobile',
+                    'acertos2Submit': 'acertos2SubmitMobile',
+                    'acertos3Submit': 'acertos3SubmitMobile',
+                    'acertosRSubmit': 'acertosRSubmitMobile',
+                    'calculateButtonSubmit': 'calculateButtonSubmitMobile',
+                    'resultSubmit': 'resultSubmitMobile'
+                };
+
+                for (const oldId in idsToUpdateInClone) {
+                    const newId = idsToUpdateInClone[oldId];
+                    const element = calculatorMobileClone.querySelector('#' + oldId);
+                    if (element) {
+                        element.id = newId;
+                    }
+                    const label = calculatorMobileClone.querySelector(`label[for="${oldId}"]`);
+                    if (label) {
+                        label.setAttribute('for', newId);
+                    }
+                }
+
+                mobileNavMenu.appendChild(calculatorMobileClone);
+
+                const clonedCalcButton = calculatorMobileClone.querySelector('#calculateButtonSubmitMobile');
+                if (clonedCalcButton) {
+                    clonedCalcButton.addEventListener('click', () => {
+                        const acertosInput = calculatorMobileClone.querySelector('#acertosSubmitMobile');
+                        const acertos2Input = calculatorMobileClone.querySelector('#acertos2SubmitMobile');
+                        const acertos3Input = calculatorMobileClone.querySelector('#acertos3SubmitMobile');
+                        const acertosRInput = calculatorMobileClone.querySelector('#acertosRSubmitMobile');
+                        const resultDisplay = calculatorMobileClone.querySelector('#resultSubmitMobile');
+
+                        if (!acertosInput.value || !acertos2Input.value || !acertos3Input.value || !acertosRInput.value) {
+                            resultDisplay.innerHTML = '<strong class="calculator-error-message">Preencha todos os campos.</strong>';
+                            return;
+                        }
+
+                        let acertos = Number(acertosInput.value);
+                        let acertos2 = Number(acertos2Input.value);
+                        let acertos3 = Number(acertos3Input.value);
+                        let acertosR = Number(acertosRInput.value);
+
+                        let notaCalculadora = ((acertos / 90) * 0.15) +
+                                              ((acertos2 / 90) * 0.25) +
+                                              ((acertos3 / 90) * 0.40) +
+                                              ((acertosR / 20) * 0.20);
+                        let notaReal = (notaCalculadora * 100).toFixed(3);
+
+                        resultDisplay.innerHTML = `Sua nota é: <strong>${notaReal}</strong>`;
+                        localStorage.setItem('minhaNotaCalculada', notaReal);
+                        exibirNotaSalvaFormulario(); 
+                    });
+                }
+            }
+            // --- End logic to add calculator to mobile menu ---
 
             const dataForm = document.getElementById('dataForm');
             if (dataForm) {

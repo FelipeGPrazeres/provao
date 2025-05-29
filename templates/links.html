@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Links Úteis - MEUPROVAO</title>
+    <link rel="icon" href="{{ url_for('static', filename='logo2.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header class="top-nav">
         <div class="nav-inner">
             <div class="nav-left">
-                <h1><a href="{{url_for('index_page')}}" style="color: white; text-decoration: none;">MEUPROVAO<span class="dot">.</span></a></h1>
+                <a href="{{url_for('index_page')}}"><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo MEUPROVAO" class="header-logo"></a>
             </div>
 
             <!-- Botão Hambúrguer (visível apenas em mobile) -->
@@ -40,30 +41,35 @@
 
         <div class="links-container">
             <div class="link-card">
+                <img src="{{ url_for('static', filename='discordlogo.png') }}" alt="Logo Discord" class="link-logo">
                 <h3>Discord Oficial</h3>
                 <p>Participe da nossa comunidade no Discord para interações em tempo real, grupos de estudo e mais.</p>
                 <a href="https://discord.gg/NFmkM5kNPX" target="_blank" class="link-button">Acessar Discord</a>
             </div>
 
             <div class="link-card">
+                <img src="{{ url_for('static', filename='whatslogo.png') }}" alt="Logo WhatsApp" class="link-logo">
                 <h3>WhatsApp: Chat Geral e Monitorias</h3>
                 <p>Grupo principal para dúvidas rápidas, avisos e discussões sobre as monitorias.</p>
                 <a href="https://chat.whatsapp.com/DKwd9hgYNHGKSSyKP9tJhS" target="_blank" class="link-button">Entrar no Grupo</a>
             </div>
 
             <div class="link-card">
+                <img src="{{ url_for('static', filename='forms.jpg') }}" alt="Logo Formulário" class="link-logo">
                 <h3>Seja um Monitor!</h3>
                 <p>Tem interesse em ajudar outros estudantes? Inscreva-se para ser um monitor no projeto Meu Provão.</p>
                 <a href="https://forms.gle/heoRkGXLRSGtpTAW8" target="_blank" class="link-button">Formulário para Monitores</a>
             </div>
 
             <div class="link-card">
+                <img src="{{ url_for('static', filename='forms.jpg') }}" alt="Logo Formulário" class="link-logo">
                 <h3>Inscreva-se nas Monitorias</h3>
                 <p>Precisa de ajuda nos estudos? Inscreva-se aqui para participar das nossas monitorias gratuitas.</p>
                 <a href="https://forms.gle/G5oHxBsNgPRox8yG7" target="_blank" class="link-button">Formulário para Alunos</a>
             </div>
             
             <div class="link-card">
+                <img src="{{ url_for('static', filename='Instagramlogo.png') }}" alt="Logo Instagram" class="link-logo">
                 <h3>Siga-nos no Instagram</h3>
                 <p>Fique por dentro das novidades, dicas e informações importantes acompanhando nosso perfil.</p>
                 <a href="https://www.instagram.com/meuprovao" target="_blank" class="link-button">Acessar Instagram</a>
@@ -105,10 +111,12 @@
             if (displayElement) {
                 if (notaSalva) {
                     displayElement.textContent = `Nota: ${notaSalva}`;
-                    displayElement.style.display = 'inline-block';
+                    // displayElement.style.display = 'inline-block'; // This line is commented out to keep the element hidden
                 } else {
-                    displayElement.style.display = 'none';
+                    displayElement.style.display = 'none'; // Ensures it's hidden if no note (already default)
                 }
+                // To be absolutamente certo de que permanece oculto nesta página:
+                displayElement.style.display = 'none';
             }
 
             // --- Mobile Menu Toggle ---

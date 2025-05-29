@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEUPROVAO</title>
+    <link rel="icon" href="{{ url_for('static', filename='logo2.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -12,7 +13,7 @@
     <header class="top-nav">
         <div class="nav-inner">
             <div class="nav-left">
-                <h1><a href="{{url_for('index_page')}}" style="color: white; text-decoration: none;">MEUPROVAO<span class="dot">.</span></a></h1>
+                <a href="{{url_for('index_page')}}"><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo MEUPROVAO" class="header-logo"></a>
             </div>
 
             <!-- Botão Hambúrguer (visível apenas em mobile) -->
@@ -20,10 +21,10 @@
 
             <!-- Navegação para Desktop (visível apenas em desktop) -->
             <div class="nav-actions desktop-nav">
+                <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
                 <a href="{{ url_for('links_page') }}" class="nav-button">Links Úteis</a>
                 <span id="notaSalvaDisplayIndex" class="nav-button nota-salva-display" style="margin-right: 10px; font-size: 0.9em; cursor: default; display: none;"></span>
                 <button class="nav-button" id="toggleCalculator">Minha Nota</button>
-                <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
             </div>
 
             <!-- Menu Mobile (inicialmente oculto, controlado por JS e CSS) -->
