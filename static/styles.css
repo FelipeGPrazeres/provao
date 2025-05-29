@@ -808,7 +808,8 @@ body.dark-mode .info-trigger { color: var(--accent-color); border-color: var(--a
     .mobile-nav #calculatorContainerMobile input[type="number"]::placeholder {
         color: #ddd;
     }
-    .mobile-nav #calculatorContainerMobile #calculateButtonMobile {
+    .mobile-nav #calculatorContainerMobile #calculateButtonMobile,
+    .mobile-nav #calculatorContainerMobile #calculateButtonSubmitMobile { /* MODIFIED: Added ID for formulario.html button */
         background: var(--gradient) !important; 
         color: white !important;
         border: 1px solid white !important; /* Borda branca para destaque, similar aos outros botões do menu */
@@ -818,7 +819,8 @@ body.dark-mode .info-trigger { color: var(--accent-color); border-color: var(--a
         display: inline-block; /* Para que width: auto funcione bem */
         border-radius: var(--border-radius-pill); /* Mantendo o padrão de outros botões principais */
     }
-    .mobile-nav #calculatorContainerMobile #calculateButtonMobile:hover {
+    .mobile-nav #calculatorContainerMobile #calculateButtonMobile:hover,
+    .mobile-nav #calculatorContainerMobile #calculateButtonSubmitMobile:hover { /* MODIFIED: Added ID for formulario.html button */
         opacity: 0.9;
     }
     .mobile-nav #calculatorContainerMobile .button-result-group {
