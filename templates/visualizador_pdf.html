@@ -12,7 +12,7 @@
     <header class="top-nav">
         <div class="nav-inner">
             <div class="nav-left">
-                <a href="./index.html"><img src="../static/logo.png" alt="Logo MEUPROVAO" class="header-logo"></a>
+                <a href="{{ url_for('index_page') }}"><img src="../static/logo.png" alt="Logo MEUPROVAO" class="header-logo"></a>
             </div>
 
             <button class="mobile-menu-toggle" aria-label="Abrir menu" aria-expanded="false">&#9776;</button>
@@ -20,10 +20,12 @@
             <div class="nav-actions desktop-nav">
                 <a href="{{ url_for('index_page') }}" class="nav-button">Página Inicial</a>
                 <a href="{{ url_for('links_page') }}" class="nav-button">Links Úteis</a>
+                <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
                 <a href="{{ url_for('visualizador_pdf_page') }}" class="nav-button">Visualizar Edital</a>
             </div>
 
             <nav class="mobile-nav">
+                <a href="{{ url_for('index_page') }}" class="nav-button">Página Inicial</a>
                 <a href="{{ url_for('links_page') }}" class="nav-button">Links Úteis</a>
                 <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
                 <a href="{{ url_for('visualizador_pdf_page') }}" class="nav-button">Visualizar Edital</a>

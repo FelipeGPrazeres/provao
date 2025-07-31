@@ -66,6 +66,10 @@ def formulario_page():
 def links_page():
     return render_template('links.html')
 
+@app.route('/visualizador_pdf')
+def visualizador_pdf_page():
+    return render_template('visualizador_pdf.html')
+
 # --- Rotas para fornecer dados do JSON para SUGESTÕES ---
 @app.route('/get_json_categories')
 def get_json_categories():
