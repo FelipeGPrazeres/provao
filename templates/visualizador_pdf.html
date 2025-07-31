@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edital do Provão - MEUPROVAO</title>
+    <link rel="icon" href="../static/logo2.png" type="image/png">
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+
+    <header class="top-nav">
+        <div class="nav-inner">
+            <div class="nav-left">
+                <a href="./index.html"><img src="../static/logo.png" alt="Logo MEUPROVAO" class="header-logo"></a>
+            </div>
+
+            <button class="mobile-menu-toggle" aria-label="Abrir menu" aria-expanded="false">&#9776;</button>
+
+            <div class="nav-actions desktop-nav">
+                <a href="{{ url_for('index_page') }}" class="nav-button">Página Inicial</a>
+                <a href="{{ url_for('links_page') }}" class="nav-button">Links Úteis</a>
+                <a href="{{ url_for('visualizador_pdf_page') }}" class="nav-button">Visualizar Edital</a>
+            </div>
+
+            <nav class="mobile-nav">
+                <a href="{{ url_for('links_page') }}" class="nav-button">Links Úteis</a>
+                <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
+                <a href="{{ url_for('visualizador_pdf_page') }}" class="nav-button">Visualizar Edital</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="pdf-viewer-container card-style">
+            <h2>Edital Provão Paulista Seriado 2025</h2>
+            <p style="text-align: center; margin-bottom: 20px;">Visualize o documento oficial abaixo. Utilize os controles do navegador para navegar, dar zoom ou baixar o arquivo.</p>
+            
+            <iframe 
+                src="../static/SEED2503_224_20250730141547.pdf"
+                title="Visualizador do Edital do Provão Paulista Seriado 2025">
+            </iframe>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-section">
+                <h3>Grupo de Apoio</h3>
+                <p>Entre no grupo do WhatsApp e tire suas dúvidas com outros candidatos!</p>
+                <a class="group-link nav-button" href="https://chat.whatsapp.com/EP0btFILC5s38znclDM3pO" target="_blank">Entrar no Grupo</a>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <div class="contact-container">
+                    <div class="contact-box">
+                        <p><strong>Kauan Yuri</strong></p>
+                        <p><a href="https://wa.me/5516994297281" target="_blank">16 99429-7281</a></p>
+                        <p><a href="https://www.instagram.com/dev.kauan" target="_blank">@dev.kauan</a></p>
+                    </div>
+                    <div class="contact-box">
+                        <p><strong>Felipe Galvão</strong></p>
+                        <p><a href="https://wa.me/5516992145809" target="_blank">16 99214-5809</a></p>
+                        <p><a href="https://www.instagram.com/felipe.prazeresz" target="_blank">@felipe.prazeresz</a></p>
+                    </div>
+                </div>      
+            </div>          
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MEUPROVAO. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const mobileNav = document.querySelector('.mobile-nav');
+
+            if (mobileMenuToggle && mobileNav) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    mobileNav.classList.toggle('active');
+                    const isExpanded = mobileNav.classList.contains('active');
+                    mobileMenuToggle.setAttribute('aria-expanded', isExpanded);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

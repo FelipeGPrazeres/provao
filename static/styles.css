@@ -1045,3 +1045,44 @@ body.dark-mode .suggestions-dropdown div:hover {
     margin-right: auto;
     margin-bottom: 15px; /* Adds some space below the logo */
 }
+
+/* Adicionado ao final de styles.css */
+
+/* Estilos para o container do visualizador de PDF */
+.pdf-viewer-container {
+    padding: 20px;
+    height: 90vh; /* Ocupa 90% da altura da tela */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.pdf-viewer-container h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    flex-shrink: 0; /* Impede que o h2 encolha */
+}
+
+.pdf-viewer-container p {
+     flex-shrink: 0;
+}
+
+.pdf-viewer-container iframe {
+    flex-grow: 1; /* Faz o iframe ocupar todo o espaço vertical disponível */
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius-md);
+    width: 100%;
+}
+
+body.dark-mode .pdf-viewer-container iframe {
+    border-color: var(--border-color-dark);
+}
+
+/* Ajuste para telas menores */
+@media (max-width: 768px) {
+    .pdf-viewer-container {
+        height: 85vh;
+        padding: 10px;
+    }
+}
