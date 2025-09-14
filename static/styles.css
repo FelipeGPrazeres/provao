@@ -1084,37 +1084,56 @@ body.dark-mode .pdf-viewer-container iframe {
 }
 /* --- Estilos do Grupo de Botões da Calculadora --- */
 
-/* Container que agrupa os botões e o resultado */
-.button-result-group {
-    display: flex; /* Ativa o layout flexível */
-    flex-wrap: wrap; /* Permite que os botões quebrem para a linha de baixo se não couberem */
-    justify-content: center; /* Centraliza os botões no container */
-    gap: 10px; /* Adiciona um espaço de 10px entre os botões */
+/* --- [CORREÇÃO] Estilos do Grupo de Botões da Calculadora --- */
+/* Este código é mais específico para evitar conflitos com outros estilos. */
+
+/* Container geral dos botões */
+.calculadora .button-result-group {
     width: 100%;
-    margin-top: 15px; /* Um espaço acima dos botões */
+    margin-top: 20px;
+    padding: 0;
 }
 
-/* Garante que o texto de resultado fique em sua própria linha */
-.calculator-result {
+/* --- Layout para DESKTOP (telas maiores que 768px) --- */
+@media (min-width: 769px) {
+    .calculadora .button-result-group {
+        display: flex;
+        flex-direction: row; /* Garante que fiquem em linha */
+        flex-wrap: wrap;
+        justify-content: center; /* Centraliza na horizontal */
+        align-items: center;
+        gap: 10px; /* Espaçamento entre os botões */
+    }
+
+    /* Estilo para garantir que os botões não ocupem a largura toda no desktop */
+    .calculadora .button-result-group .nav-button {
+        width: auto; /* Largura automática com base no texto */
+        padding: 8px 15px; /* Ajuste de espaçamento interno */
+    }
+}
+
+/* --- Layout para CELULAR (telas com até 768px) --- */
+@media (max-width: 768px) {
+    .calculadora .button-result-group {
+        display: flex;
+        flex-direction: column; /* Empilha os botões */
+        align-items: center; /* Centraliza os botões */
+        gap: 8px; /* Espaçamento vertical entre eles */
+    }
+
+    /* Garante que os botões ocupem uma largura adequada no celular */
+    .calculadora .button-result-group .nav-button {
+        width: 90%;
+        max-width: 320px;
+    }
+}
+
+/* Estilo do campo de resultado (comum para desktop e mobile) */
+.calculadora .calculator-result {
     width: 100%;
     text-align: center;
-    margin-top: 10px;
-    padding: 8px;
-    min-height: 1.5em; /* Garante uma altura mínima mesmo quando vazio */
-}
-
-
-/* --- Layout para Celular (Telas com até 768px de largura) --- */
-@media (max-width: 768px) {
-    .button-result-group {
-        flex-direction: column; /* Muda a direção do flex para vertical (empilha os itens) */
-        align-items: center; /* Centraliza os botões empilhados */
-    }
-
-    /* Faz cada botão ocupar uma boa parte da largura no mobile */
-    .button-result-group .nav-button {
-        width: 90%; 
-        max-width: 300px; /* Limita a largura máxima em telas um pouco maiores */
-        box-sizing: border-box; /* Garante que padding e borda não aumentem a largura total */
-    }
+    margin-top: 15px;
+    font-size: 1.1em;
+    font-weight: bold;
+    min-height: 1.5em;
 }
