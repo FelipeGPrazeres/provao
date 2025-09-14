@@ -6,6 +6,7 @@
     <title>MEUPROVAO</title>
     <link rel="icon" href="{{ url_for('static', filename='logo2.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="/static/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -65,10 +66,10 @@
                             </div>
                         </div>
                         <div class="button-result-group">
-                            <button id="calculateHumanas" class="nav-button">Calcular Humanas/Artes</button>
-                            <button id="calculateExatas" class="nav-button">Calcular Exatas</button>
-                            <button id="calculateBiologicas" class="nav-button">Calcular Biológicas/Saúde</button>
-                            <div id="result" class="calculator-result"></div>
+                            <button id="calculateHumanasMobile" class="nav-button">Calcular Humanas/Artes</button>
+                            <button id="calculateExatasMobile" class="nav-button">Calcular Exatas</button>
+                            <button id="calculateBiologicasMobile" class="nav-button">Calcular Biológicas/Saúde</button>
+                            <div id="resultMobile" class="calculator-result"></div>
                         </div>
                     </div>
                 </div>
@@ -210,7 +211,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Elementos da UI
+            console.log("Página carregada. Iniciando script MEUPROVAO.");
+
+            // --- ELEMENTOS COMUNS DA UI ---
             const categorySelect = document.getElementById('categorySelect');
             const groupSelect = document.getElementById('groupSelect');
             const institutionInput = document.getElementById('institution');
@@ -247,12 +250,24 @@
                 });
             }
 
-            // --- Lógica da Calculadora (Funções de Cálculo) ---
+            // --- LÓGICA DA CALCULADORA (VERSÃO DE DEPURAÇÃO) ---
+
+            const fieldNames = {
+                acertos1: 'Acertos 2023',
+                acertos2: 'Acertos 2024',
+                acertosL: 'Linguagens',
+                acertosM: 'Matemática',
+                acertosH: 'Humanas',
+                acertosN: 'Natureza',
+                redacao: 'Redação'
+            };
+
+            // 1. Funções de Cálculo
             function calcularHumanas(acertos1, acertos2, acertosL, acertosM, acertosH, acertosN, redacao) {
                 const notaAno1 = (acertos1 / 90) * 15;
                 const notaAno2 = (acertos2 / 90) * 25;
                 const notaAno3 = ((acertosL / 24) * 2 + (acertosM / 18) * 1 + (acertosH / 24) * 2 + (acertosN / 24) * 1 + (redacao / 20) * 2) * 5;
-                const notaFinal = notaAno1 + notaAno2 + notaAno3 + redacao;
+                const notaFinal = notaAno1 + notaAno2 + notaAno3 + Number(redacao);
                 return notaFinal.toFixed(3);
             }
 
@@ -260,7 +275,7 @@
                 const notaAno1 = (acertos1 / 90) * 15;
                 const notaAno2 = (acertos2 / 90) * 25;
                 const notaAno3 = ((acertosL / 24) * 1 + (acertosM / 18) * 3 + (acertosH / 24) * 1 + (acertosN / 24) * 2 + (redacao / 20) * 1) * 5;
-                const notaFinal = notaAno1 + notaAno2 + notaAno3 + redacao;
+                const notaFinal = notaAno1 + notaAno2 + notaAno3 + Number(redacao);
                 return notaFinal.toFixed(3);
             }
 
@@ -268,64 +283,117 @@
                 const notaAno1 = (acertos1 / 90) * 15;
                 const notaAno2 = (acertos2 / 90) * 25;
                 const notaAno3 = ((acertosL / 24) * 2 + (acertosM / 18) * 1 + (acertosH / 24) * 1 + (acertosN / 24) * 3 + (redacao / 20) * 1) * 5;
-                const notaFinal = notaAno1 + notaAno2 + notaAno3 + redacao;
+                const notaFinal = notaAno1 + notaAno2 + notaAno3 + Number(redacao);
                 return notaFinal.toFixed(3);
             }
 
-            // --- Lógica da Calculadora (Event Listeners) ---
+            // 2. Lógica para a Calculadora DESKTOP
+            if (calculatorContainer) {
+                console.log("Container da calculadora DESKTOP encontrado. Configurando botões...");
+                const btnHumanas = document.getElementById('calculateHumanas');
+                const btnExatas = document.getElementById('calculateExatas');
+                const btnBiologicas = document.getElementById('calculateBiologicas');
+                const resultDisplay = document.getElementById('result');
+
+                const inputs = {
+                    acertos1: document.getElementById('acertos'),
+                    acertos2: document.getElementById('acertos2'),
+                    acertosL: document.getElementById('acertosL'),
+                    acertosM: document.getElementById('acertosM'),
+                    acertosH: document.getElementById('acertosH'),
+                    acertosN: document.getElementById('acertosN'),
+                    redacao: document.getElementById('acertosR')
+                };
+
+                const calculate = (calcFunction, message) => {
+                    console.log(`Botão '${message}' clicado. Verificando campos...`);
+                    const values = {};
+                    for (const key in inputs) {
+                        const inputElement = inputs[key];
+                        if (!inputElement) {
+                            const errorMsg = `Erro de CÓDIGO: O campo '${fieldNames[key]}' não foi encontrado no HTML. Verifique se o ID está correto.`;
+                            console.error(errorMsg);
+                            resultDisplay.innerHTML = `<strong class="calculator-error-message">${errorMsg}</strong>`;
+                            return;
+                        }
+                        if (inputElement.value === '') {
+                            const errorMsg = `VALOR AUSENTE: O campo '${fieldNames[key]}' está vazio.`;
+                            console.error(errorMsg);
+                            resultDisplay.innerHTML = `<strong class="calculator-error-message">Preencha o campo: ${fieldNames[key]}.</strong>`;
+                            return;
+                        }
+                        console.log(`Campo '${fieldNames[key]}' OK, valor: '${inputElement.value}'`);
+                        values[key] = Number(inputElement.value);
+                    }
+                    console.log("Todos os campos foram validados com sucesso! Calculando a nota...");
+                    const notaFinal = calcFunction(values.acertos1, values.acertos2, values.acertosL, values.acertosM, values.acertosH, values.acertosN, values.redacao);
+                    resultDisplay.innerHTML = `${message} <strong>${notaFinal}</strong>`;
+                    salvarNotaCalculada(notaFinal);
+                    updateResultCardsAppearance();
+                };
+                
+                if (btnHumanas) btnHumanas.addEventListener('click', () => calculate(calcularHumanas, 'Sua nota (Humanas/Artes) é:')); else console.error("Botão 'calculateHumanas' NÃO encontrado!");
+                if (btnExatas) btnExatas.addEventListener('click', () => calculate(calcularExatas, 'Sua nota (Exatas) é:')); else console.error("Botão 'calculateExatas' NÃO encontrado!");
+                if (btnBiologicas) btnBiologicas.addEventListener('click', () => calculate(calcularBiologicas, 'Sua nota (Biológicas/Saúde) é:')); else console.error("Botão 'calculateBiologicas' NÃO encontrado!");
+            }
+
+            // 3. Lógica para a Calculadora MOBILE
+            const calculatorContainerMobile = document.getElementById('calculatorContainerMobile');
+            if (calculatorContainerMobile) {
+                console.log("Container da calculadora MOBILE encontrado. Configurando botões...");
+                const btnHumanasMobile = document.getElementById('calculateHumanasMobile');
+                const btnExatasMobile = document.getElementById('calculateExatasMobile');
+                const btnBiologicasMobile = document.getElementById('calculateBiologicasMobile');
+                const resultDisplayMobile = document.getElementById('resultMobile');
+
+                const inputsMobile = {
+                    acertos1: document.getElementById('acertosMobile'),
+                    acertos2: document.getElementById('acertos2Mobile'),
+                    acertosL: document.getElementById('acertosLMobile'),
+                    acertosM: document.getElementById('acertosMMobile'),
+                    acertosH: document.getElementById('acertosHMobile'),
+                    acertosN: document.getElementById('acertosNMobile'),
+                    redacao: document.getElementById('acertosRMobile')
+                };
+
+                const calculateMobile = (calcFunction, message) => {
+                    console.log(`Botão MOBILE '${message}' clicado. Verificando campos...`);
+                    const values = {};
+                    for (const key in inputsMobile) {
+                        const inputElement = inputsMobile[key];
+                        if (!inputElement) {
+                            const errorMsg = `Erro de CÓDIGO (Mobile): O campo '${fieldNames[key]}' não foi encontrado no HTML.`;
+                            console.error(errorMsg);
+                            resultDisplayMobile.innerHTML = `<strong class="calculator-error-message">${errorMsg}</strong>`;
+                            return;
+                        }
+                        if (inputElement.value === '') {
+                            const errorMsg = `VALOR AUSENTE (Mobile): O campo '${fieldNames[key]}' está vazio.`;
+                            console.error(errorMsg);
+                            resultDisplayMobile.innerHTML = `<strong class="calculator-error-message">Preencha o campo: ${fieldNames[key]}.</strong>`;
+                            return;
+                        }
+                        values[key] = Number(inputElement.value);
+                    }
+                    const notaFinal = calcFunction(values.acertos1, values.acertos2, values.acertosL, values.acertosM, values.acertosH, values.acertosN, values.redacao);
+                    resultDisplayMobile.innerHTML = `${message} <strong>${notaFinal}</strong>`;
+                    salvarNotaCalculada(notaFinal);
+                    updateResultCardsAppearance();
+                };
+
+                if (btnHumanasMobile) btnHumanasMobile.addEventListener('click', () => calculateMobile(calcularHumanas, 'Sua nota (Humanas/Artes) é:')); else console.error("Botão 'calculateHumanasMobile' NÃO encontrado!");
+                if (btnExatasMobile) btnExatasMobile.addEventListener('click', () => calculateMobile(calcularExatas, 'Sua nota (Exatas) é:')); else console.error("Botão 'calculateExatasMobile' NÃO encontrado!");
+                if (btnBiologicasMobile) btnBiologicasMobile.addEventListener('click', () => calculateMobile(calcularBiologicas, 'Sua nota (Biológicas/Saúde) é:')); else console.error("Botão 'calculateBiologicasMobile' NÃO encontrado!");
+            }
+
+            // 4. Lógica para o botão "Minha Nota" que abre a calculadora
             if (toggleCalculator && calculatorContainer) {
+                console.log("Configurando botão 'Minha Nota'.");
                 toggleCalculator.addEventListener('click', () => {
                     calculatorContainer.classList.toggle('visible');
                 });
             }
-
-            function setupCalculatorListeners(isMobile) {
-                const prefix = isMobile ? 'Mobile' : '';
-                const calculateHumanasBtn = document.getElementById(`calculateHumanas${prefix}`);
-                const calculateExatasBtn = document.getElementById(`calculateExatas${prefix}`);
-                const calculateBiologicasBtn = document.getElementById(`calculateBiologicas${prefix}`);
-                const resultDisplay = document.getElementById(`result${prefix}`);
-
-                const getInputs = () => ({
-                    acertos1: document.getElementById(`acertos${prefix}`).value,
-                    acertos2: document.getElementById(`acertos2${prefix}`).value,
-                    acertosL: document.getElementById(`acertosL${prefix}`).value,
-                    acertosM: document.getElementById(`acertosM${prefix}`).value,
-                    acertosH: document.getElementById(`acertosH${prefix}`).value,
-                    acertosN: document.getElementById(`acertosN${prefix}`).value,
-                    redacao: document.getElementById(`acertosR${prefix}`).value,
-                });
-
-                const validateAndCalculate = (calculationFn, successMessage) => {
-                    const inputs = getInputs();
-                    const allFieldsFilled = Object.values(inputs).every(val => val);
-                    
-                    if (!allFieldsFilled) {
-                        resultDisplay.innerHTML = '<strong class="calculator-error-message">Preencha todos os campos.</strong>';
-                        return;
-                    }
-                    
-                    const values = Object.fromEntries(Object.entries(inputs).map(([key, value]) => [key, Number(value)]));
-                    const notaReal = calculationFn(values.acertos1, values.acertos2, values.acertosL, values.acertosM, values.acertosH, values.acertosN, values.redacao);
-                    resultDisplay.innerHTML = `${successMessage} <strong>${notaReal}</strong>`;
-                    salvarNotaCalculada(notaReal);
-                    updateResultCardsAppearance();
-                };
-
-                if (calculateHumanasBtn) {
-                    calculateHumanasBtn.addEventListener('click', () => validateAndCalculate(calcularHumanas, 'Sua nota (Humanas/Artes) é:'));
-                }
-                if (calculateExatasBtn) {
-                    calculateExatasBtn.addEventListener('click', () => validateAndCalculate(calcularExatas, 'Sua nota (Exatas) é:'));
-                }
-                if (calculateBiologicasBtn) {
-                    calculateBiologicasBtn.addEventListener('click', () => validateAndCalculate(calcularBiologicas, 'Sua nota (Biológicas/Saúde) é:'));
-                }
-            }
             
-            setupCalculatorListeners(false); // Desktop
-            setupCalculatorListeners(true);  // Mobile
-
             // --- Funções de Nota Salva ---
             function salvarNotaCalculada(nota) {
                 localStorage.setItem('minhaNotaCalculada', nota);
@@ -451,30 +519,24 @@
                 const groupSelected = groupSelect.value !== "";
                 const institutionValue = institutionInput.value.trim();
                 const courseValue = courseInput.value.trim();
-
                 let canEnableButton = false;
                 const primaryFilterSelected = categorySelected || groupSelected;
 
                 if (primaryFilterSelected) {
                     const instValidOrEmpty = institutionValue === "" || allInstitutions.includes(institutionValue);
                     const courseValidOrEmpty = courseValue === "" || allCourses.includes(courseValue);
-                    
-                    if (instValidOrEmpty && courseValidOrEmpty) {
-                         canEnableButton = true;
-                    }
+                    if (instValidOrEmpty && courseValidOrEmpty) canEnableButton = true;
                 } else {
                      const instFilledAndValid = institutionValue !== "" && allInstitutions.includes(institutionValue);
                      const courseFilledAndValid = courseValue !== "" && allCourses.includes(courseValue);
-                     if ((instFilledAndValid && courseValue === "") || 
-                         (courseFilledAndValid && institutionValue === "") || 
-                         (instFilledAndValid && courseFilledAndValid)) {
+                     if ((instFilledAndValid && courseValue === "") || (courseFilledAndValid && institutionValue === "") || (instFilledAndValid && courseFilledAndValid)) {
                          canEnableButton = true;
                      }
                 }
                 if (!categorySelected && !groupSelected && institutionValue === "" && courseValue === "") {
                     canEnableButton = false;
                 }
-                searchButton.disabled = !canEnableButton;
+                if(searchButton) searchButton.disabled = !canEnableButton;
             }
 
             function performSearch() {
@@ -501,14 +563,12 @@
                 resultsSection.style.display = 'block';
                 peopleListDiv.innerHTML = '';
                 loadingDiv.style.display = 'flex';
-                searchButton.disabled = true;
+                if(searchButton) searchButton.disabled = true;
 
-                supabaseClient
-                    .from('dados_formulario')
-                    .select('*')
+                supabaseClient.from('dados_formulario').select('*')
                     .then(response => {
                         loadingDiv.style.display = 'none';
-                        searchButton.disabled = false;
+                        if(searchButton) searchButton.disabled = false;
                         const { data, error } = response;
 
                         if (error) {
@@ -518,24 +578,16 @@
                         }
 
                         let filteredData = data;
-                        if (selectedCategory) {
-                            filteredData = filteredData.filter(person => person.tipo_cota === selectedCategory);
-                        }
-                        if (selectedGroup) {
-                            filteredData = filteredData.filter(person => person.grupo === selectedGroup);
-                        }
-                        if (selectedInstitution) {
-                            filteredData = filteredData.filter(person => person.instituicao === selectedInstitution);
-                        }
-                        if (selectedCourse) {
-                            filteredData = filteredData.filter(person => person.curso === selectedCourse);
-                        }
+                        if (selectedCategory) filteredData = filteredData.filter(person => person.tipo_cota === selectedCategory);
+                        if (selectedGroup) filteredData = filteredData.filter(person => person.grupo === selectedGroup);
+                        if (selectedInstitution) filteredData = filteredData.filter(person => person.instituicao === selectedInstitution);
+                        if (selectedCourse) filteredData = filteredData.filter(person => person.curso === selectedCourse);
                         
                         displayResults(filteredData);
                     })
                     .catch(error => {
                         loadingDiv.style.display = 'none';
-                        searchButton.disabled = false;
+                        if(searchButton) searchButton.disabled = false;
                         peopleListDiv.innerHTML = `<p class="error-message">Erro crítico ao buscar dados: ${error.message}</p>`;
                         console.error('Erro crítico na busca:', error);
                     });
@@ -544,29 +596,21 @@
             function displayResults(results) {
                 peopleListDiv.innerHTML = '';
                 if (results && results.length > 0) {
-                    results.sort((a, b) => {
-                        const notaA = parseFloat(a.numero_unico) || 0;
-                        const notaB = parseFloat(b.numero_unico) || 0;
-                        return notaB - notaA;
-                    });
+                    results.sort((a, b) => (parseFloat(b.numero_unico) || 0) - (parseFloat(a.numero_unico) || 0));
 
                     results.forEach(item => {
                         const resultCard = document.createElement('div');
                         resultCard.className = 'result-card';
-
                         const indicatorBar = document.createElement('div');
                         indicatorBar.className = 'result-card-indicator';
-
                         const contentDiv = document.createElement('div');
                         contentDiv.className = 'result-card-content';
-
                         contentDiv.innerHTML = `
                             <p><strong>Instituição:</strong> ${item.instituicao || 'N/A'}</p>
                             <p><strong>Curso:</strong> ${item.curso || 'N/A'}</p>
                             <p><strong>Nota de Corte:</strong> ${item.numero_unico !== null ? parseFloat(item.numero_unico).toFixed(3) : 'N/A'}</p>
                             <p><strong>Grupo (Cota):</strong> ${item.tipo_cota || 'N/A'}</p>
                         `;
-                        
                         resultCard.appendChild(indicatorBar);
                         resultCard.appendChild(contentDiv);
                         peopleListDiv.appendChild(resultCard);
@@ -583,31 +627,19 @@
             function updateResultCardsAppearance() {
                 const notaSalva = localStorage.getItem('minhaNotaCalculada');
                 let notaCalculada = null;
-                if (notaSalva) {
-                    notaCalculada = parseFloat(notaSalva);
-                }
+                if (notaSalva) notaCalculada = parseFloat(notaSalva);
 
                 const resultCards = document.querySelectorAll('.result-card');
                 resultCards.forEach(card => {
                     const indicatorBar = card.querySelector('.result-card-indicator');
                     const notaCorteP = card.querySelector('.result-card-content p:nth-child(3)');
-                    
                     if (!indicatorBar || !notaCorteP || !notaCorteP.textContent) return;
-
                     const notaCorteMatch = notaCorteP.textContent.match(/Nota de Corte: (\d+\.?\d*)/);
                     let notaCorteItem = null;
-                    if (notaCorteMatch && notaCorteMatch[1]) {
-                        notaCorteItem = parseFloat(notaCorteMatch[1]);
-                    }
-
+                    if (notaCorteMatch && notaCorteMatch[1]) notaCorteItem = parseFloat(notaCorteMatch[1]);
                     indicatorBar.classList.remove('bar-green', 'bar-red', 'bar-neutral');
-
                     if (notaCalculada !== null && notaCorteItem !== null) {
-                        if (notaCalculada >= notaCorteItem) {
-                            indicatorBar.classList.add('bar-green');
-                        } else {
-                            indicatorBar.classList.add('bar-red');
-                        }
+                        indicatorBar.classList.add(notaCalculada >= notaCorteItem ? 'bar-green' : 'bar-red');
                     } else {
                         indicatorBar.classList.add('bar-neutral');
                     }
@@ -627,15 +659,15 @@
             
             if (clearFiltersButton) {
                 clearFiltersButton.addEventListener('click', () => {
-                    categorySelect.value = '';
-                    groupSelect.value = '';
-                    institutionInput.value = '';
-                    courseInput.value = '';
-                    institutionSuggestions.style.display = 'none';
-                    courseSuggestions.style.display = 'none';
-                    peopleListDiv.innerHTML = '';
-                    resultsSection.style.display = 'none';
-                    searchButton.disabled = true;
+                    if(categorySelect) categorySelect.value = '';
+                    if(groupSelect) groupSelect.value = '';
+                    if(institutionInput) institutionInput.value = '';
+                    if(courseInput) courseInput.value = '';
+                    if(institutionSuggestions) institutionSuggestions.style.display = 'none';
+                    if(courseSuggestions) courseSuggestions.style.display = 'none';
+                    if(peopleListDiv) peopleListDiv.innerHTML = '';
+                    if(resultsSection) resultsSection.style.display = 'none';
+                    if(searchButton) searchButton.disabled = true;
                     exibirNotaSalvaIndex();
                     updateResultCardsAppearance();
                 });
@@ -672,7 +704,6 @@
                     courseSuggestions.style.display = 'none';
                 }
             });
-
         });
     </script>
 </body>
