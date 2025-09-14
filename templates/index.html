@@ -16,10 +16,8 @@
                 <a href="{{url_for('index_page')}}"><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo MEUPROVAO" class="header-logo"></a>
             </div>
 
-            <!-- Botão Hambúrguer (visível apenas em mobile) -->
             <button class="mobile-menu-toggle" aria-label="Abrir menu" aria-expanded="false">&#9776;</button>
 
-            <!-- Navegação para Desktop (visível apenas em desktop) -->
             <div class="nav-actions desktop-nav">
                 <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
                 <a href="{{ url_for('links_page') }}" class="nav-button">Links Úteis</a>
@@ -28,14 +26,11 @@
                 <button class="nav-button" id="toggleCalculator">Minha Nota</button>
             </div>
 
-            <!-- Menu Mobile (inicialmente oculto, controlado por JS e CSS) -->
             <nav class="mobile-nav">
                 <a href="{{ url_for('links_page') }}" class="nav-button">Links Úteis</a>
                 <a href="{{ url_for('formulario_page') }}" class="nav-button">Enviar Nota</a>
                 <a href="{{ url_for('visualizador_pdf_page') }}" class="nav-button">Visualizar Edital</a>
-                <!-- O span da nota salva NÃO será incluído aqui conforme solicitado -->
                 
-                <!-- Calculadora para Mobile (visível quando o menu estiver ativo, agora no final) -->
                 <div class="containerCalculadora" id="calculatorContainerMobile">
                     <div class="calculadora">
                         <h3>Calculadora de Nota</h3>
@@ -48,9 +43,21 @@
                                 <label for="acertos2Mobile">Acertos 2024:</label>
                                 <input type="number" id="acertos2Mobile" placeholder="Ex: 80">
                             </div>
+                             <div class="input-group">
+                                <label for="acertosLMobile">Linguagens:</label>
+                                <input type="number" id="acertosLMobile" placeholder="Ex: 20">
+                            </div>
                             <div class="input-group">
-                                <label for="acertos3Mobile">Acertos 2025:</label>
-                                <input type="number" id="acertos3Mobile" placeholder="Ex: 85">
+                                <label for="acertosMMobile">Matemática:</label>
+                                <input type="number" id="acertosMMobile" placeholder="Ex: 15">
+                            </div>
+                            <div class="input-group">
+                                <label for="acertosHMobile">Humanas:</label>
+                                <input type="number" id="acertosHMobile" placeholder="Ex: 22">
+                            </div>
+                            <div class="input-group">
+                                <label for="acertosNMobile">Natureza:</label>
+                                <input type="number" id="acertosNMobile" placeholder="Ex: 18">
                             </div>
                             <div class="input-group">
                                 <label for="acertosRMobile">Redação:</label>
@@ -58,7 +65,9 @@
                             </div>
                         </div>
                         <div class="button-result-group">
-                            <button id="calculateButtonMobile" class="nav-button">Calcular</button>
+                            <button id="calculateHumanasMobile" class="nav-button">Calcular Humanas/Artes</button>
+                            <button id="calculateExatasMobile" class="nav-button">Calcular Exatas</button>
+                            <button id="calculateBiologicasMobile" class="nav-button">Calcular Biológicas/Saúde</button>
                             <div id="resultMobile" class="calculator-result"></div>
                         </div>
                     </div>
@@ -89,8 +98,20 @@
                         <input type="number" id="acertos2" placeholder="Ex: 80">
                     </div>
                     <div class="input-group">
-                        <label for="acertos3">Acertos 2025:</label>
-                        <input type="number" id="acertos3" placeholder="Ex: 85">
+                        <label for="acertosL">Linguagens:</label>
+                        <input type="number" id="acertosL" placeholder="Ex: 20">
+                    </div>
+                    <div class="input-group">
+                        <label for="acertosM">Matemática:</label>
+                        <input type="number" id="acertosM" placeholder="Ex: 15">
+                    </div>
+                    <div class="input-group">
+                        <label for="acertosH">Humanas:</label>
+                        <input type="number" id="acertosH" placeholder="Ex: 22">
+                    </div>
+                    <div class="input-group">
+                        <label for="acertosN">Natureza:</label>
+                        <input type="number" id="acertosN" placeholder="Ex: 18">
                     </div>
                     <div class="input-group">
                         <label for="acertosR">Redação:</label>
@@ -98,7 +119,9 @@
                     </div>
                 </div>
                 <div class="button-result-group">
-                    <button id="calculateButton">Calcular</button>
+                    <button id="calculateHumanas">Calcular Humanas/Artes</button>
+                    <button id="calculateExatas">Calcular Exatas</button>
+                    <button id="calculateBiologicas">Calcular Biológicas/Saúde</button>
                     <div id="result" class="calculator-result"></div>
                 </div>
             </div>
@@ -194,7 +217,7 @@
             const institutionSuggestions = document.getElementById('institution-suggestions');
             const courseInput = document.getElementById('course');
             const courseSuggestions = document.getElementById('course-suggestions');
-            let searchButton = document.getElementById('searchButton'); // Usar let para poder substituir o nó
+            let searchButton = document.getElementById('searchButton');
             const resultsSection = document.getElementById('results-section');
             const peopleListDiv = document.getElementById('peopleList');
             const loadingDiv = document.getElementById('loading');
@@ -202,17 +225,15 @@
             const closePopupButton = document.getElementById("closePopup");
             const toggleCalculator = document.getElementById('toggleCalculator');
             const calculatorContainer = document.getElementById('calculatorContainer');
-            const calculateButton = document.getElementById('calculateButton');
             const clearFiltersButton = document.getElementById('clearFiltersButton');
             const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
             const mobileNav = document.querySelector('.mobile-nav');
-            const calculateButtonMobile = document.getElementById('calculateButtonMobile');
 
-            // Armazenamento de dados
+            // --- Armazenamento de dados ---
             let allInstitutions = [];
             let allCourses = [];
 
-            // Configuração Supabase (exemplo, idealmente viria de um config)
+            // --- Configuração Supabase ---
             const SUPABASE_URL = 'https://iradczvlimgyukwbwqcl.supabase.co';
             const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyYWRjenZsaW1neXVrd2J3cWNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgxMTQwMDcsImV4cCI6MjA2MzY5MDAwN30.CcLvcjhUaNvgSEHFunka_Er-RQ8iwMKInP5lvIrlqIY';
             const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -226,60 +247,85 @@
                 });
             }
 
-            // --- Lógica da Calculadora (Desktop e Mobile) ---
-            function calcularNota(acertosVal, acertos2Val, acertos3Val, acertosRVal) {
-                let acertos = Number(acertosVal);
-                let acertos2 = Number(acertos2Val);
-                let acertos3 = Number(acertos3Val);
-                let acertosR = Number(acertosRVal);
-                let notaCalculadora = ((acertos / 90) * 0.15) + ((acertos2 / 90) * 0.25) + ((acertos3 / 90) * 0.40) + ((acertosR / 20) * 0.20);
-                return (notaCalculadora * 100).toFixed(3);
+            // --- Lógica da Calculadora (Funções de Cálculo) ---
+            function calcularHumanas(acertos1, acertos2, acertosL, acertosM, acertosH, acertosN, redacao) {
+                const notaAno1 = (acertos1 / 90) * 15;
+                const notaAno2 = (acertos2 / 90) * 25;
+                const notaAno3 = ((acertosL / 24) * 2 + (acertosM / 18) * 1 + (acertosH / 24) * 2 + (acertosN / 24) * 1 + (redacao / 20) * 2) * 5;
+                const notaFinal = notaAno1 + notaAno2 + notaAno3 + redacao;
+                return notaFinal.toFixed(3);
             }
 
+            function calcularExatas(acertos1, acertos2, acertosL, acertosM, acertosH, acertosN, redacao) {
+                const notaAno1 = (acertos1 / 90) * 15;
+                const notaAno2 = (acertos2 / 90) * 25;
+                const notaAno3 = ((acertosL / 24) * 1 + (acertosM / 18) * 3 + (acertosH / 24) * 1 + (acertosN / 24) * 2 + (redacao / 20) * 1) * 5;
+                const notaFinal = notaAno1 + notaAno2 + notaAno3 + redacao;
+                return notaFinal.toFixed(3);
+            }
+
+            function calcularBiologicas(acertos1, acertos2, acertosL, acertosM, acertosH, acertosN, redacao) {
+                const notaAno1 = (acertos1 / 90) * 15;
+                const notaAno2 = (acertos2 / 90) * 25;
+                const notaAno3 = ((acertosL / 24) * 2 + (acertosM / 18) * 1 + (acertosH / 24) * 1 + (acertosN / 24) * 3 + (redacao / 20) * 1) * 5;
+                const notaFinal = notaAno1 + notaAno2 + notaAno3 + redacao;
+                return notaFinal.toFixed(3);
+            }
+
+            // --- Lógica da Calculadora (Event Listeners) ---
             if (toggleCalculator && calculatorContainer) {
                 toggleCalculator.addEventListener('click', () => {
                     calculatorContainer.classList.toggle('visible');
                 });
             }
 
-            if (calculateButton) {
-                calculateButton.addEventListener('click', () => {
-                    const acertosInput = document.getElementById('acertos');
-                    const acertos2Input = document.getElementById('acertos2');
-                    const acertos3Input = document.getElementById('acertos3');
-                    const acertosRInput = document.getElementById('acertosR');
-                    const resultDisplay = document.getElementById('result');
+            function setupCalculatorListeners(isMobile) {
+                const prefix = isMobile ? 'Mobile' : '';
+                const calculateHumanasBtn = document.getElementById(`calculateHumanas${prefix}`);
+                const calculateExatasBtn = document.getElementById(`calculateExatas${prefix}`);
+                const calculateBiologicasBtn = document.getElementById(`calculateBiologicas${prefix}`);
+                const resultDisplay = document.getElementById(`result${prefix}`);
 
-                    if (!acertosInput.value || !acertos2Input.value || !acertos3Input.value || !acertosRInput.value) {
+                const getInputs = () => ({
+                    acertos1: document.getElementById(`acertos${prefix}`).value,
+                    acertos2: document.getElementById(`acertos2${prefix}`).value,
+                    acertosL: document.getElementById(`acertosL${prefix}`).value,
+                    acertosM: document.getElementById(`acertosM${prefix}`).value,
+                    acertosH: document.getElementById(`acertosH${prefix}`).value,
+                    acertosN: document.getElementById(`acertosN${prefix}`).value,
+                    redacao: document.getElementById(`acertosR${prefix}`).value,
+                });
+
+                const validateAndCalculate = (calculationFn, successMessage) => {
+                    const inputs = getInputs();
+                    const allFieldsFilled = Object.values(inputs).every(val => val);
+                    
+                    if (!allFieldsFilled) {
                         resultDisplay.innerHTML = '<strong class="calculator-error-message">Preencha todos os campos.</strong>';
                         return;
                     }
-                    const notaReal = calcularNota(acertosInput.value, acertos2Input.value, acertos3Input.value, acertosRInput.value);
-                    resultDisplay.innerHTML = `Sua nota é: <strong>${notaReal}</strong>`;
+                    
+                    const values = Object.fromEntries(Object.entries(inputs).map(([key, value]) => [key, Number(value)]));
+                    const notaReal = calculationFn(values.acertos1, values.acertos2, values.acertosL, values.acertosM, values.acertosH, values.acertosN, values.redacao);
+                    resultDisplay.innerHTML = `${successMessage} <strong>${notaReal}</strong>`;
                     salvarNotaCalculada(notaReal);
                     updateResultCardsAppearance();
-                });
-            }
+                };
 
-            if (calculateButtonMobile) {
-                calculateButtonMobile.addEventListener('click', () => {
-                    const acertosInput = document.getElementById('acertosMobile');
-                    const acertos2Input = document.getElementById('acertos2Mobile');
-                    const acertos3Input = document.getElementById('acertos3Mobile');
-                    const acertosRInput = document.getElementById('acertosRMobile');
-                    const resultDisplay = document.getElementById('resultMobile');
-
-                    if (!acertosInput.value || !acertos2Input.value || !acertos3Input.value || !acertosRInput.value) {
-                        resultDisplay.innerHTML = '<strong class="calculator-error-message">Preencha todos os campos.</strong>';
-                        return;
-                    }
-                    const notaReal = calcularNota(acertosInput.value, acertos2Input.value, acertos3Input.value, acertosRInput.value);
-                    resultDisplay.innerHTML = `Sua nota é: <strong>${notaReal}</strong>`;
-                    salvarNotaCalculada(notaReal);
-                     // Se o menu mobile estiver aberto, pode fechá-lo ou atualizar a nota salva em outros lugares se necessário.
-                });
+                if (calculateHumanasBtn) {
+                    calculateHumanasBtn.addEventListener('click', () => validateAndCalculate(calcularHumanas, 'Sua nota (Humanas/Artes) é:'));
+                }
+                if (calculateExatasBtn) {
+                    calculateExatasBtn.addEventListener('click', () => validateAndCalculate(calcularExatas, 'Sua nota (Exatas) é:'));
+                }
+                if (calculateBiologicasBtn) {
+                    calculateBiologicasBtn.addEventListener('click', () => validateAndCalculate(calcularBiologicas, 'Sua nota (Biológicas/Saúde) é:'));
+                }
             }
             
+            setupCalculatorListeners(false); // Desktop
+            setupCalculatorListeners(true);  // Mobile
+
             // --- Funções de Nota Salva ---
             function salvarNotaCalculada(nota) {
                 localStorage.setItem('minhaNotaCalculada', nota);
@@ -332,14 +378,11 @@
                                 const uniqueSortedData = [...new Set(data.map(item => item ? String(item).trim() : '').filter(item => item))].sort();
                                 if (identifier === 'institution') {
                                     allInstitutions = uniqueSortedData;
-                                    console.log('Instituições carregadas no array:', allInstitutions.length > 0);
                                 } else if (identifier === 'course') {
                                     allCourses = uniqueSortedData;
-                                    console.log('Cursos carregados no array:', allCourses.length > 0);
                                 }
                                 resolve();
                             } else {
-                                console.error("Os dados para sugestões não são um array:", data, "para", identifier);
                                 reject("Formato de dados inválido");
                             }
                         })
@@ -351,27 +394,16 @@
             }
 
             function displaySuggestions(inputValue, suggestionsContainer, sourceArray, inputElement) {
-                console.log(`displaySuggestions chamada para: ${inputElement.id}, valor: ${inputValue}, sourceArray tem ${sourceArray.length} itens`);
                 suggestionsContainer.innerHTML = '';
                 const valueToFilter = inputValue.toLowerCase();
                 let filteredSuggestions = [];
                 if (inputValue.length === 0 && document.activeElement === inputElement) {
-                    if (sourceArray && sourceArray.length > 0) {
-                        filteredSuggestions = sourceArray.slice(0, 10);
-                        console.log('Input vazio e focado, mostrando primeiras N sugestões:', filteredSuggestions);
-                    } else {
-                        console.log('Input vazio e focado, MAS sourceArray está vazio ou não definido.');
-                    }
+                    filteredSuggestions = sourceArray.slice(0, 10);
                 } else if (inputValue.length > 0) {
-                    if (sourceArray && sourceArray.length > 0) {
-                        filteredSuggestions = sourceArray.filter(item => item.toLowerCase().includes(valueToFilter));
-                    } else {
-                         console.log('Input com valor, MAS sourceArray está vazio ou não definido.');
-                    }
+                    filteredSuggestions = sourceArray.filter(item => item.toLowerCase().includes(valueToFilter));
                 }
-                console.log('Sugestões filtradas/para mostrar:', filteredSuggestions);
+                
                 if (filteredSuggestions.length > 0) {
-                    console.log('Mostrando sugestões...');
                     filteredSuggestions.forEach(suggestion => {
                         const div = document.createElement('div');
                         div.classList.add('suggestion-item');
@@ -386,22 +418,18 @@
                     });
                     suggestionsContainer.style.display = 'block';
                 } else {
-                    console.log('Ocultando sugestões (sem resultados, ou sourceArray não populado, ou input vazio e não focado).');
                     suggestionsContainer.style.display = 'none';
                 }
             }
 
             function setupInputListeners() {
-                console.log("Configurando listeners para inputs AGORA que os dados devem estar carregados.");
                 function setupSingleInput(inputEl, suggestionsEl, dataArray) {
                      if (inputEl && suggestionsEl) {
                         inputEl.addEventListener('input', () => {
-                            console.log(`Input event em ${inputEl.id}, valor: ${inputEl.value}`);
                             displaySuggestions(inputEl.value, suggestionsEl, dataArray, inputEl);
                             validateInputsAndToggleButton(); 
                         });
                         inputEl.addEventListener('focus', () => {
-                            console.log(`Focus event em ${inputEl.id}`);
                             displaySuggestions(inputEl.value, suggestionsEl, dataArray, inputEl);
                         });
                         inputEl.addEventListener('blur', () => {
@@ -418,12 +446,6 @@
                 setupSingleInput(courseInput, courseSuggestions, allCourses);
             }
             
-            function isValidSuggestion(inputElement, sourceArray) {
-                const value = inputElement.value.trim();
-                if (value === "") return true; // Campo vazio é "válido" no sentido de não impedir a busca
-                return sourceArray.includes(value);
-            }
-
             function validateInputsAndToggleButton() {
                 const categorySelected = categorySelect.value !== "";
                 const groupSelected = groupSelect.value !== "";
@@ -455,7 +477,6 @@
                 searchButton.disabled = !canEnableButton;
             }
 
-
             function performSearch() {
                 const selectedCategory = categorySelect.value;
                 const selectedGroup = groupSelect.value;
@@ -479,15 +500,15 @@
 
                 resultsSection.style.display = 'block';
                 peopleListDiv.innerHTML = '';
-                loadingDiv.style.display = 'flex'; // Usar flex para centralizar spinner
-                searchButton.disabled = true; // Desabilitar durante a busca
+                loadingDiv.style.display = 'flex';
+                searchButton.disabled = true;
 
                 supabaseClient
                     .from('dados_formulario')
                     .select('*')
                     .then(response => {
                         loadingDiv.style.display = 'none';
-                        searchButton.disabled = false; // Reabilitar após a busca
+                        searchButton.disabled = false;
                         const { data, error } = response;
 
                         if (error) {
@@ -512,7 +533,7 @@
                         
                         displayResults(filteredData);
                     })
-                    .catch(error => { // Catch para erros de rede ou outros não tratados pelo Supabase
+                    .catch(error => {
                         loadingDiv.style.display = 'none';
                         searchButton.disabled = false;
                         peopleListDiv.innerHTML = `<p class="error-message">Erro crítico ao buscar dados: ${error.message}</p>`;
@@ -521,9 +542,9 @@
             }
 
             function displayResults(results) {
-                peopleListDiv.innerHTML = ''; // Limpar resultados anteriores
+                peopleListDiv.innerHTML = '';
                 if (results && results.length > 0) {
-                    results.sort((a, b) => { // Ordenar por nota decrescente
+                    results.sort((a, b) => {
                         const notaA = parseFloat(a.numero_unico) || 0;
                         const notaB = parseFloat(b.numero_unico) || 0;
                         return notaB - notaA;
@@ -569,7 +590,7 @@
                 const resultCards = document.querySelectorAll('.result-card');
                 resultCards.forEach(card => {
                     const indicatorBar = card.querySelector('.result-card-indicator');
-                    const notaCorteP = card.querySelector('.result-card-content p:nth-child(3)'); // Assume que é o 3º <p>
+                    const notaCorteP = card.querySelector('.result-card-content p:nth-child(3)');
                     
                     if (!indicatorBar || !notaCorteP || !notaCorteP.textContent) return;
 
@@ -596,13 +617,11 @@
             // --- Inicialização e Event Listeners Gerais ---
             if (categorySelect) categorySelect.addEventListener('change', validateInputsAndToggleButton);
             if (groupSelect) groupSelect.addEventListener('change', validateInputsAndToggleButton);
-            // Listeners de 'input' para institutionInput e courseInput são configurados em setupInputListeners
 
-            // Substituir o listener do botão de busca para evitar duplicatas e usar a nova função performSearch
             if (searchButton) {
                 const newSearchButton = searchButton.cloneNode(true);
                 searchButton.parentNode.replaceChild(newSearchButton, searchButton);
-                searchButton = newSearchButton; // Atualiza a referência
+                searchButton = newSearchButton;
                 searchButton.addEventListener('click', performSearch);
             }
             
@@ -617,8 +636,8 @@
                     peopleListDiv.innerHTML = '';
                     resultsSection.style.display = 'none';
                     searchButton.disabled = true;
-                    exibirNotaSalvaIndex(); // Re-exibir nota, pode ter sido limpa
-                    updateResultCardsAppearance(); // Limpar indicadores de comparação
+                    exibirNotaSalvaIndex();
+                    updateResultCardsAppearance();
                 });
             }
 
@@ -630,25 +649,21 @@
                 }
             }
 
-            // Carregamento inicial de dados e configuração dos listeners dependentes
+            // --- Carregamento inicial de dados ---
             loadCategories();
-            exibirNotaSalvaIndex(); // Pode ser chamada antes, não depende dos dados de sugestão
-            validateInputsAndToggleButton(); // Estado inicial do botão de busca
+            exibirNotaSalvaIndex();
+            validateInputsAndToggleButton();
 
             Promise.all([
                 loadSuggestionData('institution', '/get_all_institutions'),
                 loadSuggestionData('course', '/get_all_courses')
             ]).then(() => {
-                console.log("TODOS os dados de sugestão carregados. Configurando listeners de input AGORA.");
-                setupInputListeners(); // Configura os listeners de autocomplete APÓS os dados estarem prontos
-                // Chamar validateInputsAndToggleButton novamente aqui pode ser útil se o estado inicial do botão depender dos dados carregados
+                setupInputListeners();
                 validateInputsAndToggleButton(); 
             }).catch(error => {
                 console.error("Erro ao carregar um ou mais conjuntos de dados de sugestão:", error);
-                // Lidar com o erro, talvez desabilitar campos de autocomplete ou mostrar mensagem ao usuário
             });
 
-            // Ocultar sugestões ao clicar fora (pode permanecer aqui)
             document.addEventListener('click', (event) => {
                 if (institutionSuggestions && !institutionInput.contains(event.target) && !institutionSuggestions.contains(event.target)) {
                     institutionSuggestions.style.display = 'none';
