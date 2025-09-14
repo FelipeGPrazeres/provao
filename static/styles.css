@@ -409,11 +409,7 @@ input[type="number"]:focus, input[type="text"]:focus, select:focus {
     transform: none;
     box-shadow: none;
 }
-
 /* Results Section */
-#results-section { /* Updated from #results */
-    /* Uses .card-style now */
-}
 #results-section h2 {
     color: var(--primary-color); /* */
     text-align: center;
@@ -1084,5 +1080,41 @@ body.dark-mode .pdf-viewer-container iframe {
     .pdf-viewer-container {
         height: 85vh;
         padding: 10px;
+    }
+}
+/* --- Estilos do Grupo de Botões da Calculadora --- */
+
+/* Container que agrupa os botões e o resultado */
+.button-result-group {
+    display: flex; /* Ativa o layout flexível */
+    flex-wrap: wrap; /* Permite que os botões quebrem para a linha de baixo se não couberem */
+    justify-content: center; /* Centraliza os botões no container */
+    gap: 10px; /* Adiciona um espaço de 10px entre os botões */
+    width: 100%;
+    margin-top: 15px; /* Um espaço acima dos botões */
+}
+
+/* Garante que o texto de resultado fique em sua própria linha */
+.calculator-result {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+    padding: 8px;
+    min-height: 1.5em; /* Garante uma altura mínima mesmo quando vazio */
+}
+
+
+/* --- Layout para Celular (Telas com até 768px de largura) --- */
+@media (max-width: 768px) {
+    .button-result-group {
+        flex-direction: column; /* Muda a direção do flex para vertical (empilha os itens) */
+        align-items: center; /* Centraliza os botões empilhados */
+    }
+
+    /* Faz cada botão ocupar uma boa parte da largura no mobile */
+    .button-result-group .nav-button {
+        width: 90%; 
+        max-width: 300px; /* Limita a largura máxima em telas um pouco maiores */
+        box-sizing: border-box; /* Garante que padding e borda não aumentem a largura total */
     }
 }
