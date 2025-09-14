@@ -584,6 +584,7 @@
                         if (selectedCourse) filteredData = filteredData.filter(person => person.curso === selectedCourse);
                         
                         displayResults(filteredData);
+                        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     })
                     .catch(error => {
                         loadingDiv.style.display = 'none';
