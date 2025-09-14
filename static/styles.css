@@ -1157,3 +1157,40 @@ body.dark-mode .pdf-viewer-container iframe {
     font-weight: bold;
     min-height: 1.5em;
 }
+
+.mobile-nav #calculatorContainerMobile {
+    background-color: rgba(0,0,0,0.1); 
+    border-bottom: 1px solid rgba(255,255,255,0.2); 
+    border-top: 1px solid rgba(255,255,255,0.2);    
+    padding: 15px; 
+    width: 100%; 
+    box-sizing: border-box; 
+    max-height: none; 
+    overflow: visible; /* Restaurado para visible para não mascarar a origem do problema interno */
+    /* overflow-x: hidden;  Removido daqui, colocado no .mobile-nav */
+    visibility: visible;
+    opacity: 1;
+    margin-top: 10px; 
+    margin-bottom: 5px; 
+    margin-left: 0; 
+    margin-right: 0; 
+    border-radius: 0; 
+    transition: none;
+}
+
+.mobile-nav #calculatorContainerMobile .button-result-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 10px;
+    margin-top: 5px;
+    padding: 0;
+}
+
+.mobile-nav #calculatorContainerMobile .nav-button {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+}
