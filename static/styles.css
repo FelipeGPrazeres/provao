@@ -1145,3 +1145,18 @@ body.dark-mode .pdf-viewer-container iframe {
     display: block !important;
   }
 }
+/* --- Torna a seção de resultados "grudenta" no topo (mobile) --- */
+
+@media (max-width: 768px) {
+  #results-section {
+    position: -webkit-sticky; /* Para compatibilidade com Safari */
+    position: sticky;
+    top: 0; /* Distância do topo para "grudar" */
+    z-index: 1000; /* Garante que a seção fique acima de outros elementos */
+
+    /* Opcional: Melhora a aparência quando a seção está "flutuando" */
+    background-color: #f9f9f9; 
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+}
