@@ -38,31 +38,31 @@
                         <div class="input-row">
                             <div class="input-group">
                                 <label for="acertosMobile">Acertos 2023:</label>
-                                <input type="number" id="acertosMobile" placeholder="Ex: 75">
+                                <input type="number" id="acertosMobile" placeholder="De 0 a 90">
                             </div>
                             <div class="input-group">
                                 <label for="acertos2Mobile">Acertos 2024:</label>
-                                <input type="number" id="acertos2Mobile" placeholder="Ex: 80">
+                                <input type="number" id="acertos2Mobile" placeholder="De 0 a 90">
                             </div>
                              <div class="input-group">
                                 <label for="acertosLMobile">Linguagens:</label>
-                                <input type="number" id="acertosLMobile" placeholder="Ex: 20">
+                                <input type="number" id="acertosLMobile" placeholder="De 0 a 24">
                             </div>
                             <div class="input-group">
                                 <label for="acertosMMobile">Matemática:</label>
-                                <input type="number" id="acertosMMobile" placeholder="Ex: 15">
+                                <input type="number" id="acertosMMobile" placeholder="De 0 a 18">
                             </div>
                             <div class="input-group">
                                 <label for="acertosHMobile">Humanas:</label>
-                                <input type="number" id="acertosHMobile" placeholder="Ex: 22">
+                                <input type="number" id="acertosHMobile" placeholder="De 0 a 24">
                             </div>
                             <div class="input-group">
                                 <label for="acertosNMobile">Natureza:</label>
-                                <input type="number" id="acertosNMobile" placeholder="Ex: 18">
+                                <input type="number" id="acertosNMobile" placeholder="De 0 a 24">
                             </div>
                             <div class="input-group">
                                 <label for="acertosRMobile">Redação:</label>
-                                <input type="number" id="acertosRMobile" placeholder="Ex: 18">
+                                <input type="number" id="acertosRMobile" placeholder="De 0 a 20">
                             </div>
                         </div>
                         <div class="button-result-group">
@@ -560,20 +560,20 @@
                     return;
                 }
 
-                resultsSection.style.display = 'block';
-                peopleListDiv.innerHTML = '';
-                loadingDiv.style.display = 'flex';
+                if(resultsSection) resultsSection.style.display = 'block';
+                if(peopleListDiv) peopleListDiv.innerHTML = '';
+                if(loadingDiv) loadingDiv.style.display = 'flex';
                 if(searchButton) searchButton.disabled = true;
 
                 supabaseClient.from('dados_formulario').select('*')
                     .then(response => {
-                        loadingDiv.style.display = 'none';
+                        if(loadingDiv) loadingDiv.style.display = 'none';
                         if(searchButton) searchButton.disabled = false;
                         const { data, error } = response;
 
                         if (error) {
                             console.error('Erro na busca Supabase:', error);
-                            peopleListDiv.innerHTML = '<p class="error-message">Erro ao buscar dados. Tente novamente.</p>';
+                            if(peopleListDiv) peopleListDiv.innerHTML = '<p class="error-message">Erro ao buscar dados. Tente novamente.</p>';
                             return;
                         }
 
@@ -584,12 +584,21 @@
                         if (selectedCourse) filteredData = filteredData.filter(person => person.curso === selectedCourse);
                         
                         displayResults(filteredData);
-                        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        
+                        // --- BLOCO DE CÓDIGO ALTERADO ---
+                        // Adicionamos um pequeno atraso para garantir que o navegador 
+                        // tenha tempo de renderizar os resultados antes de rolar a tela.
+                        setTimeout(() => {
+                            if (resultsSection) {
+                                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        }, 100); // 100 milissegundos de atraso
+
                     })
                     .catch(error => {
-                        loadingDiv.style.display = 'none';
+                        if(loadingDiv) loadingDiv.style.display = 'none';
                         if(searchButton) searchButton.disabled = false;
-                        peopleListDiv.innerHTML = `<p class="error-message">Erro crítico ao buscar dados: ${error.message}</p>`;
+                        if(peopleListDiv) peopleListDiv.innerHTML = `<p class="error-message">Erro crítico ao buscar dados: ${error.message}</p>`;
                         console.error('Erro crítico na busca:', error);
                     });
             }
