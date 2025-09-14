@@ -1137,3 +1137,11 @@ body.dark-mode .pdf-viewer-container iframe {
     font-weight: bold;
     min-height: 1.5em;
 }
+/* --- CORREÇÃO PARA EXIBIÇÃO DE RESULTADOS NO MOBILE --- */
+
+/* Esta regra garante que a seção de resultados não seja escondida em telas pequenas */
+@media (max-width: 768px) {
+  #results-section {
+    display: block !important;
+  }
+}
